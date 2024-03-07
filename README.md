@@ -1,10 +1,3 @@
-<<<<<<< login
-# COSC310
-Rajveer, Vanshika, Amey, Sanjith, Reyhan
-
-
-Please add the login and signup page related stuff here. 
-=======
 # EduPool😎
 
 The below text outlines the requirements for a canvas quiz like platform designed to facilitate interaction among administrators, students, and professors. The system aims to provide a seamless experience in course management, assignment distribution, and grading, alongside fostering an engaging community through a discussion portal.
@@ -50,4 +43,3 @@ The below text outlines the requirements for a canvas quiz like platform designe
 - **Data Protection:** Strong measures to prevent unauthorized access to user information.
 
 This platform is designed to enhance the educational experience by streamlining administrative tasks, facilitating interactive learning, and ensuring a secure and efficient online environment for all users.
->>>>>>> main
