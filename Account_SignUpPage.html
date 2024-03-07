@@ -4,49 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create an Account</title>
+    <!-- CSS Styles -->
     <style>
+        /* Body Styles */
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #6495ED; /* Blue background color */
+            font-family: Arial, sans-serif; /* Set font family */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+            background-color: #6495ED; /* Set background color to blue */
         }
+        /* Container Styles */
         .container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px; /* Set maximum width */
+            margin: 50px auto; /* Center the container horizontally with top margin */
+            padding: 20px; /* Add padding */
+            background-color: #fff; /* Set background color to white */
+            border-radius: 8px; /* Add border radius */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow */
         }
+        /* Heading Styles */
         h2 {
-            text-align: center;
-            margin-bottom: 20px;
+            text-align: center; /* Center align heading */
+            margin-bottom: 20px; /* Add bottom margin */
         }
+        /* Input Styles */
         input[type="text"],
         input[type="email"],
         input[type="password"],
         input[type="submit"],
         input[type="button"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            width: 100%; /* Set width to 100% */
+            padding: 10px; /* Add padding */
+            margin-bottom: 15px; /* Add bottom margin */
+            border: 1px solid #ccc; /* Add border */
+            border-radius: 4px; /* Add border radius */
+            box-sizing: border-box; /* Include padding and border in the width */
         }
+        /* Submit Button Styles */
         input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
+            background-color: #4CAF50; /* Set background color to green */
+            color: white; /* Set text color to white */
+            cursor: pointer; /* Change cursor to pointer on hover */
         }
         input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #45a049; /* Darken background color on hover */
         }
+        /* Cancel Button Styles */
         input[type="button"] {
-            background-color: #FF0000; /* Red cancel button color */
-            color: white;
-            cursor: pointer;
+            background-color: #FF0000; /* Set background color to red */
+            color: white; /* Set text color to white */
+            cursor: pointer; /* Change cursor to pointer on hover */
         }
     </style>
 </head>
@@ -54,40 +61,53 @@
 
 <div class="container">
     <h2>Create an Account</h2>
+    <!-- Account Creation Form -->
     <form action="submit_action.php" method="post" id="createAccountForm">
+        <!-- Username Field -->
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
 
+        <!-- Email Field -->
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
 
+        <!-- Student Number Field -->
         <label for="studentNumber">Student Number:</label>
         <input type="text" id="studentNumber" name="studentNumber" required>
 
+        <!-- Degree Field -->
         <label for="degree">Degree:</label>
         <input type="text" id="degree" name="degree" required>
 
+        <!-- Year Standing Field -->
         <label for="yearStanding">Year Standing:</label>
         <input type="text" id="yearStanding" name="yearStanding" required>
 
+        <!-- Password Field -->
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
 
+        <!-- Confirm Password Field -->
         <label for="confirmPassword">Confirm Password:</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <!-- Error Message for Password Mismatch -->
         <span id="passwordError" style="color: red; display: none;">Passwords do not match</span>
 
+        <!-- Submit Button -->
         <input type="submit" value="Create Account">
+        <!-- Cancel Button -->
         <input type="button" value="Cancel" onclick="cancelRegistration()">
     </form>
 </div>
 
+<!-- JavaScript for Cancel Button -->
 <script>
     function cancelRegistration() {
         // Redirect or perform other action when cancel button is clicked
         window.location.href = "index.html"; // Replace "index.html" with the appropriate URL
     }
 
+    // JavaScript for Form Submission
     document.getElementById("createAccountForm").onsubmit = function() {
         // Validate password and confirm password
         var password = document.getElementById("password").value;
