@@ -11,7 +11,6 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(150))
     last_name = db.Column(db.String(150))
     DOB =  db.Column(db.String(150))
-    grades = db.relationship('Grade', backref='user')
 
 class Admin(db.Model):
     __tablename__ = 'admins'
