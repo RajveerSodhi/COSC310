@@ -63,35 +63,33 @@
     <h2>Create an Account</h2>
     <!-- Account Creation Form -->
     <form action="submit_action.php" method="post" id="createAccountForm">
-        <!-- Username Field -->
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <!-- ID Field -->
+        <!-- No need to include ID field as it's auto-generated -->
 
-        <!-- Email Field -->
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <!-- Student Number Field -->
-        <label for="studentNumber">Student Number:</label>
-        <input type="text" id="studentNumber" name="studentNumber" required>
-
-        <!-- Degree Field -->
-        <label for="degree">Degree:</label>
-        <input type="text" id="degree" name="degree" required>
-
-        <!-- Year Standing Field -->
-        <label for="yearStanding">Year Standing:</label>
-        <input type="text" id="yearStanding" name="yearStanding" required>
+        <!-- Username (Email) Field -->
+        <label for="username">Username (Email):</label>
+        <input type="email" id="username" name="username" required>
 
         <!-- Password Field -->
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
 
-        <!-- Confirm Password Field -->
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required>
-        <!-- Error Message for Password Mismatch -->
-        <span id="passwordError" style="color: red; display: none;">Passwords do not match</span>
+        <!-- First Name Field -->
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <!-- Last Name Field -->
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <!-- Date of Birth (DOB) Field -->
+        <label for="dob">Date of Birth (DOB):</label>
+        <input type="date" id="dob" name="dob" required>
+        <br> <!-- Line break to move to the next line -->
+
+        <!-- Grades Field -->
+        <label for="grades">Grades:</label>
+        <input type="text" id="grades" name="grades" required>
 
         <!-- Submit Button -->
         <input type="submit" value="Create Account">
@@ -107,14 +105,14 @@
         window.location.href = "index.html"; // Replace "index.html" with the appropriate URL
     }
 
-    // JavaScript for Form Submission
+    // JavaScript for Form Submission (Validation)
     document.getElementById("createAccountForm").onsubmit = function() {
         // Validate password and confirm password
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("confirmPassword").value;
 
         if (password !== confirmPassword) {
-            document.getElementById("passwordError").style.display = "inline";
+            alert("Passwords do not match"); // Display error message
             return false; // Prevent form submission
         }
     };
