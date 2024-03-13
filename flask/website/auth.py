@@ -14,13 +14,14 @@ def login():
         if user:
             if (user.password==password):
                 flash("Logged in Successfully!",category="success")
+                login_user(user, remember=True)
                 return "<h1>Home page<h1>"
             else:
                 flash("Incorrect password, please try again.",category="error")
         else:
             flash("Username does not exist!",category="error")
 
-    return render_template("login.html")
+    return render_template("login.html", user=current_user)
 
 @auth.route('/signup', methods=['GET','POST'])
 def signup():
@@ -35,9 +36,13 @@ def signup():
         new_user = User(username=email,password=password,first_name=firstName,last_name=lastName,DOB=dob,user_type=user_type)
         db.session.add(new_user)
         db.session.commit()
-
-    return render_template("signup.html")
+        login_user(new_user, remember=True)
+        return redirect(url_for('views.home'))
+        
+    return render_template("signup.html", user=current_user)
 
 @auth.route('/logout')
+@login_required
 def logout():
+    logout_user()
     return redirect(url_for('auth.login'))
