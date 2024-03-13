@@ -10,7 +10,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        user = User.query.filter_by(username=email).first()
+        user = User.query.filter_by(username=username).first()
         if user:
             if (user.password==password):
                 flash("Logged in Successfully!",category="success")
@@ -18,7 +18,7 @@ def login():
             else:
                 flash("Incorrect password, please try again.",category="error")
         else:
-            flash("Email does not exist!",category="error")
+            flash("Username does not exist!",category="error")
 
     return render_template("login.html")
 
