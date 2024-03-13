@@ -12,12 +12,12 @@ def home():
 @views.route('/create-course', methods=['GET','POST'])
 def createCourse():
     if request.method == 'POST':
-        course_number = request.form.get('course_number')
+        course_code = request.form.get('course_code')
         course_name = request.form.get('course_name')
         course_desc = request.form.get('course_desc')
         course_limit = request.form.get('course_limit')
         teacher_id = request.form.get('teacher_id')
-        new_course = Course(course_number=course_number, course_name=course_name, course_desc=course_desc, course_limit=course_limit, teacher_id=teacher_id)
+        new_course = Course(course_code=course_code, course_name=course_name, course_desc=course_desc, course_limit=course_limit, teacher_id=teacher_id)
         db.session.add(new_course)
         db.session.commit()
     return render_template("createCourse.html", user=current_user)

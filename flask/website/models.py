@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
 class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
-    course_number = db.Column(db.Integer(), unique = True)
+    course_code = db.Column(db.Integer(), unique = True)
     course_name = db.Column(db.String(150))
     course_limit = db.Column(db.Integer)
     course_desc = db.Column(db.String(1000))
