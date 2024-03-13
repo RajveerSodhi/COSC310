@@ -13,12 +13,24 @@ class User(db.Model, UserMixin):
     DOB =  db.Column(db.String(150))
     user_type = db.Column(db.String(50))
     
-class Requests(db.Model, UserMixin):
+class Course(db.Model):
+    __tablename__ = 'courses'
+    id = db.Column(db.Integer, primary_key=True)
+    course_number = db.Column(db.Integer(150))
+    course_name = db.Column(db.String(150))
+    course_limit = db.Column(db.Integer)
+    course_desc = db.Column(db.String(1000))
+    teacher_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    # Relationships
+    # sections = db.relationship('Section', backref='course')
+    # assignments = db.relationship('Assignment', backref='course')    
+    
+class Request(db.Model, UserMixin):
     __tablename__ = 'requests'
     id=db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique = True)
     course = db.Column(db.String(150))
-
+    
 class Admin(db.Model):
     __tablename__ = 'admins'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
@@ -40,17 +52,6 @@ class Teacher(db.Model):
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     # Relationships
     courses = db.relationship('Course', backref='teacher')
-
-class Course(db.Model):
-    __tablename__ = 'courses'
-    id = db.Column(db.Integer, primary_key=True)
-    course_name = db.Column(db.String(150))
-    course_limit = db.Column(db.Integer)
-    course_desc = db.Column(db.String(1000))
-    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'))
-    # Relationships
-    sections = db.relationship('Section', backref='course')
-    assignments = db.relationship('Assignment', backref='course')
 
 class Section(db.Model):
     __tablename__ = 'sections'
