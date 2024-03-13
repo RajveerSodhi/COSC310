@@ -1,4 +1,7 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, flash, render_template, request
+from .models import User,db
+from flask_login import login_user
+
 
 auth = Blueprint('auth', __name__)
 
@@ -19,9 +22,18 @@ def signup():
         firstName = request.form.get('firstName')
         lastName = request.form.get('lastName')
         dob = request.form.get('dob')
+        user_type = request.form.get('user_type')
+    
+        #new_user=User(username=email,password=password,first_name=firstName,last_name=lastName,DOB=dob,user_type=user_type)
+        flash("Account created succesfully!", category="success")
+        print(user_type)
         print(email)
         print(password)
         print(firstName)
         print(lastName)
         print(dob)
+        new_user = User(username=email,password=password,first_name=firstName,last_name=lastName,DOB=dob,user_type=user_type)
+        db.session.add(new_user)
+        db.session.commit()
+
     return render_template("signup.html")

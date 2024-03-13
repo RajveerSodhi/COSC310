@@ -76,6 +76,23 @@
         <input type="date" id="dob" name="dob" required>
         <br><br>
 
+        <!-- User Type Selection -->
+        <fieldset>
+            <legend>User Type:</legend>
+            <label for="student">
+                <input type="radio" id="student" name="user_type" value="student" required> Student
+            </label>
+            <br>
+            <label for="teacher">
+                <input type="radio" id="teacher" name="user_type" value="teacher"> Teacher
+            </label>
+            <br>
+            <label for="admin">
+                <input type="radio" id="admin" name="user_type" value="admin"> Admin
+            </label>
+        </fieldset>
+        <br>
+
         <!-- Submit Button -->
         <input type="submit" value="Create Account">
         <!-- Cancel Button -->
