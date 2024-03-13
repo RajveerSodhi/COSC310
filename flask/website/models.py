@@ -1,5 +1,5 @@
-from . import db
 import flask
+from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(150))
     last_name = db.Column(db.String(150))
     DOB =  db.Column(db.String(150))
+    user_type = db.Column(db.String(50))
     
 class Requests(db.Model, UserMixin):
     __tablename__ = 'requests'
