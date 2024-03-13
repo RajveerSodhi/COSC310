@@ -13,13 +13,13 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user:
             if (user.password==password):
-                flash("Logged in Successfully!",category="success")
+                print("Logged in Successfully!")
                 login_user(user, remember=True)
-                return "<h1>Home page<h1>"
+                return redirect(url_for('views.home'))
             else:
-                flash("Incorrect password, please try again.",category="error")
+                print("Incorrect password, please try again.")
         else:
-            flash("Username does not exist!",category="error")
+            print("Username does not exist!")
 
     return render_template("login.html", user=current_user)
 

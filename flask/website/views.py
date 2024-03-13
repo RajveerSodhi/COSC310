@@ -31,13 +31,3 @@ def createRequest():
         db.session.add(new_request)
         db.session.commit()
     return "<h1>Home page<h1>"
-
-# @views.route('/create-course', methods=['POST'])
-# def createCourse():
-#     if request.method == 'POST':
-#         username = ""
-#         course = ""
-#         new_request = Request(username=username,course=course)
-#         db.session.add(new_request)
-#         db.session.commit()
-#     return "<h1>Home page<h1>"
