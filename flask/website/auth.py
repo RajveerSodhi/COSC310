@@ -1,7 +1,6 @@
-from flask import Blueprint, flash, render_template, request
+from flask import Blueprint, flash, render_template, request, redirect, url_for
 from .models import User,db
-from flask_login import login_user
-
+from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
@@ -29,3 +28,7 @@ def signup():
         db.session.commit()
 
     return render_template("signup.html")
+
+@auth.route('/logout')
+def logout():
+    return redirect(url_for('auth.login'))
