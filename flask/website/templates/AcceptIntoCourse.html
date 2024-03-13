@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+  <meta charset = "UTF-8">
+  <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
+  <title>Accept Student Enrolment Requests</title>
+  <link rel = "stylesheet" href = "AcceptIntoCourse.css">
+</head>
+<body>
+
+<div class = "subjectSelection">
+  <label for = "subjectFilter">Select Subject: </label>
+  <select id = "subjectFilter" onchange  =  "filterRequests()">
+    <option value = "All Subjects">All Subjects</option>
+    <option value = "COSC">Computer Science</option>
+    <option value = "PHYS">Physics</option>
+    <option value = "DATA">Data Science</option>
+    <option value = "MATH">Mathematics</option>
+    <option value = "STAT">Statistics</option> 
+  </select>
+</div>
+
+<div class = "requestContainer">
+  <h2>Accept Student EnrolmentnRequests</h2>
+  
+  <ul>
+    <li>
+      <div class = "request">
+        <h3>COSC 150</h3>
+        <p><strong>Ben Strover</strong> has requested to enroll in this course</p>
+        <button type = "button" class = "acceptButton">Accept</button>
+        <button type = "button" class = "declineButton">Decline</button>
+      </div>
+    </li>
+
+    <li>
+      <div class = "request">
+        <h3>COSC 150</h3>
+        <p><strong>Hugh Jackman</strong> has requested to enroll in this course</p>
+        <button type = "button" class = "acceptButton">Accept</button>
+        <button type = "button" class = "declineButton">Decline</button>
+      </div>
+    </li>
+
+    <li>
+      <div class = "request">
+        <h3>DATA 101</h3>
+        <p><strong>Nick Hurt</strong> has requested to enroll in this course</p>
+        <button type = "button" class = "acceptButton">Accept</button>
+        <button type = "button" class = "declineButton">Decline</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+</body>
+</html>

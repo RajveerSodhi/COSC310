@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
+<title>Course Enrollment</title>
+<link rel = "stylesheet" href = "EnrollCourse.css">
+</head>
+<body>
+
+<div class = "subjectSelection">
+  <label for = "subjectFilter">Select Subject: </label>
+  <select id = "subjectFilter" onchange = "filterCourses()">
+    <option value = "All Subjects">All Subjects</option>
+    <option value = "COSC">Computer Science</option>
+    <option value = "PHYS">Physics</option>
+    <option value = "DATA">Data Science</option>
+    <option value = "MATH">Mathematics</option>
+    <option value = "STAT">Statistics</option>
+  </select>
+</div>
+
+<div class = "courseList">
+  <ul>
+     <li>
+      <div class = "course"> 
+        <h3>COSC 101 - Digital Citizenship</h3>
+        <p>Basics of web technology and what it means to be a user of the Internet.</p>
+        <p><strong>Instructor: </strong> Dr. Abdul Bari</p>
+        <p><strong>Students: </strong> 86 of 90 Registered</p>
+        <button type = "button" class = "enrollButton">Request to Enroll</button>
+      </div>
+    </li>
+
+    <li>
+      <div class = "course"> 
+        <h3>COSC 120 - Intro To Programming</h3>
+        <p>Overview of programming concepts, syntax, and control structures using a beginner-friendly language such as Python.</p>
+        <p><strong>Instructor: </strong> Dr. Marques Brownlee</p>
+        <p><strong>Students: </strong> 120 of 145 Registered</p>
+        <button type = "button" class = "enrollButton">Request to Enroll</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<script>
+function filterCourses() {
+}
+</script>
+
+</body>
+</html>

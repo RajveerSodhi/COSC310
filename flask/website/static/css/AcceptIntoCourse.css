@@ -1,0 +1,80 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #6495ED;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+h2 {
+  color: #FFF;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.request h3 {
+  color: #000;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.requestContainer {
+  width: 100%;
+  max-width: 600px;
+}
+
+.request { 
+  background: #F7F7F7;
+  border: 1px solid #DDD;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.request p {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.acceptButton, .declineButton {
+  padding: 10px 15px;
+  width: 48.5% ;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+select {
+  appearance: none;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.acceptButton {
+  background-color: #4CAF50;
+  margin-right: 10px;
+  color: white;
+}
+
+.declineButton {
+  background-color: #F00 ;
+  color: white;
+}
+
+.acceptButton:hover {
+  background-color: #45a049;
+}
+
+.declineButton:hover {
+  background-color: #B00;
+}
