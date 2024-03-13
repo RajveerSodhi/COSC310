@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, render_template, request
-from .models import Course,Requests,db
+from .models import Course, Request, db
 
 views = Blueprint('views', __name__)
 
@@ -25,7 +25,7 @@ def createRequest():
     if request.method == 'POST':
         username = ""
         course = ""
-        new_request = Requests(username=username,course=course)
+        new_request = Request(username=username,course=course)
         db.session.add(new_request)
         db.session.commit()
     return "<h1>Home page<h1>"
