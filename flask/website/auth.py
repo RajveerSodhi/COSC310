@@ -12,6 +12,17 @@ def login():
         password = request.form.get('password')
         print(email)
         print(password)
+
+        user = User.query.filter_by(username=email).first()
+        if user:
+            if (user.password==password):
+                flash("Logged in Successfully!",category="success")
+                return "<h1>Home page<h1>"
+            else:
+                flash("Incorrect password, please try again.",category="error")
+        else:
+            flash("Email does not exist!",category="error")
+
     return render_template("login.html")
 
 @auth.route('/signup', methods=['GET','POST'])
