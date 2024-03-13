@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, render_template, request
-from .models import Course,Requests,db
+from .models import Course,Request,db
 
 views = Blueprint('views', __name__)
 
