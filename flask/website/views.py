@@ -9,7 +9,7 @@ views = Blueprint('views', __name__)
 def home():
     return render_template("home.html", user=current_user)
 
-@views.route('/create-course', methods=['POST'])
+@views.route('/create-course', methods=['GET','POST'])
 def createCourse():
     if request.method == 'POST':
         course_number = request.form.get('course_number')
@@ -20,7 +20,7 @@ def createCourse():
         new_course = Course(course_number=course_number, course_name=course_name, course_desc=course_desc, course_limit=course_limit, teacher_id=teacher_id)
         db.session.add(new_course)
         db.session.commit()
-    return ""
+    return render_template("createCourse.html", user=current_user)
 
 @views.route('/create-request', methods=['POST'])
 def createRequest():
@@ -31,3 +31,13 @@ def createRequest():
         db.session.add(new_request)
         db.session.commit()
     return "<h1>Home page<h1>"
+
+# @views.route('/create-course', methods=['POST'])
+# def createCourse():
+#     if request.method == 'POST':
+#         username = ""
+#         course = ""
+#         new_request = Request(username=username,course=course)
+#         db.session.add(new_request)
+#         db.session.commit()
+#     return "<h1>Home page<h1>"
