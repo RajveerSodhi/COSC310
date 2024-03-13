@@ -1,4 +1,4 @@
-from .  import db
+from . import db
 import flask
 from flask_login import UserMixin
 from sqlalchemy.sql import func
@@ -6,11 +6,17 @@ from sqlalchemy.sql import func
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id=db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique = True) #email for username
+    username = db.Column(db.String(150), unique = True)
     password=db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     last_name = db.Column(db.String(150))
     DOB =  db.Column(db.String(150))
+    
+class Requests(db.Model, UserMixin):
+    __tablename__ = 'requests'
+    id=db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique = True)
+    course = db.Column(db.String(150))
 
 class Admin(db.Model):
     __tablename__ = 'admins'
