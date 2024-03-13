@@ -16,48 +16,25 @@ class User(db.Model, UserMixin):
 class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
-    course_number = db.Column(db.Integer(150))
+    course_number = db.Column(db.Integer(150), unique = True)
     course_name = db.Column(db.String(150))
     course_limit = db.Column(db.Integer)
     course_desc = db.Column(db.String(1000))
     teacher_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-    # Relationships
-    # sections = db.relationship('Section', backref='course')
-    # assignments = db.relationship('Assignment', backref='course')    
     
 class Request(db.Model, UserMixin):
     __tablename__ = 'requests'
     id=db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique = True)
-    course = db.Column(db.String(150))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    course_id = db.Column(db.Integer, db.ForeignKey('Course.id'))
     
-class Admin(db.Model):
-    __tablename__ = 'admins'
-    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+class Enrollment(db.Model, UserMixin):
+    __tablename__ = 'enrollments'
+    id=db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    course_id = db.Column(db.Integer, db.ForeignKey('Course.id'))
 
-class Student(User):  # Assuming inheritance from User
-    __tablename__ = 'students'
-    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    # Relationship for many-to-many with Course
-    courses = db.relationship('Course', secondary='student_courses', backref='students')
 
-# Association table for Student-Course many-to-many relationship
-student_courses = db.Table('student_courses',
-    db.Column('student_id', db.Integer, db.ForeignKey('students.id'), primary_key=True),
-    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True)
-)
-
-class Teacher(db.Model):
-    __tablename__ = 'teachers'
-    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    # Relationships
-    courses = db.relationship('Course', backref='teacher')
-
-class Section(db.Model):
-    __tablename__ = 'sections'
-    id = db.Column(db.Integer, primary_key=True)
-    course_section = db.Column(db.Integer)
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
 
 class Grade(db.Model):
     __tablename__ = 'grades'
