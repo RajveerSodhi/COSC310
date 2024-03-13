@@ -12,6 +12,12 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(150))
     DOB =  db.Column(db.String(150))
     user_type = db.Column(db.String(50))
+    
+class Requests(db.Model, UserMixin):
+    __tablename__ = 'requests'
+    id=db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique = True)
+    course = db.Column(db.String(150))
 
 class Admin(db.Model):
     __tablename__ = 'admins'

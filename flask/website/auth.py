@@ -23,8 +23,6 @@ def signup():
         lastName = request.form.get('lastName')
         dob = request.form.get('dob')
         user_type = request.form.get('user_type')
-    
-        #new_user=User(username=email,password=password,first_name=firstName,last_name=lastName,DOB=dob,user_type=user_type)
         flash("Account created succesfully!", category="success")
         print(user_type)
         print(email)
