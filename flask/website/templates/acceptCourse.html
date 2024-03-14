@@ -1,57 +1,53 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
+
 <head>
-  <meta charset = "UTF-8">
-  <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width = device-width, initial-scale = 1.0">
   <title>Accept Student Enrolment Requests</title>
-  <link rel = "stylesheet" href = "../static/css/acceptIntoCourse.css">
+  <link rel="stylesheet" href="../static/css/acceptIntoCourse.css">
 </head>
+
 <body>
+  <div class="header">
+    <h2>Accept Student Enrolment Requests</h2>
+  </div>
 
-<div class = "subjectSelection">
-  <label for = "subjectFilter">Select Subject: </label>
-  <select id = "subjectFilter" onchange  =  "filterRequests()">
-    <option value = "All Subjects">All Subjects</option>
-    <option value = "COSC">Computer Science</option>
-    <option value = "PHYS">Physics</option>
-    <option value = "DATA">Data Science</option>
-    <option value = "MATH">Mathematics</option>
-    <option value = "STAT">Statistics</option> 
-  </select>
-</div>
+  <div class="subjectSelection">
+    <label for="subjectFilter">Select Subject: </label>
+    <select id="subjectFilter" onchange="filterRequests()">
+      <option value="All Subjects">All Subjects</option>
+      <option value="COSC">Computer Science</option>
+      <option value="PHYS">Physics</option>
+      <option value="DATA">Data Science</option>
+      <option value="MATH">Mathematics</option>
+      <option value="STAT">Statistics</option>
+    </select>
+  </div>
 
-<div class = "requestContainer">
-  <h2>Accept Student EnrolmentnRequests</h2>
-  
-  <ul>
-    <li>
-      <div class = "request">
-        <h3>COSC 150</h3>
-        <p><strong>Ben Strover</strong> has requested to enroll in this course</p>
-        <button type = "button" class = "acceptButton">Accept</button>
-        <button type = "button" class = "declineButton">Decline</button>
-      </div>
-    </li>
-
-    <li>
-      <div class = "request">
-        <h3>COSC 150</h3>
-        <p><strong>Hugh Jackman</strong> has requested to enroll in this course</p>
-        <button type = "button" class = "acceptButton">Accept</button>
-        <button type = "button" class = "declineButton">Decline</button>
-      </div>
-    </li>
-
-    <li>
-      <div class = "request">
-        <h3>DATA 101</h3>
-        <p><strong>Nick Hurt</strong> has requested to enroll in this course</p>
-        <button type = "button" class = "acceptButton">Accept</button>
-        <button type = "button" class = "declineButton">Decline</button>
-      </div>
-    </li>
-  </ul>
-</div>
+  <div class="requestContainer">
+    <ul>
+      {% for request in requests %}
+      <li>
+        <div class="request">
+          <h3>{{ request.course_id }}</h3>
+          <p><strong>{{ request.user_id }}</strong> has requested to enroll in this course</p>
+          <form method="POST" action="{{ url_for('views.acceptRequest') }}" class="req-action-form">
+            <input type="hidden" name="course_id" value="{{ request.course_id }}">
+            <input type="hidden" name="user_id" value="{{ request.user_id }}">
+            <input type="submit" class="acceptButton" value="Accept">
+          </form>
+          <form method="POST" action="{{ url_for('views.declineRequest') }}" class="req-action-form">
+            <input type="hidden" name="course_id" value="{{ request.course_id }}">
+            <input type="hidden" name="user_id" value="{{ request.user_id }}">
+            <input type="submit" class="declineButton" value="Decline">
+          </form>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
 
 </body>
+
 </html>
