@@ -10,7 +10,7 @@ body {
   flex-direction: column;
 }
 
-h2 {
+.header h2 {
   color: #FFF;
   margin-bottom: 20px;
   text-align: center;
@@ -31,7 +31,7 @@ ul {
   max-width: 600px;
 }
 
-.request { 
+.request {
   background: #F7F7F7;
   border: 1px solid #DDD;
   padding: 15px;
@@ -44,9 +44,10 @@ ul {
   text-align: center;
 }
 
-.acceptButton, .declineButton {
+.acceptButton,
+.declineButton {
   padding: 10px 15px;
-  width: 48.5% ;
+  width: 48.5%;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -67,7 +68,7 @@ select {
 }
 
 .declineButton {
-  background-color: #F00 ;
+  background-color: #F00;
   color: white;
 }
 
@@ -77,4 +78,8 @@ select {
 
 .declineButton:hover {
   background-color: #B00;
+}
+
+.req-action-form {
+  display: inline;
 }
