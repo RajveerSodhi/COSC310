@@ -31,3 +31,13 @@ def createRequest():
         db.session.add(new_request)
         db.session.commit()
     return "<h1>Home page<h1>"
+
+@views.route('/enroll-courses')
+def display_courses():
+    courses = Course.query.all()
+    return render_template('enrollCourse.html', courses=courses)
+
+@views.route('/accept-requests')
+def display_requests():
+    requests = Request.query.all()
+    return render_template('acceptCourse.html', requests=requests)
