@@ -37,7 +37,7 @@ def display_courses():
     courses = Course.query.all()
     return render_template('enrollCourse.html', courses=courses)
 
-@views.route('/accept-requests')
+@views.route('/requests')
 def display_requests():
     requests = Request.query.all()
     return render_template('acceptCourse.html', requests=requests)
