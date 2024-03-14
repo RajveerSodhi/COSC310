@@ -1,7 +1,7 @@
 import unittest
 from flask import Flask
 from flask_testing import TestCase
-from .models import db, User  # Import the database and the User model
+from ...flask.website.models  import db, User  # Import the database and the User model
 
 # sys.path.append('flask\main.py')  # Replace '/path/to/myapp' with the actual path to the 'myapp' package or module
 
