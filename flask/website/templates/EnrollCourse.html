@@ -32,7 +32,8 @@
           <p><strong>Instructor: </strong>{{ course.teacher_id }}</p>
           <p><strong>Total Students: </strong>{{ course.course_limit }}</p>
           <form method="POST" action="{{ url_for('views.createRequest') }}">
-            <input type="hidden" name="course_name" value="{{ course.course_name }}">
+            <input type="hidden" name="course_id" value="{{ course.id }}">
+            <input type="hidden" name="user_id" value="{{ user.id }}">
             <input type="submit" class="enrollButton" value="Request to Enroll">
           </form>
         </div>

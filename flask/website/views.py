@@ -25,8 +25,8 @@ def createCourse():
 @views.route('/create-request', methods=['POST'])
 def createRequest():
     if request.method == 'POST':
-        user_id = "dummy_user" # make login required and replace with current_user.id
-        course_id = request.form.get('course_name')
+        user_id = request.form.get('user_id') # make login required and replace with current_user.id
+        course_id = request.form.get('course_id')
         new_request = Request(user_id=user_id, course_id=course_id)
         db.session.add(new_request)
         db.session.commit()
@@ -35,7 +35,7 @@ def createRequest():
 @views.route('/enroll-courses')
 def display_courses():
     courses = Course.query.all()
-    return render_template('enrollCourse.html', courses=courses)
+    return render_template('enrollCourse.html', user=current_user, courses=courses)
 
 @views.route('/requests')
 def display_requests():
