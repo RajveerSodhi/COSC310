@@ -7,7 +7,8 @@ views = Blueprint('views', __name__)
 @views.route('/')
 @login_required
 def home():
-    return render_template("home.html", user=current_user)
+    enrolled_courses = Course.query.join(Enrollment).filter(Enrollment.user_id == current_user.id).all()
+    return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses)
 
 @views.route('/create-course', methods=['GET','POST'])
 def createCourse():
