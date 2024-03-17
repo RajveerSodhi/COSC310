@@ -13,18 +13,6 @@
     <h2>Accept Student Enrolment Requests</h2>
   </div>
 
-  <div class="subjectSelection">
-    <label for="subjectFilter">Select Subject: </label>
-    <select id="subjectFilter" onchange="filterRequests()">
-      <option value="All Subjects">All Subjects</option>
-      <option value="COSC">Computer Science</option>
-      <option value="PHYS">Physics</option>
-      <option value="DATA">Data Science</option>
-      <option value="MATH">Mathematics</option>
-      <option value="STAT">Statistics</option>
-    </select>
-  </div>
-
   <div class="requestContainer">
     <ul>
       {% for request in requests %}

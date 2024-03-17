@@ -41,7 +41,9 @@
 
       <button class="form-group" type="submit">Create Course</button>
 
-      <input class="form-group" type="button" value="Cancel" onclick="cancelCourseCreation()">
+      <a class="form-group" href="{{ url_for('views.home') }}">
+        <input type="button" value="Cancel">
+      </a>
     </form>
   </div>
 
