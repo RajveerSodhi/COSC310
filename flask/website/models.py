@@ -34,7 +34,34 @@ class Enrollment(db.Model, UserMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
 
+class Quiz(db.Model, UserMixin):
+    __tablename__ = 'quizzes'
+    id=db.Column(db.Integer, primary_key=True)
+    quiz_name = db.Column(db.String(150))
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
 
+class QuizQuestion(db.Model, UserMixin):
+    __tablename__ = 'quizQuestions'
+    id=db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(150))
+    option1 = db.Column(db.String(150))
+    option2 = db.Column(db.String(150))
+    option3 = db.Column(db.String(150))
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
+
+class Essay(db.Model, UserMixin):
+    __tablename__ = 'essays'
+    id=db.Column(db.Integer, primary_key=True)
+    essay_name = db.Column(db.String(150))
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+
+class EssayQuestion(db.Model, UserMixin):
+    __tablename__ = 'essayQuestions'
+    id=db.Column(db.Integer, primary_key=True)
+    question_text = db.Column(db.String(150))
+    file_upload = db.Column(db.LargeBinary)    # Storing file content as blob (May change datatype)
+    question_type = db.Column(db.String(150))
+    essay_id = db.Column(db.Integer, db.ForeignKey('essays.id'))
 
 # class Grade(db.Model):
 #     __tablename__ = 'grades'
@@ -42,23 +69,6 @@ class Enrollment(db.Model, UserMixin):
 #     scored_points = db.Column(db.Integer)
 #     max_points = db.Column(db.Integer)
 #     student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
-
-# class Assignment(db.Model):
-#     __tablename__ = 'assignments'
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(150))
-#     due_date = db.Column(db.DateTime)
-#     total_points = db.Column(db.Integer)
-#     description = db.Column(db.String(1000))
-#     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
-#     section_id = db.Column(db.Integer, db.ForeignKey('sections.id'))
-
-# class Question(db.Model):
-#     __tablename__ = 'questions'
-#     id = db.Column(db.Integer, primary_key=True)
-#     desc = db.Column(db.String(1000))
-#     # Foreign Key - Each Question belongs to one Assignment
-#     assignment_id = db.Column(db.Integer, db.ForeignKey('assignments.id'))
 
 
 
