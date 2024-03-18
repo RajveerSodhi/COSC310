@@ -8,18 +8,48 @@
 </head>
 <body>
     <h1>Home Page</h1>
-    <h3>Details of user logged in-:<h3>
-    <p>username: {{ user.username }}</p>
-    <p>first name: {{ user.first_name }}</p>
-    <p>last name: {{ user.last_name }}</p>   
-    <p>DOB: {{ user.DOB }}</p>
-    <p>role: {{ user.user_type }}</p>
 
-    <h3>Enrolled Courses</h3>
+    <!-- Account Details -->
+    <h3>Your account details:</h3>
     <ul>
-        {% for course in enrolled_courses %}
-            <li><a href="{{ url_for('views.course_page', course_id=course.id) }}">{{ course.course_code }} : {{ course.course_name }}</a></li>
-        {% endfor %}
+        <li>Username: {{ user.username }}</li>
+        <li>First Name: {{ user.first_name }}</li>
+        <li>Last Name: {{ user.last_name }}</li>
+        <li>DOB: {{ user.DOB }}</li>
+        <li>Role: {{ user.user_type }}</li>
     </ul>
+    
+    <!-- Student and Teacher View of Enrolled Courses-->
+    {% if current_user.user_type in ['student', 'teacher'] %}
+        <h3>Enrolled Courses:</h3>
+        <ul>
+            {% for course in enrolled_courses %}
+                <li><a href="{{ url_for('views.course_page', course_id=course.id) }}">{{ course.course_code }} : {{ course.course_name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <!-- Student View of Link to Enrolling in Courses -->
+    {% if current_user.user_type in ['student'] %}
+        <h3>Enroll in a New Course:</h3>
+        <a href="{{ url_for('views.display_courses') }}">Clicking this link will redirect you to the enroll course page</a>
+    {% endif %}
+
+     <!-- Admin View of Link to Creating Courses -->
+    {% if current_user.user_type in ['admin'] %}
+     <h3>Create a Course:</h3>
+     <a href="{{ url_for('views.createCourse') }}">Clicking this link will redirect you to the create course page</a>
+    {% endif %}
+
+    <!-- Admin View of Link to Accepting/Declining Student Enrollment Requests for Courses -->
+    {% if current_user.user_type in ['admin'] %}
+     <h3>Accept/Decline Student Enrollment Requests for Courses:</h3>
+     <a href="{{ url_for('views.display_requests') }}">Clicking this link will redirect you to the requests page</a>
+    {% endif %}
+
+    <!-- Logout -->
+    <h3>Logout:</h3>
+    <a href="{{ url_for('auth.logout') }}">Clicking this link will log you out of your account.</a>
+
 </body>
 </html>

@@ -10,18 +10,6 @@
 
 <body>
 
-  <div class="subjectSelection">
-    <label for="subjectFilter">Select Subject: </label>
-    <select id="subjectFilter" onchange="filterCourses()">
-      <option value="All Subjects">All Subjects</option>
-      <option value="COSC">Computer Science</option>
-      <option value="PHYS">Physics</option>
-      <option value="DATA">Data Science</option>
-      <option value="MATH">Mathematics</option>
-      <option value="STAT">Statistics</option>
-    </select>
-  </div>
-
   <div class="courseList">
     <ul>
       {% for course in courses %}
