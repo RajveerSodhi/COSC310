@@ -1,0 +1,81 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #6495ED;
+  margin: 0;
+  padding: 20px;
+}
+
+.form-container {
+  background-color: #FFF;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.assignment-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.assignment-form label {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.items {
+  font-weight: bold;
+}
+
+.assignment-form input[type = text],
+.assignment-form input[type = file],
+.assignment-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #CCC;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.assignment-form .assignment-type,
+.assignment-form .content-type {
+  margin-bottom: 15px;
+}
+
+.assignment-form .quiz-content,
+.assignment-form .essay-content,
+.assignment-form .file-upload-quiz,
+.assignment-form .file-upload-essay,
+.assignment-form .text-entry-quiz,
+.assignment-form .text-entry-essay {
+  display: none;
+}
+
+.assignment-form .visible {
+  display: block;
+}
+
+.assignment-form button {
+  padding: 10px 15px;
+  border: 1px solid #CCC;
+  cursor: pointer;
+  display: block;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button[type = submit] {
+  margin-top: 30px;
+  background-color: #4CAF50;
+  color: #FFF;
+}
+
+.assignment-form .radio-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
