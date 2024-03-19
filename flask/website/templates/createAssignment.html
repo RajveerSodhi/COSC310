@@ -6,114 +6,128 @@
   <title>Create Assignment</title>
   <link rel="stylesheet" href="../static/css/createAssignment.css">
 </head>
+<body>
+  <div class="form-container">
+    <form class="assignment-form" method="POST">
+      <h2>Create Assignment</h2>
+      
+      <label for="title" class="items">Title</label>
+      <input type="text" id="title" name="title" required>
 
-  <body>
-    <div class="form-container">
-      <form class="assignment-form" method="POST"
-      >
-        <h2>Create Assignment</h2>
-        
-        <label for="title" class="items">Title</label>
-        <input type="text" id="title" name="title" required>
+      <div class="assignment-type radio-group">
+        <label class="items">Assignment Type</label>
+        <label><input type="radio" name="assignmentType" value="quiz" onclick="toggleAssignmentType()" required> Quiz</label>
+        <label><input type="radio" name="assignmentType" value="essay" onclick="toggleAssignmentType()"> Essay</label>
+      </div>
 
-        <div class="assignment-type radio-group">
-          <label class="items">Assignment Type</label>
-          <label><input type="radio" name="assignmentType" value="quiz" onclick="toggleAssignmentType()" required> Quiz</label>
-          <label><input type="radio" name="assignmentType" value="essay" onclick="toggleAssignmentType()"> Essay</label>
-        </div>
-
-        <div class="quiz-content">
-          <div class="content-type">
-            <label class="items">Content Type</label>
-            <div class="radio-group">
-              <label><input type="radio" name="contentMethodQuiz" value="file" onclick="toggleContentMethod('quiz')" checked required> Upload File</label>
-              <label><input type="radio" name="contentMethodQuiz" value="text" onclick="toggleContentMethod('quiz')"> Enter Text</label>
+      <div class="quiz-content">
+        <div id="quiz-questions">
+          <label for="question1" class="items">Question #1</label>
+          <input type="text" id="question1" name="question1" class="question-input" required>
+          <div class="mcq-options" id="mcq-options-1">
+            <div class = "mcq-option" id = "mcq-option-1">
+              <label for="option1-1">A:</label>
+              <input type="text" id="option1-1" name="option1-1" required>
+            </div>
+            <div class = "mcq-option" id = "mcq-option-2">
+              <label for="option1-2">B:</label>
+              <input type="text" id="option1-2" name="option1-2" required>
+            </div>
+            <div class = "mcq-option" id = "mcq-option-3">
+              <label for="option1-3">C:</label>
+              <input type="text" id="option1-3" name="option1-3" required>
+            </div>
+            <div class = "mcq-option" id = "mcq-option-4">
+              <label for="option1-4">D:</label>
+              <input type="text" id="option1-4" name="option1-4" required>
             </div>
           </div>
+          <button type="button" onclick="addQuestion()">Add Question</button>
+        </div>
+      </div>
 
-          <div class="file-upload-quiz visible">
-            <label for="file-upload-quiz" class="items">Upload File</label>
-            <input type="file" id="file-upload-quiz" name="file-upload-quiz">
-          </div>
-
-          <div class="text-entry-quiz">
-            <div id="quiz-questions">
-              <label for="question1" class = "items">Question #1</label>
-              <input type="text" id="question1" name="question1">
-              <button type="button" onclick="addQuestion()">Add Question</button>
-            </div>
+      <div class="essay-content" style="display: none;">
+        <div class="content-type">
+          <label class="items">Content Type</label>
+          <div class="radio-group">
+            <label><input type="radio" name="contentMethodEssay" id="fileRadio" value="file" onclick="toggleContentMethod('essay')" checked required> Upload File</label>
+            <label><input type="radio" name="contentMethodEssay" id="textRadio" value="text" onclick="toggleContentMethod('essay')"> Enter Text</label>
           </div>
         </div>
 
-        <div class="essay-content">
-          <div class="content-type">
-            <label class="items">Content Type</label>
-            <div class="radio-group">
-              <label><input type="radio" name="contentMethodEssay" id="fileRadio" value="file" onclick="toggleContentMethod('essay')" checked required
-                > Upload File</label>
-              <label><input type="radio" name="contentMethodEssay" id="textRadio" value="text" onclick="toggleContentMethod('essay')"> Enter Text</label>
-            </div>
-          </div>
-
-          <div class="file-upload-essay visible">
-            <label for="file-upload-essay" class="items">Upload File</label>
-            <input type="file" id="file-upload-essay" name="file-upload-essay">
-          </div>
-
-          <div class="text-entry-essay">
-            <label for="text-entry-essay">Text Entry</label>
-            <textarea id="text-entry-essay" name="text-entry-essay"></textarea>
-          </div>
+        <div class="file-upload-essay visible">
+          <label for="file-upload-essay" class="items">Upload File</label>
+          <input type="file" id="file-upload-essay" name="file-upload-essay">
         </div>
-        
-        <button type="submit">Post Assignment</button>
-      </form>
-    </div>
 
-    <script>
-      function toggleAssignmentType() {
-        var assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
-        var quizContent = document.querySelector('.quiz-content');
-        var essayContent = document.querySelector('.essay-content');
-        quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
-        essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
-        if (assignmentType === 'quiz') {
-          document.querySelector('input[name="contentMethodQuiz"][value="file"]').checked = true;
-        }
-        else {
-          document.querySelector('input[name="contentMethodEssay"][value="file"]').checked = true;
-        }
-        toggleContentMethod(assignmentType);
-      }
+        <div class="text-entry-essay">
+          <label for="text-entry-essay">Text Entry</label>
+          <textarea id="text-entry-essay" name="text-entry-essay"></textarea>
+        </div>
+      </div>
+      
+      <button type="submit">Post Assignment</button>
+    </form>
+  </div>
 
-      function toggleContentMethod(assignmentType) {
-        var methodType = assignmentType === 'quiz' ? 'Quiz' : 'Essay';
-        var contentMethod = document.querySelector(`input[name="contentMethod${methodType}"]:checked`).value;
-        var fileUpload = document.querySelector(`.file-upload-${assignmentType.toLowerCase()}`);
-        var textEntry = document.querySelector(`.text-entry-${assignmentType.toLowerCase()}`);
-        fileUpload.style.display = contentMethod === 'file' ? 'block' : 'none';
-        textEntry.style.display = contentMethod === 'text' ? 'block' : 'none';
-      }
+<script>
+  function toggleAssignmentType() {
+    var assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
+    var quizContent = document.querySelector('.quiz-content');
+    var essayContent = document.querySelector('.essay-content');
+    quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
+    essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
+  }
 
-      function addQuestion() {
-        var quizQuestions = document.getElementById('quiz-questions');
-        var questionCount = quizQuestions.querySelectorAll('input[type=text]').length + 1;
-        var newLabel = document.createElement('label');
-        newLabel.setAttribute('for', 'question' + questionCount);
-        newLabel.setAttribute('class', 'items');
-        newLabel.textContent = 'Question #' + questionCount;
+  function toggleContentMethod(assignmentType) {
+    var fileUpload = document.querySelector(`.file-upload-${assignmentType}`);
+    var textEntry = document.querySelector(`.text-entry-${assignmentType}`);
+    fileUpload.style.display = assignmentType === 'essay' && fileRadio.checked ? 'block' : 'none';
+    textEntry.style.display = assignmentType === 'essay' && textRadio.checked ? 'block' : 'none';
+  }
 
-        var newInput = document.createElement('input');
-        newInput.type = 'text';
-        newInput.id = 'question' + questionCount;
-        newInput.name = 'question' + questionCount;
+  function addQuestion() {
+    var quizQuestions = document.getElementById('quiz-questions');
+    var questionCount = quizQuestions.querySelectorAll('.question-input').length + 1;
+    var newLabel = document.createElement('label');
+    newLabel.setAttribute('for', 'question' + questionCount);
+    newLabel.setAttribute('class', 'items');
+    newLabel.textContent = 'Question #' + questionCount;
 
-        var addButton = quizQuestions.querySelector('button');
-        quizQuestions.insertBefore(newLabel, addButton);
-        quizQuestions.insertBefore(newInput, addButton);
+    var newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.id = 'question' + questionCount;
+    newInput.name = 'question' + questionCount;
+    newInput.classList.add('question-input');
 
-        toggleAssignmentType();
-      }
-    </script> 
-  </body>
+    var mcqOptionsDiv = document.createElement('div');
+    mcqOptionsDiv.classList.add('mcq-options');
+    mcqOptionsDiv.id = 'mcq-options-' + questionCount;
+
+    for (let i = 1; i <= 4; i++) {
+      let mcqOptionDiv = document.createElement('div');
+      mcqOptionDiv.classList.add('mcq-option');
+
+      let optionLabel = document.createElement('label');
+      optionLabel.htmlFor = `option${questionCount}-${i}`;
+      optionLabel.textContent = `${String.fromCharCode(64 + i)}:`;
+
+      let optionInput = document.createElement('input');
+      optionInput.type = 'text';
+      optionInput.id = `option${questionCount}-${i}`;
+      optionInput.name = `option${questionCount}-${i}`;
+
+      mcqOptionDiv.appendChild(optionLabel);
+      mcqOptionDiv.appendChild(optionInput);
+      mcqOptionsDiv.appendChild(mcqOptionDiv);
+    }
+
+    var addButton = quizQuestions.querySelector('button');
+    quizQuestions.insertBefore(newLabel, addButton);
+    quizQuestions.insertBefore(newInput, addButton);
+    quizQuestions.insertBefore(mcqOptionsDiv, addButton);
+  }
+
+</script>
+</body>
 </html>

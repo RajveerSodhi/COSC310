@@ -7,11 +7,15 @@ body {
 
 .form-container {
   background-color: #FFF;
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+}
+
+.essay-content {
+  display: none;
 }
 
 .assignment-form h2 {
@@ -21,16 +25,16 @@ body {
 
 .assignment-form label {
   display: block;
-  margin-top: 10px;
   text-align: center;
 }
 
 .items {
   font-weight: bold;
+  margin-top: 10px;
 }
 
-.assignment-form input[type = text],
-.assignment-form input[type = file],
+.assignment-form input[type="text"],
+.assignment-form input[type="file"],
 .assignment-form textarea {
   width: 100%;
   padding: 10px;
@@ -69,7 +73,7 @@ body {
   box-sizing: border-box;
 }
 
-button[type = submit] {
+button[type="submit"] {
   margin-top: 30px;
   background-color: #4CAF50;
   color: #FFF;
@@ -78,4 +82,21 @@ button[type = submit] {
 .assignment-form .radio-group {
   margin-bottom: 15px;
   text-align: left;
+}
+
+.mcq-option {
+  margin-bottom: 5px;
+  text-align: left;
+  align-items: center;
+}
+
+.mcq-option label {
+  display: inline-block;
+  width: 20px;
+  margin-right: 10px;
+}
+
+.mcq-option input[type="text"] {
+  display: inline-block;
+  width: calc(100% - 35px);
 }
