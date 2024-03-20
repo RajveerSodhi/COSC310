@@ -75,7 +75,7 @@ def acceptRequest():
         
     return redirect(url_for('views.display_requests'))
 
-# Declining Enrollemnt Request
+# Declining Enrollment Request
 @views.route('/decline-request', methods=['POST'])
 def declineRequest():
     if request.method == 'POST':
@@ -87,17 +87,18 @@ def declineRequest():
             db.session.commit()
     return redirect(url_for('views.display_requests'))
 
+# Page for Individual Course
 @views.route('/course/<int:course_id>')
 def course_page(course_id):
     course = Course.query.get(course_id)
     return render_template('coursePage.html', course=course)
 
-@views.route('/createAssignment', methods=['GET','POST'])
-def createAssignment():
+# Page for Creating Assignemnt for a particular Course
+@views.route('/course/<int:course_id>/createAssignment', methods=['GET','POST'])
+def createAssignment(course_id):
     if request.method == 'POST':
         assignment_type = request.form.get('assignmentType')
         assignment_name = request.form.get('title')
-        course_id = request.form.get('course_id')
 
         if assignment_type == 'quiz':
             new_quiz = Quiz(quiz_name=assignment_name, course_id=course_id)
@@ -131,8 +132,7 @@ def createAssignment():
             db.session.add(essay_question)
 
         db.session.commit()
-        return redirect(
-            url_for('views.createAssignment')
-        )
+        return redirect(url_for('views.home', course_id=course_id))
 
-    return render_template('createAssignment.html', user=current_user)
+    return render_template('createAssignment.html', user=current_user, course_id=course_id)
+

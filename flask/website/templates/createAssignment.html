@@ -10,10 +10,8 @@
 
 <body>
   <div class="form-container">
-    <form class="assignment-form" method="POST" action="/createAssignment" enctype="multipart/form-data">
+    <form class="assignment-form" method="POST" action="/course/{{ course_id }}/createAssignment" enctype="multipart/form-data">
       <h2>Create Assignment</h2>
-
-      <input type="hidden" name="course_id" value="ID_OF_COURSE">
 
       <label for="title" class="items">Title</label>
       <input type="text" id="title" name="title" required>
