@@ -49,6 +49,13 @@ class QuizQuestion(db.Model, UserMixin):
     option3 = db.Column(db.String(150))
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
 
+class QuizAnswer(db.Model,UserMixin):
+    __tablename__ = 'quizResponses'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    question_id = db.Column(db.Integer, db.ForeignKey('quizQuestions.id'))
+    response = db.Column(db.String(150))  # The option chosen by the student
+
 class Essay(db.Model, UserMixin):
     __tablename__ = 'essays'
     id=db.Column(db.Integer, primary_key=True)

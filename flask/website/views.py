@@ -1,6 +1,6 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, render_template, request, redirect, url_for
-from .models import db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion
+from .models import db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizAnswer, QuizQuestion
 
 views = Blueprint('views', __name__)
 
