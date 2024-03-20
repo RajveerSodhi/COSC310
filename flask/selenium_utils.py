@@ -1,15 +1,17 @@
-# selenium_utils.py
 from selenium import webdriver
+import unittest
 
-def perform_selenium_actions():
-    # Initialize WebDriver
-    driver = webdriver.Chrome('/path/to/chromedriver')
+class MyTestCase(unittest.TestCase):
+    def setUp(self):
+        self.driver = webdriver.Chrome() 
+        self.driver.implicitly_wait(10)  # Set an implicit wait time for elements to load
 
-    # Example Selenium actions
-    driver.get('https://example.com')
-    title = driver.title
+    def tearDown(self):
+        self.driver.quit()
 
-    # Close the WebDriver
-    driver.quit()
+    def test_example(self):
+        self.driver.get("http://127.0.0.1:5000")  
+        self.assertEqual(self.driver.title, "Example Domain")  # Replace with your expected title
 
-    return title
+if __name__ == '__main__':
+    unittest.main()
