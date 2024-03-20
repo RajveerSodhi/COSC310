@@ -54,14 +54,25 @@
 
 <div class="container">
     <h2>Edit User Details</h2>
-    <form id="editUserDetailsForm" method="post" action="/edit">
-        <!-- Username Field -->
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+    <form id="editUserDetailsForm" method="post" action="{{ url_for('views.edit_details') }}">
+       
 
         <!-- Email Field -->
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
+
+        <!-- First Name Field -->
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <!-- Last Name Field -->
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+         <!-- Date of Birth (DOB) Field -->
+         <label for="dob">Date of Birth (DOB):</label>
+         <input type="date" id="dob" name="dob" required>
+         <br><br>
 
         <!-- Password Field -->
         <label for="password">New Password:</label>
@@ -83,7 +94,7 @@
 <script>
     function cancelEdit() {
         // Redirect to home page when cancel button is clicked
-        window.location.href = "/home";
+        window.location.href = "/";
     }
 
     // Additional JavaScript for password validation if needed
@@ -96,11 +107,7 @@
             alert("Passwords do not match.");
             return false; // Prevent form submission
         } else {
-            // Display success message
-            alert("User details have been changed.");
-            // Redirect to home page after displaying the message
-            window.location.href = "/";
-            return false; // Prevent form submission
+            return true; // Allow form submission
         }
     };
 </script>

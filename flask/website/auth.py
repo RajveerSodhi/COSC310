@@ -47,7 +47,7 @@ def edit_details():
     if request.method == 'POST':
         # Retrieve the updated details from the form
         email = request.form.get('email')
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=email).first()
         if user:
             user.password = request.form.get('password')
             user.first_name = request.form.get('firstName')
@@ -58,9 +58,9 @@ def edit_details():
             return redirect(url_for('views.home'))
         else:
             flash("User not found!", category="error")
-        return ("Try again!")
-        
-    
+           
+
+
     return render_template("EditDetails.html", user=current_user)
 
 @auth.route('/logout')

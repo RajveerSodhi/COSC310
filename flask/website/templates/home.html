@@ -4,27 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Title</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Add Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Add Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
-    <h1>Home Page</h1>
+    <div class="container">
+        <h1>Welcome to the Home Page</h1>
 
-    <!-- Account Details -->
-    <h3>Your account details:</h3>
-    <ul>
-        <li>Username: {{ user.username }}</li>
-        <li>First Name: {{ user.first_name }}</li>
-        <li>Last Name: {{ user.last_name }}</li>
-        <li>DOB: {{ user.DOB }}</li>
-        <li>Role: {{ user.user_type }}</li>
-    </ul>
-    
+        <!-- Account Details -->
+        <h3>Your account details:</h3>
+        <ul>
+            <li>Username: {{ user.username }}</li>
+            <li>First Name: {{ user.first_name }}</li>
+            <li>Last Name: {{ user.last_name }}</li>
+            <li>DOB: {{ user.DOB }}</li>
+            <li>Role: {{ user.user_type }}</li>
+        </ul>
+   
     <!-- Student and Teacher View of Enrolled Courses-->
     {% if current_user.user_type in ['student', 'teacher'] %}
         <h3>Enrolled Courses:</h3>
         <ul>
             {% for course in enrolled_courses %}
-                <li><a href="{{ url_for('views.course_page', course_id=course.id) }}">{{ course.course_code }} : {{ course.course_name }}</a></li>
+                <li><a class="btn btn-primary" href="{{ url_for('views.course_page', course_id=course.id) }}">{{ course.course_code }} : {{ course.course_name }}</a></li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -47,9 +56,17 @@
      <a href="{{ url_for('views.display_requests') }}">Clicking this link will redirect you to the requests page</a>
     {% endif %}
 
+    <!-- Link to Edit Page -->
+    <h3>Edit User detail:</h3>
+    <!-- need to add the right connection here, auth or views which one should be used -->
+    <a href="{{ url_for('views.edit_details') }}">Clicking this link will redirect you to the edit page/Currently a replace is used </a>
+
     <!-- Logout -->
     <h3>Logout:</h3>
     <a href="{{ url_for('auth.logout') }}">Clicking this link will log you out of your account.</a>
 
+ <!-- Add Bootstrap JS and jQuery -->
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, render_template, request, redirect, url_for
-from .models import db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission
+
+from .models import User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission
 
 views = Blueprint('views', __name__)
 
@@ -10,6 +11,28 @@ views = Blueprint('views', __name__)
 def home():
     enrolled_courses = Course.query.join(Enrollment).filter(Enrollment.user_id == current_user.id).all()
     return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses)
+  
+@views.route('/editDetails', methods=['GET', 'POST'])
+@login_required
+def edit_details():
+     if request.method == 'POST':
+        # Retrieve the updated details from the form
+        email = request.form.get('email')
+        user = User.query.filter_by(username=email).first()
+        if user:
+            user.password = request.form.get('password')
+            user.first_name = request.form.get('firstName')
+            user.last_name = request.form.get('lastName')
+            user.DOB = request.form.get('dob')
+            db.session.commit()
+            flash("Details updated successfully!", category="success")
+            return redirect(url_for('views.home'))
+        else:
+            flash("User not found!", category="error")
+            
+            
+    
+     return render_template("EditDetails.html", user=current_user)
 
 # Page for Creating a New Course - Admin
 @views.route('/create-course', methods=['GET','POST'])
