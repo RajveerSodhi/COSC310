@@ -1,10 +1,7 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, render_template, request, redirect, url_for
-<<<<<<< HEAD
-from .models import User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion
-=======
-from .models import db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission
->>>>>>> main
+
+from .models import User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission
 
 views = Blueprint('views', __name__)
 
@@ -21,7 +18,7 @@ def edit_details():
      if request.method == 'POST':
         # Retrieve the updated details from the form
         email = request.form.get('email')
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=email).first()
         if user:
             user.password = request.form.get('password')
             user.first_name = request.form.get('firstName')

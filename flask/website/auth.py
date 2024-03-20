@@ -47,7 +47,7 @@ def edit_details():
     if request.method == 'POST':
         # Retrieve the updated details from the form
         email = request.form.get('email')
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=email).first()
         if user:
             user.password = request.form.get('password')
             user.first_name = request.form.get('firstName')
