@@ -11,6 +11,29 @@ def home():
     enrolled_courses = Course.query.join(Enrollment).filter(Enrollment.user_id == current_user.id).all()
     return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses)
 
+    # Edit User Details
+    @views.route('/EditDetails', methods=['GET', 'POST'])
+    @login_required
+    def edit_details():
+        if request.method == 'POST':
+            # Get the updated details from the form
+            new_username = request.form.get('username')
+            new_email = request.form.get('email')
+            new_password = request.form.get('password')
+
+            # Update the current user's details
+            current_user.username = new_username
+            current_user.email = new_email
+            current_user.set_password(new_password)
+
+            # Commit the changes to the database
+            db.session.commit()
+
+            flash('Your details have been updated!', 'success')
+            return redirect(url_for('views.edit_details'))
+
+        return render_template('EditDetails.html', user=current_user)
+
 # Page for Creating a New Course - Admin
 @views.route('/create-course', methods=['GET','POST'])
 def createCourse():

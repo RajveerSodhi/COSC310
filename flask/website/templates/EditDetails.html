@@ -54,7 +54,7 @@
 
 <div class="container">
     <h2>Edit User Details</h2>
-    <form id="editUserDetailsForm" method="post" action="/edit">
+    <form id="editUserDetailsForm" method="post" action="{{ url_for('views.EditDetails') }}">
         <!-- Username Field -->
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>

@@ -41,7 +41,7 @@ def signup():
         
     return render_template("signup.html", user=current_user)
 
-    @auth.route('/edit_details', methods=['GET', 'POST'])
+    @auth.route('/EditDetails', methods=['GET', 'POST'])
     @login_required
     def edit_details():
         if request.method == 'POST':
@@ -61,7 +61,7 @@ def signup():
             flash("Details updated successfully!", category="success")
             return redirect(url_for('views.home'))
         
-        return render_template("edit_details.html", user=current_user)
+        return render_template("EditDetails.html", user=current_user)
 
 @auth.route('/logout')
 @login_required
