@@ -138,16 +138,7 @@ def createAssignment(course_id):
 
     return render_template('createAssignment.html', user=current_user, course_id=course_id)
 
-# @views.route('/course/<int:course_id>/quizzes', methods=['GET'])
-# def get_quizzes(course_id):
-#     quizzes = Quiz.query.filter_by(course_id=course_id).all()
-#     quizzes_data = []
-#     for quiz in quizzes:
-#         quiz_data = {
-#             'id': quiz.id,
-#             'quiz_name': quiz.quiz_name,
-#             'course_id': quiz.course_id,
-#         }
-#         quizzes_data.append(quiz_data)
-
-#     return jsonify(quizzes_data)
+# Individual Quiz Page
+@views.route('/course/<int:course_id>/quiz')
+def course_page(course_id):
+    return render_template('quiz.html', course_id=course_id)
