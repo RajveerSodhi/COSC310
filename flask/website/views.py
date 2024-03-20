@@ -87,13 +87,15 @@ def declineRequest():
             db.session.commit()
     return redirect(url_for('views.display_requests'))
 
-# Page for Individual Course
+# Individual Course Page
 @views.route('/course/<int:course_id>')
 def course_page(course_id):
     course = Course.query.get(course_id)
-    return render_template('coursePage.html', course=course)
+    quizzes = Quiz.query.filter_by(course_id=course_id).all()
+    essays = Essay.query.filter_by(course_id=course_id).all()
+    return render_template('coursePage.html', course=course, quizzes=quizzes, essays=essays)
 
-# Page for Creating Assignemnt for a particular Course
+# Page for Creating Assignment for a particular Course
 @views.route('/course/<int:course_id>/createAssignment', methods=['GET','POST'])
 def createAssignment(course_id):
     if request.method == 'POST':
@@ -136,3 +138,16 @@ def createAssignment(course_id):
 
     return render_template('createAssignment.html', user=current_user, course_id=course_id)
 
+# @views.route('/course/<int:course_id>/quizzes', methods=['GET'])
+# def get_quizzes(course_id):
+#     quizzes = Quiz.query.filter_by(course_id=course_id).all()
+#     quizzes_data = []
+#     for quiz in quizzes:
+#         quiz_data = {
+#             'id': quiz.id,
+#             'quiz_name': quiz.quiz_name,
+#             'course_id': quiz.course_id,
+#         }
+#         quizzes_data.append(quiz_data)
+
+#     return jsonify(quizzes_data)
