@@ -41,26 +41,27 @@ def signup():
         
     return render_template("signup.html", user=current_user)
 
-    @auth.route('/EditDetails', methods=['GET', 'POST'])
-    @login_required
-    def edit_details():
-        if request.method == 'POST':
-            # Retrieve the updated details from the form
-            email = request.form.get('email')
-            firstName = request.form.get('firstName')
-            lastName = request.form.get('lastName')
-            dob = request.form.get('dob')
-            
-            # Update the user's details in the database
-            current_user.email = email
-            current_user.first_name = firstName
-            current_user.last_name = lastName
-            current_user.DOB = dob
+@auth.route('/editDetails', methods=['GET', 'POST'])
+@login_required
+def edit_details():
+    if request.method == 'POST':
+        # Retrieve the updated details from the form
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.password = request.form.get('password')
+            user.first_name = request.form.get('firstName')
+            user.last_name = request.form.get('lastName')
+            user.DOB = request.form.get('dob')
             db.session.commit()
             flash("Details updated successfully!", category="success")
             return redirect(url_for('views.home'))
+        else:
+            flash("User not found!", category="error")
+        return ("Try again!")
         
-        return render_template("EditDetails.html", user=current_user)
+    
+    return render_template("EditDetails.html", user=current_user)
 
 @auth.route('/logout')
 @login_required
