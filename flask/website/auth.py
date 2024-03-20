@@ -58,7 +58,7 @@ def edit_details():
             return redirect(url_for('views.home'))
         else:
             flash("User not found!", category="error")
-        return ("User doesnt exist, Try again!")
+           
 
 
     return render_template("EditDetails.html", user=current_user)
