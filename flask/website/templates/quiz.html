@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="quiz-container">
-    <form class="quiz-form" method="POST" action="">
+    <form class="quiz-form" method="POST" action="/create-submission">
       <h2>Quiz Title: {{ quiz.quiz_name }}</h2>
 
       {% for question in questions %}
@@ -16,17 +16,19 @@
         <p class="question-text">{{ loop.index }}. {{ question.question }}</p>
         <div class="options">
           <label class="option">
-            <input type="radio" name="answer{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}
+            <input type="radio" name="{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}
           </label>
           <label class="option">
-            <input type="radio" name="answer{{ question.id }}" value="{{ question.option2 }}">{{ question.option2 }}
+            <input type="radio" name="{{ question.id }}" value="{{ question.option2 }}">{{ question.option2 }}
           </label>
-          <label class="option">
-            <input type="radio" name="answer{{ question.id }}" value="{{ question.option3 }}">{{ question.option3 }}
+          <label class="option" >
+            <input type="radio" name="{{ question.id }}" value="{{ question.option3 }}">{{ question.option3 }}
           </label>
         </div>
       </div>
       {% endfor %}
+
+      <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
 
       <button type="submit" class="submit-quiz">Submit Answers</button>
     </form>

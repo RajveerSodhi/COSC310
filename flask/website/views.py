@@ -1,6 +1,6 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, render_template, request, redirect, url_for
-from .models import db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion
+from .models import db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission
 
 views = Blueprint('views', __name__)
 
@@ -139,8 +139,34 @@ def createAssignment(course_id):
     return render_template('createAssignment.html', user=current_user, course_id=course_id)
 
 # Individual Quiz Page
-@views.route('/course/<int:course_id>/quiz/<int:quiz_id>')
-def quiz_page(course_id, quiz_id):
+@views.route('/course/<int:course_id>/quiz/<int:quiz_id>',methods=['GET'])
+def quiz_page(course_id, quiz_id):        
     quiz = Quiz.query.filter_by(id=quiz_id, course_id=course_id).first()
     questions = QuizQuestion.query.filter_by(quiz_id=quiz_id).all()
     return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz)
+
+@views.route('/create-submission',methods=['POST'])
+def create_submission():
+    quiz_id = request.form.get('quiz_id')
+    student_id = current_user.id
+    answers = {}
+    for question_id in request.form:
+        if question_id != 'quiz_id':
+            answers[question_id] = request.form[question_id]
+        
+    print(quiz_id)
+    print(student_id)
+    print(answers)
+    
+    for question_id, selected_option in answers.items():
+        submission = QuizSubmission(selected_option=selected_option, quiz_id=quiz_id, quizQuestion_id=question_id, student_id=student_id)
+        db.session.add(submission)
+
+    db.session.commit()
+    
+    return redirect(url_for('views.home'))
+    
+    
+    
+
+
