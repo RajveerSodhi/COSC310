@@ -57,7 +57,6 @@ def signup():
             current_user.last_name = lastName
             current_user.DOB = dob
             db.session.commit()
-            
             flash("Details updated successfully!", category="success")
             return redirect(url_for('views.home'))
         
