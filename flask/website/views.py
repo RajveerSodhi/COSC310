@@ -15,14 +15,25 @@ def home():
 @views.route('/create-course', methods=['GET','POST'])
 def createCourse():
     if request.method == 'POST':
-        course_code = request.form.get('course_code')
         course_name = request.form.get('course_name')
         course_desc = request.form.get('course_desc')
         course_limit = request.form.get('course_limit')
+        course_code = request.form.get('course_code')
         teacher_id = request.form.get('teacher_id')
+        #create the new course
         new_course = Course(course_code=course_code, course_name=course_name, course_desc=course_desc, course_limit=course_limit, teacher_id=teacher_id)
+        #add the new course to the session
         db.session.add(new_course)
+        # commit to save the course and get its course_id
         db.session.commit()
+        #creating the new enrollment for the teacher with the new course id
+        teacher_enrollment = Enrollment(user_id=teacher_id,course_id=new_course.id)
+        #add the teacher's enrollment to the session
+        db.session.add(teacher_enrollment)
+        db.session.commit()
+
+
+
     return render_template("createCourse.html", user=current_user)
 
 # Creating Enrollment Request
