@@ -140,6 +140,7 @@ def createAssignment(course_id):
 
 # Individual Quiz Page
 @views.route('/course/<int:course_id>/quiz/<int:quiz_id>')
-def course_page(course_id, quiz_id):
+def quiz_page(course_id, quiz_id):
     quiz = Quiz.query.filter_by(id=quiz_id, course_id=course_id).first()
-    return render_template('quiz.html', course_id=course_id, quiz=quiz)
+    questions = QuizQuestion.query.filter_by(quiz_id=quiz_id).all()
+    return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz)

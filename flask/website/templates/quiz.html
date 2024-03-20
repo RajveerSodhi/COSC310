@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="quiz-container">
-    <form class="quiz-form" method="POST" action="{{ url_for('views.submit_quiz', quiz_id=quiz.id) }}">
+    <form class="quiz-form" method="POST" action="">
       <h2>Quiz Title: {{ quiz.quiz_name }}</h2>
 
       {% for question in questions %}
