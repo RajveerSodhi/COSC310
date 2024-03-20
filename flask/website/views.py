@@ -1,6 +1,6 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, render_template, request, redirect, url_for
-from .models import Course, Request, Enrollment, db
+from .models import db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion
 
 views = Blueprint('views', __name__)
 
@@ -80,3 +80,48 @@ def declineRequest():
 def course_page(course_id):
     course = Course.query.get(course_id)
     return render_template('coursePage.html', course=course)
+
+@views.route('/createAssignment', methods=['GET','POST'])
+def createAssignment():
+    if request.method == 'POST':
+        assignment_type = request.form.get('assignmentType')
+        assignment_name = request.form.get('title')
+        course_id = request.form.get('course_id')
+
+        if assignment_type == 'quiz':
+            new_quiz = Quiz(quiz_name=assignment_name, course_id=course_id)
+            db.session.add(new_quiz)
+            db.session.commit()
+
+            question_keys = [key for key in request.form if key.startswith('question')]
+            for question_key in question_keys:
+                question_number = question_key[len('question'):]
+                question_text = request.form[question_key]
+                options = [request.form.get(f'option{question_number}-{i}') for i in range(1, 4)]
+                quiz_question = QuizQuestion(question=question_text, quiz_id=new_quiz.id, option1=options[0], option2=options[1], option3=options[2])
+                db.session.add(quiz_question)
+
+        else:
+            new_essay = Essay(essay_name=assignment_name, course_id=course_id)
+            db.session.add(new_essay)
+            db.session.commit()
+            essay_text = None
+            essay_file = None
+
+            question_type = request.form.get('contentMethodEssay')
+            if question_type == 'text':
+                essay_text = request.form.get('text-entry-essay')
+            elif 'file-upload-essay' in request.files:
+                file = request.files['file-upload-essay']
+                if file and file.filename != '':  # Check if a file has been uploaded
+                    essay_file = file.read()
+            
+            essay_question = EssayQuestion(essay_id = new_essay.id, question_type = question_type, file_upload = essay_file, question_text = essay_text)
+            db.session.add(essay_question)
+
+        db.session.commit()
+        return redirect(
+            url_for('views.createAssignment')
+        )
+
+    return render_template('createAssignment.html', user=current_user)
