@@ -1,0 +1,35 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Quiz</title>
+  <link rel="stylesheet" href="../static/css/quiz.css">
+</head>
+<body>
+  <div class="quiz-container">
+    <form class="quiz-form" method="POST" action="{{ url_for('views.submit_quiz', quiz_id=quiz.id) }}">
+      <h2>Quiz Title: {{ quiz.quiz_name }}</h2>
+
+      {% for question in questions %}
+      <div class="question">
+        <p class="question-text">{{ loop.index }}. {{ question.question }}</p>
+        <div class="options">
+          <label class="option">
+            <input type="radio" name="answer{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}
+          </label>
+          <label class="option">
+            <input type="radio" name="answer{{ question.id }}" value="{{ question.option2 }}">{{ question.option2 }}
+          </label>
+          <label class="option">
+            <input type="radio" name="answer{{ question.id }}" value="{{ question.option3 }}">{{ question.option3 }}
+          </label>
+        </div>
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="submit-quiz">Submit Answers</button>
+    </form>
+  </div>
+</body>
+</html>
