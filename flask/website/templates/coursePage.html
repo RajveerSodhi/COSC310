@@ -12,7 +12,7 @@
     <h3>Quizzes:</h3>
     <ul>
         {% for quiz in quizzes %}
-            <li>{{ quiz.quiz_name }}</li>
+            <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a></li>
         {% endfor %}
     </ul>
 
@@ -24,7 +24,7 @@
     </ul>
 
     {% if current_user.user_type in ['teacher'] %}
-        <h3>Create New Quiz:</h3>
+        <h3>Create New Assignment:</h3>
         <a href="{{ url_for('views.createAssignment', course_id=course.id) }}">Create New Quiz</a>
     {% endif %}
 
