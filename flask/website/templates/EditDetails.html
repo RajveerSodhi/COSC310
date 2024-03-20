@@ -54,7 +54,7 @@
 
 <div class="container">
     <h2>Edit User Details</h2>
-    <form id="editUserDetailsForm" method="post" action="{{ url_for('views.EditDetails') }}">
+    <form id="editUserDetailsForm" method="post" action="{{ url_for('views.edit_details') }}">
         <!-- Username Field -->
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -96,11 +96,7 @@
             alert("Passwords do not match.");
             return false; // Prevent form submission
         } else {
-            // Display success message
-            alert("User details have been changed.");
-            // Redirect to home page after displaying the message
-            window.location.href = "/home";
-            return false; // Prevent form submission
+            return true; // Allow form submission
         }
     };
 </script>
