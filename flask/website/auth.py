@@ -41,6 +41,28 @@ def signup():
         
     return render_template("signup.html", user=current_user)
 
+    @auth.route('/edit_details', methods=['GET', 'POST'])
+    @login_required
+    def edit_details():
+        if request.method == 'POST':
+            # Retrieve the updated details from the form
+            email = request.form.get('email')
+            firstName = request.form.get('firstName')
+            lastName = request.form.get('lastName')
+            dob = request.form.get('dob')
+            
+            # Update the user's details in the database
+            current_user.email = email
+            current_user.first_name = firstName
+            current_user.last_name = lastName
+            current_user.DOB = dob
+            db.session.commit()
+            
+            flash("Details updated successfully!", category="success")
+            return redirect(url_for('views.home'))
+        
+        return render_template("edit_details.html", user=current_user)
+
 @auth.route('/logout')
 @login_required
 def logout():
