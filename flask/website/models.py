@@ -50,7 +50,7 @@ class QuizQuestion(db.Model, UserMixin):
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
     
 class QuizSubmission(db.Model, UserMixin):
-    __tablename__ = 'quizQuestions'
+    __tablename__ = 'quizSubmissions'
     id=db.Column(db.Integer, primary_key=True)
     selected_option = db.Column(db.String(150))
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
@@ -72,7 +72,7 @@ class EssayQuestion(db.Model, UserMixin):
     essay_id = db.Column(db.Integer, db.ForeignKey('essays.id'))
 
 class EssaySubmission(db.Model, UserMixin):
-    __tablename__ = 'essayQuestions'
+    __tablename__ = 'essaySubmissions'
     id=db.Column(db.Integer, primary_key=True)
     answer_text = db.Column(db.String(150))
     answer_file = db.Column(db.LargeBinary)
