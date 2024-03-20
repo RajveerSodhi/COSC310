@@ -48,6 +48,14 @@ class QuizQuestion(db.Model, UserMixin):
     option2 = db.Column(db.String(150))
     option3 = db.Column(db.String(150))
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
+    
+class QuizSubmission(db.Model, UserMixin):
+    __tablename__ = 'quizQuestions'
+    id=db.Column(db.Integer, primary_key=True)
+    selected_option = db.Column(db.String(150))
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
+    quizQuestion_id = db.Column(db.Integer, db.ForeignKey('quizQuestions.id'))
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Essay(db.Model, UserMixin):
     __tablename__ = 'essays'
@@ -63,12 +71,15 @@ class EssayQuestion(db.Model, UserMixin):
     question_type = db.Column(db.String(150))
     essay_id = db.Column(db.Integer, db.ForeignKey('essays.id'))
 
-# class Grade(db.Model):
-#     __tablename__ = 'grades'
-#     id = db.Column(db.Integer, primary_key=True)
-#     scored_points = db.Column(db.Integer)
-#     max_points = db.Column(db.Integer)
-#     student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
+class EssaySubmission(db.Model, UserMixin):
+    __tablename__ = 'essayQuestions'
+    id=db.Column(db.Integer, primary_key=True)
+    answer_text = db.Column(db.String(150))
+    answer_file = db.Column(db.LargeBinary)
+    answer_type = db.Column(db.String(150))
+    essay_id = db.Column(db.Integer, db.ForeignKey('essays.id'))
+    essayQuestion_id = db.Column(db.Integer, db.ForeignKey('essayQuestions.id'))
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 
