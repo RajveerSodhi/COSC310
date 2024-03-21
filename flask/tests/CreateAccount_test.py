@@ -151,6 +151,16 @@ class LoginTestCase(unittest.TestCase):
 
         # Check if the screen changes to the specified window
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should change to the specified window")
+    def test_cancel_button_redirects_to_login(self):
+        driver = self.driver
+        driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
+
+        # Find the cancel button and click it
+        cancel_button = driver.find_element(By.ID, "cancel_button")
+        cancel_button.click()  # Click the cancel button
+
+        # Check if the screen changes to the specified window (Login page)
+        self.assertEqual(driver.current_url, "http://127.0.0.1:5000/login", "Screen should change to the Login page")
 
     def tearDown(self):
         self.driver.quit()  # Clean up after the test
