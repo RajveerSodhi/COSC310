@@ -1,7 +1,7 @@
 from flask_login import login_required, current_user
-from flask import Blueprint, flash, render_template, request, redirect, url_for
-
-from .models import User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission
+from flask import Blueprint, flash, jsonify, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
+from .models import User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission, EssaySubmission
 import base64
 
 views = Blueprint('views', __name__)
@@ -198,10 +198,56 @@ def essay_page(course_id, essay_id):
     for question in questions:
         if question.file_upload and question.question_type == 'file':
             question.base64_image = base64.b64encode(question.file_upload).decode('utf-8')
-    return render_template('essay.html', course_id=course_id, questions=questions, essay=essay)
+    student_id = current_user.id 
 
-    
-    
-    
+    return render_template('essay.html', course_id=course_id, questions=questions, essay=essay,student_id=student_id)
 
+#students submission for essay to be stored
+@views.route('/submit_essay', methods=['POST'])
+def submit_essay():
+    essay_id = request.form.get('essay_id')  # Assuming there's a hidden input for essay_id
+    student_id = request.form.get('student_id')  # Assuming there's a hidden input for student_id
 
+    messages = []
+
+    if not essay_id or not student_id:
+        messages.append({'error': 'Essay or student ID missing.'})
+        return jsonify(messages), 400
+
+    for key, value in request.form.items():
+        if key.startswith('text_answer'):
+            question_id = key.replace('text_answer', '')
+            if value:  # Ensure text response is not empty
+                new_submission = EssaySubmission(
+                    answer_text=value,
+                    answer_type='text',
+                    essay_id=essay_id,
+                    essayQuestion_id=question_id,
+                    student_id=student_id
+                )
+                db.session.add(new_submission)
+
+    for file_key in request.files:
+        if file_key.startswith('file_answer'):
+            question_id = file_key.replace('file_answer', '')
+            file = request.files[file_key]
+            if file.filename:  # Check if a file was selected for upload
+                filename = secure_filename(file.filename)
+                # Here you save the file to the filesystem
+                # For simplicity, not saving files in this example
+                
+                new_submission = EssaySubmission(
+                    # Assuming you handle file storage and just store a reference in DB
+                    answer_type='file',
+                    essay_id=essay_id,
+                    essayQuestion_id=question_id,
+                    student_id=student_id
+                )
+                db.session.add(new_submission)
+            else:
+                # Log the issue or handle it according to your application's needs
+                messages.append({'warning': f'No file selected for question {question_id}.'})
+
+    db.session.commit()
+    messages.append({'success': 'Essay submitted successfully!'})
+    return jsonify(messages), 200

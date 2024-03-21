@@ -7,47 +7,52 @@
 
   <h2>Essay Title: {{ essay.essay_name }}</h2>
 
-    {% for question in questions %}
-      <div class="question">
-        {% if question.question_type == 'file' %}
-          <p class="question-text">{{ loop.index }}. Question:</p>
-          <img src="data:image/jpeg;base64,{{ question.base64_image }}" alt="Question Image">
-        {% endif %}
-        
-        <!-- Student response input options -->
-        <div class="response-options">
-          <label>
-            <input type="radio" name="response_type{{ question.id }}" value="text" checked> Text Response
-          </label>
-          <label>
-            <input type="radio" name="response_type{{ question.id }}" value="file"> File Upload
-          </label>
-        </div>
+<!-- The form begins here -->
+<form action="{{ url_for('views.submit_essay') }}" method="POST" enctype="multipart/form-data">
+  <!-- Hidden inputs for essay_id and student_id (Assuming you have student_id available in the context) -->
+  <input type="hidden" name="essay_id" value="{{ essay.id }}">
+  <input type="hidden" name="student_id" value="{{ student_id }}"> <!-- Make sure to replace YOUR_STUDENT_ID_HERE with actual student ID -->
 
-        <!-- Text response input -->
-        <div class="text-response">
-          <textarea name="text_answer{{ question.id }}" rows="4" cols="50" placeholder="Enter your text response here"></textarea>
-        </div>
-
-        <!-- File response input -->
-        <div class="file-response" style="display: none;">
-          <input type="file" name="file_answer{{ question.id }}" accept="image/*,application/pdf">
-        </div>
+  {% for question in questions %}
+    <div class="question">
+      {% if question.question_type == 'file' %}
+        <p class="question-text">{{ loop.index }}. Question:</p>
+        <img src="data:image/jpeg;base64,{{ question.base64_image }}" alt="Question Image">
+      {% endif %}
+      
+      <!-- Student response input options -->
+      <div class="response-options">
+        <label>
+          <input type="radio" name="response_type{{ question.id }}" value="text" checked> Text Response
+        </label>
+        <label>
+          <input type="radio" name="response_type{{ question.id }}" value="file"> File Upload
+        </label>
       </div>
-    {% endfor %}
 
-    <button type="submit" class="submit-quiz">Submit Answers</button>
-  </form>
-</div>
+      <!-- Text response input -->
+      <div class="text-response">
+        <textarea name="text_answer{{ question.id }}" rows="4" cols="50" placeholder="Enter your text response here"></textarea>
+      </div>
+
+      <!-- File response input -->
+      <div class="file-response" style="display: none;">
+        <input type="file" name="file_answer{{ question.id }}" accept="image/*,application/pdf">
+      </div>
+    </div>
+  {% endfor %}
+
+  <button type="submit" class="submit-quiz">Submit Answers</button>
+</form>
 
 <script>
-
   // JavaScript to toggle between text and file inputs
   document.querySelectorAll('.response-options input').forEach(function(radio) {
     radio.addEventListener('change', function(event) {
       var questionId = event.target.name.replace('response_type', '');
-      var textResponseDiv = document.querySelector('.text-response');
-      var fileResponseDiv = document.querySelector('.file-response');
+      var parentQuestionDiv = event.target.closest('.question');
+      var textResponseDiv = parentQuestionDiv.querySelector('.text-response');
+      var fileResponseDiv = parentQuestionDiv.querySelector('.file-response');
       if (event.target.value === 'text') {
         textResponseDiv.style.display = 'block';
         fileResponseDiv.style.display = 'none';
@@ -58,4 +63,6 @@
     });
   });
 </script>
-    
+
+</body>
+</html>
