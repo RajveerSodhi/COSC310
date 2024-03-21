@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .quiz-container {
+    max-width: 800px;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .quiz-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  .question {
+    margin-bottom: 20px;
+  }
+  
+  .question-text {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #555;
+  }
+  
+  .options textarea, .options input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Makes sure the padding does not affect the total width of the textarea/input */
+    resize: vertical; /* Allows the user to vertically resize the textarea (not horizontally) */
+  }
+  
+  .submit-quiz {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .submit-quiz:hover {
+    background-color: #45a049;
+  }
+  
+  .response-options {
+    margin-bottom: 10px;
+  }
+  
+  .response-options label {
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: normal;
+  }
+  
+  /* This will style the radio buttons and the labels for better alignment */
+  .response-options input[type="radio"] {
+    margin-right: 5px;
+  }
+  
+  .text-response,
+  .file-response {
+    margin-bottom: 20px;
+  }
+  
+  /* This ensures the file input field and textarea have the same styling */
+  .text-response textarea,
+  .file-response input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+  
+  /* Adjust the button styling if necessary */
+  .submit-quiz {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px; /* Increase font size for better readability */
+    font-weight: bold;
+  }
+  
+  .submit-quiz:hover {
+    background-color: #45a049;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for a nice effect */
+  }
+
+
+  .question img {
+    width: 50%; /* Adjust width as needed */
+    height: auto; /* Maintains the aspect ratio of the image */
+  }
+  
