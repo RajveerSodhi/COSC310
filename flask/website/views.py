@@ -169,6 +169,7 @@ def quiz_page(course_id, quiz_id):
     questions = QuizQuestion.query.filter_by(quiz_id=quiz_id).all()
     return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz)
 
+# Post Request for Submitting a Quiz
 @views.route('/create-submission',methods=['POST'])
 def create_submission():
     quiz_id = request.form.get('quiz_id')
@@ -178,9 +179,9 @@ def create_submission():
         if question_id != 'quiz_id':
             answers[question_id] = request.form[question_id]
         
-    print(quiz_id)
-    print(student_id)
-    print(answers)
+    # print(quiz_id)
+    # print(student_id)
+    # print(answers)
     
     for question_id, selected_option in answers.items():
         submission = QuizSubmission(selected_option=selected_option, quiz_id=quiz_id, quizQuestion_id=question_id, student_id=student_id)
@@ -190,7 +191,7 @@ def create_submission():
     
     return redirect(url_for('views.home'))
 
-#essay page for students to answer questions
+# Individual Essay Page
 @views.route('/course/<int:course_id>/essay/<int:essay_id>', methods=['GET'])
 def essay_page(course_id, essay_id):
     essay = Essay.query.filter_by(id=essay_id, course_id=course_id).first()
@@ -202,52 +203,29 @@ def essay_page(course_id, essay_id):
 
     return render_template('essay.html', course_id=course_id, questions=questions, essay=essay,student_id=student_id)
 
-#students submission for essay to be stored
+# Post Request for Submitting an Essay
 @views.route('/submit_essay', methods=['POST'])
 def submit_essay():
-    essay_id = request.form.get('essay_id')  # Assuming there's a hidden input for essay_id
-    student_id = request.form.get('student_id')  # Assuming there's a hidden input for student_id
+    essay_id = request.form.get('essay_id')
+    student_id = request.form.get('student_id')
 
-    messages = []
-
-    if not essay_id or not student_id:
-        messages.append({'error': 'Essay or student ID missing.'})
-        return jsonify(messages), 400
-
+    # Text Answer
     for key, value in request.form.items():
         if key.startswith('text_answer'):
             question_id = key.replace('text_answer', '')
-            if value:  # Ensure text response is not empty
-                new_submission = EssaySubmission(
-                    answer_text=value,
-                    answer_type='text',
-                    essay_id=essay_id,
-                    essayQuestion_id=question_id,
-                    student_id=student_id
-                )
+            if value: # Check if text response is not empty
+                new_submission = EssaySubmission(answer_text=value, answer_file=None, answer_type='text', essay_id=essay_id, essayQuestion_id=question_id, student_id=student_id)
                 db.session.add(new_submission)
 
+    # File Answer
     for file_key in request.files:
         if file_key.startswith('file_answer'):
             question_id = file_key.replace('file_answer', '')
             file = request.files[file_key]
-            if file.filename:  # Check if a file was selected for upload
-                filename = secure_filename(file.filename)
-                # Here you save the file to the filesystem
-                # For simplicity, not saving files in this example
-                
-                new_submission = EssaySubmission(
-                    # Assuming you handle file storage and just store a reference in DB
-                    answer_type='file',
-                    essay_id=essay_id,
-                    essayQuestion_id=question_id,
-                    student_id=student_id
-                )
-                db.session.add(new_submission)
-            else:
-                # Log the issue or handle it according to your application's needs
-                messages.append({'warning': f'No file selected for question {question_id}.'})
-
+            if file and file.filename != '':  # Check if a file has been uploaded
+                essay_file = file.read()         
+                new_submission = EssaySubmission(answer_text=None, answer_file=essay_file, answer_type='file', essay_id=essay_id, essayQuestion_id=question_id, student_id=student_id)
+                db.session.add(new_submission) 
+                       
     db.session.commit()
-    messages.append({'success': 'Essay submitted successfully!'})
-    return jsonify(messages), 200
+    return redirect(url_for('views.home'))
