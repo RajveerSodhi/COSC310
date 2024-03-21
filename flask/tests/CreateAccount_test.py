@@ -21,9 +21,9 @@ class LoginTestCase(unittest.TestCase):
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
-        # Enter a username without entering the password
-        username_field = driver.find_element(By.ID, "email")
-        username_field.send_keys("testuser")
+        # Enter an email without entering the password
+        email_field = driver.find_element(By.ID, "email")
+        email_field.send_keys("testuser")
 
         # Find the create account button and click it without entering the password
         create_account_button = driver.find_element(By.ID, "create_account_button")
@@ -65,6 +65,57 @@ class LoginTestCase(unittest.TestCase):
         first_name_field.send_keys("John")
 
         # Find the create account button and click it without entering the last name
+        create_account_button = driver.find_element(By.ID, "create_account_button")
+        create_account_button.click()  # Click the create account button
+
+        # Check if the screen remains on the same page
+        self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should remain on the same page")
+
+    def test_create_account_blank_dob(self):
+        driver = self.driver
+        driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
+
+        # Enter email, password, first name, and last name but leave DOB blank
+        email_field = driver.find_element(By.ID, "email")
+        email_field.send_keys("test@example.com")
+
+        password_field = driver.find_element(By.ID, "password")
+        password_field.send_keys("password123")
+
+        first_name_field = driver.find_element(By.ID, "firstName")
+        first_name_field.send_keys("John")
+
+        last_name_field = driver.find_element(By.ID, "lastName")
+        last_name_field.send_keys("Doe")
+
+        # Find the create account button and click it without entering the DOB
+        create_account_button = driver.find_element(By.ID, "create_account_button")
+        create_account_button.click()  # Click the create account button
+
+        # Check if the screen remains on the same page
+        self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should remain on the same page")
+
+    def test_create_account_blank_user_type(self):
+        driver = self.driver
+        driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
+
+        # Fill out email, password, first name, last name, and DOB but leave User Type blank
+        email_field = driver.find_element(By.ID, "email")
+        email_field.send_keys("test@example.com")
+
+        password_field = driver.find_element(By.ID, "password")
+        password_field.send_keys("password123")
+
+        first_name_field = driver.find_element(By.ID, "firstName")
+        first_name_field.send_keys("John")
+
+        last_name_field = driver.find_element(By.ID, "lastName")
+        last_name_field.send_keys("Doe")
+
+        dob_field = driver.find_element(By.ID, "dob")
+        dob_field.send_keys("01/01/1990")  # Example DOB date
+
+        # Find the create account button and click it without selecting the User Type
         create_account_button = driver.find_element(By.ID, "create_account_button")
         create_account_button.click()  # Click the create account button
 
