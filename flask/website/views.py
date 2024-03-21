@@ -170,8 +170,8 @@ def quiz_page(course_id, quiz_id):
     return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz)
 
 # Post Request for Submitting a Quiz
-@views.route('/create-submission',methods=['POST'])
-def create_submission():
+@views.route('/submit_quiz',methods=['POST'])
+def submit_quiz():
     quiz_id = request.form.get('quiz_id')
     student_id = current_user.id
     answers = {}
