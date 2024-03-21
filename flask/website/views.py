@@ -1,6 +1,8 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, render_template, request, redirect, url_for
+import io
 from .models import db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion
+import base64
 
 views = Blueprint('views', __name__)
 
@@ -144,3 +146,15 @@ def quiz_page(course_id, quiz_id):
     quiz = Quiz.query.filter_by(id=quiz_id, course_id=course_id).first()
     questions = QuizQuestion.query.filter_by(quiz_id=quiz_id).all()
     return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz)
+
+#essay page for students to answer questions
+@views.route('/course/<int:course_id>/essay/<int:essay_id>', methods=['GET'])
+def essay_page(course_id, essay_id):
+    essay = Essay.query.filter_by(id=essay_id, course_id=course_id).first()
+    questions = EssayQuestion.query.filter_by(essay_id=essay_id).all()
+    for question in questions:
+        if question.file_upload and question.question_type == 'file':
+            question.base64_image = base64.b64encode(question.file_upload).decode('utf-8')
+    return render_template('essay.html', course_id=course_id, questions=questions, essay=essay)
+
+    
