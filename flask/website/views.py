@@ -12,7 +12,8 @@ views = Blueprint('views', __name__)
 def home():
     enrolled_courses = Course.query.join(Enrollment).filter(Enrollment.user_id == current_user.id).all()
     return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses)
-  
+
+# Edit User Details Page
 @views.route('/editDetails', methods=['GET', 'POST'])
 @login_required
 def edit_details():
@@ -30,8 +31,6 @@ def edit_details():
             return redirect(url_for('views.home'))
         else:
             flash("User not found!", category="error")
-            
-            
     
      return render_template("EditDetails.html", user=current_user)
 
@@ -44,23 +43,17 @@ def createCourse():
         course_limit = request.form.get('course_limit')
         course_code = request.form.get('course_code')
         teacher_id = request.form.get('teacher_id')
-        #create the new course
         new_course = Course(course_code=course_code, course_name=course_name, course_desc=course_desc, course_limit=course_limit, teacher_id=teacher_id)
-        #add the new course to the session
         db.session.add(new_course)
-        # commit to save the course and get its course_id
         db.session.commit()
-        #creating the new enrollment for the teacher with the new course id
+        # Creating the new enrollment for the teacher with the given course id
         teacher_enrollment = Enrollment(user_id=teacher_id,course_id=new_course.id)
-        #add the teacher's enrollment to the session
         db.session.add(teacher_enrollment)
         db.session.commit()
-
-
-
+        
     return render_template("createCourse.html", user=current_user)
 
-# Creating Enrollment Request
+# Post Request for Creating Enrollment Request
 @views.route('/create-request', methods=['POST'])
 def createRequest():
     if request.method == 'POST':
@@ -83,7 +76,7 @@ def display_requests():
     requests = Request.query.all()
     return render_template('acceptCourse.html', requests=requests)
 
-# Accepting Enrollment Request
+# Post Requst for Accepting Enrollment Request
 @views.route('/accept-request', methods=['POST'])
 def acceptRequest():
     if request.method == 'POST':
@@ -99,7 +92,7 @@ def acceptRequest():
         
     return redirect(url_for('views.display_requests'))
 
-# Declining Enrollment Request
+# Post Request for Declining Enrollment Request
 @views.route('/decline-request', methods=['POST'])
 def declineRequest():
     if request.method == 'POST':
@@ -117,7 +110,7 @@ def course_page(course_id):
     course = Course.query.get(course_id)
     quizzes = Quiz.query.filter_by(course_id=course_id).all()
     essays = Essay.query.filter_by(course_id=course_id).all()
-    return render_template('coursePage.html', course=course, quizzes=quizzes, essays=essays)
+    return render_template('course.html', course=course, quizzes=quizzes, essays=essays)
 
 # Page for Creating Assignment for a particular Course
 @views.route('/course/<int:course_id>/createAssignment', methods=['GET','POST'])
