@@ -219,6 +219,6 @@ def submit_essay():
                 essay_file = file.read()         
                 new_submission = EssaySubmission(answer_text=None, answer_file=essay_file, answer_type='file', essay_id=essay_id, essayQuestion_id=question_id, student_id=student_id)
                 db.session.add(new_submission) 
-                       
+
     db.session.commit()
     return redirect(url_for('views.home'))

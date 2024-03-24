@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Assignments</title>
+    <link rel="stylesheet" href="../static/css/viewSubmissions.css">
+</head>
+
+<body>
+    <div class="grade-assignments-container">
+        <h1>View Submissions</h1>
+        <h2>Assignment Title</h2>
+
+        <div class="submissions-list">
+            <div class="student-submission">
+                <p>Student A has made a submission</p>
+                <button type="button" onclick="location.href='grade-submission-url-A'">Grade Submission</button>
+            </div>
+            <div class="student-submission">
+                <p>Student B has made a submission</p>
+                <button type="button" onclick="location.href='grade-submission-url-B'">Grade Submission</button>
+            </div>
+            <div class="student-submission">
+                <p>Student C has made a submission</p>
+                <button type="button" onclick="location.href='grade-submission-url-C'">Grade Submission</button>
+            </div>
+            <!-- ... -->
+        </div>
+
+        <button type="button" class="view-no-submission" onclick="location.href='no-submission-url'">View Students
+            Without Submissions</button>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #6495ED;
+    margin: 0;
+    padding: 20px;
+}
+
+.grade-assignment-container {
+    background-color: #FFF;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.grade-assignment-container h1 {
+    text-align: center;
+}
+
+.assignment-details h2 {
+    margin: 0;
+}
+
+.assignment-details p {
+    margin: 5px 0;
+}
+
+.assignment-content,
+.assignment-grading {
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.assignment-content {
+    min-height: 100px;
+}
+
+.assignment-grading input[type="text"] {
+    width: calc(100% - 100px);
+    display: inline-block;
+}
+
+.assignment-grading button {
+    width: 80px;
+    /* Adjust as needed */
+    display: inline-block;
+    margin-left: 10px;
+}
