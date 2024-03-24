@@ -47,12 +47,14 @@ class QuizQuestion(db.Model, UserMixin):
     option1 = db.Column(db.String(150))
     option2 = db.Column(db.String(150))
     option3 = db.Column(db.String(150))
+    max_grade = db.Column(db.Integer)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
     
 class QuizSubmission(db.Model, UserMixin):
     __tablename__ = 'quizSubmissions'
     id=db.Column(db.Integer, primary_key=True)
     selected_option = db.Column(db.String(150))
+    given_grade = db.Column(db.Integer)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
     quizQuestion_id = db.Column(db.Integer, db.ForeignKey('quizQuestions.id'))
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -61,14 +63,16 @@ class Essay(db.Model, UserMixin):
     __tablename__ = 'essays'
     id=db.Column(db.Integer, primary_key=True)
     essay_name = db.Column(db.String(150))
+    max_grade = db.Column(db.Integer)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
 
 class EssayQuestion(db.Model, UserMixin):
     __tablename__ = 'essayQuestions'
     id=db.Column(db.Integer, primary_key=True)
     question_text = db.Column(db.String(150))
-    file_upload = db.Column(db.LargeBinary)    # Storing file content as blob (May change datatype)
+    file_upload = db.Column(db.LargeBinary)
     question_type = db.Column(db.String(150))
+    given_grade = db.Column(db.Integer)
     essay_id = db.Column(db.Integer, db.ForeignKey('essays.id'))
 
 class EssaySubmission(db.Model, UserMixin):
