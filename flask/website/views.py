@@ -219,7 +219,7 @@ def submit_essay():
     for key, value in request.form.items():
         if key.startswith('text_answer'):
             question_id = key.replace('text_answer', '')
-            if value: # Check if text response is not empty
+            if value:   # Check if text response is not empty
                 new_submission = EssaySubmission(answer_text=value, answer_file=None, answer_type='text', essay_id=essay_id, essayQuestion_id=question_id, student_id=student_id)
                 db.session.add(new_submission)
 
@@ -228,7 +228,7 @@ def submit_essay():
         if file_key.startswith('file_answer'):
             question_id = file_key.replace('file_answer', '')
             file = request.files[file_key]
-            if file and file.filename != '':  # Check if a file has been uploaded
+            if file and file.filename != '':    # Check if a file has been uploaded
                 essay_file = file.read()         
                 new_submission = EssaySubmission(answer_text=None, answer_file=essay_file, answer_type='file', essay_id=essay_id, essayQuestion_id=question_id, student_id=student_id)
                 db.session.add(new_submission) 
@@ -241,4 +241,21 @@ def submit_essay():
 def grade_page(course_id):        
     quizzes = Quiz.query.filter_by(course_id=course_id).all()
     essays = Essay.query.filter_by(course_id=course_id).all()
-    return render_template('viewGrade.html', course_id=course_id, quizzes=quizzes, essays=essays)
+    
+    # Retrieve quiz grades for the current student
+    student_id = current_user.id
+    quiz_grades = {}
+    for quiz in quizzes:
+        quiz_submissions = QuizSubmission.query.filter_by(quiz_id=quiz.id, student_id=student_id).all()
+        total_grade = sum(submission.given_grade if submission.given_grade else 0 for submission in quiz_submissions)
+        quiz_grades[quiz.id] = total_grade
+        
+    # Retrieve essay grades for the current student
+    student_id = current_user.id
+    essay_grades = {}
+    for essay in essays:
+        essay_submissions = EssaySubmission.query.filter_by(essay_id=essay.id, student_id=student_id).all()
+        total_grade = sum(submission.given_grade if submission.given_grade else 0 for submission in essay_submissions)
+        essay_grades[essay.id] = total_grade
+    
+    return render_template('viewGrade.html', course_id=course_id, quizzes=quizzes, essays=essays, quiz_grades=quiz_grades, essay_grades=essay_grades)
