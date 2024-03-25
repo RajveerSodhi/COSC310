@@ -239,4 +239,6 @@ def submit_essay():
 # View Grade Page - Student View
 @views.route('/course/<int:course_id>/view-grade',methods=['GET'])
 def grade_page(course_id):        
-    return render_template('viewGrade.html', course_id=course_id)
+    quizzes = Quiz.query.filter_by(course_id=course_id).all()
+    essays = Essay.query.filter_by(course_id=course_id).all()
+    return render_template('viewGrade.html', course_id=course_id, quizzes=quizzes, essays=essays)

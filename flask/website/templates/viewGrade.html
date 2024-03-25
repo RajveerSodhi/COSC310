@@ -4,71 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Grades</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/viewGrade.css') }}">
 </head>
 <body>
 
-    <h1>Grades</h1>
+<h1>Grades</h1>
 
 <div class="container">
-    <h2>Assignments</h2>
-    <table>
-        <tr>
-            <th>Assignment</th>
-            <th>Grade</th>
-        </tr>
-        <tr>
-            <td>Assignment 1</td>
-            <td>90%</td>
-        </tr>
-        <tr>
-            <td>Assignment 2</td>
-            <td>85%</td>
-        </tr>
-    </table>
-
     <h2>Quizzes</h2>
     <table>
         <tr>
             <th>Quiz</th>
             <th>Grade</th>
         </tr>
+        {% for quiz in quizzes %}
         <tr>
-            <td>Quiz 1</td>
-            <td>80%</td>
+            <td>{{ quiz.quiz_name }}</td>
+            <td>{{ 90 }}</td>
         </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Essays</h2>
+    <table>
         <tr>
-            <td>Quiz 2</td>
-            <td>75%</td>
+            <th>Essay</th>
+            <th>Grade</th>
         </tr>
+        {% for essay in essays %}
+        <tr>
+            <td>{{ essay.essay_name }}</td>
+            <td>{{ 85 }}</td>
+        </tr>
+        {% endfor %}
     </table>
 </div>
 
