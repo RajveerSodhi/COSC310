@@ -235,3 +235,8 @@ def submit_essay():
                        
     db.session.commit()
     return redirect(url_for('views.home'))
+
+# View Grade Page - Student View
+@views.route('/course/<int:course_id>/view-grade',methods=['GET'])
+def grade_page(course_id):        
+    return render_template('viewGrade.html', course_id=course_id)
