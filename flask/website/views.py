@@ -110,7 +110,20 @@ def course_page(course_id):
     course = Course.query.get(course_id)
     quizzes = Quiz.query.filter_by(course_id=course_id).all()
     essays = Essay.query.filter_by(course_id=course_id).all()
-    return render_template('course.html', course=course, quizzes=quizzes, essays=essays)
+    
+    quiz_submissions = {}
+    for quiz in quizzes:
+        student_ids = [submission.student_id for submission in QuizSubmission.query.filter_by(quiz_id=quiz.id)]
+        student_ids = list(set(student_ids))    # Unique Student Ids
+        quiz_submissions[quiz.id] = student_ids
+        
+    essay_submissions = {}
+    for essay in essays:
+        student_ids = [submission.student_id for submission in EssaySubmission.query.filter_by(essay_id=essay.id)]
+        student_ids = list(set(student_ids))    # Unique Student Ids
+        essay_submissions[essay.id] = student_ids
+    
+    return render_template('course.html', course=course, quizzes=quizzes, essays=essays, quiz_submissions=quiz_submissions, essay_submissions=essay_submissions)
 
 # Page for Creating Assignment for a particular Course
 @views.route('/course/<int:course_id>/createAssignment', methods=['GET','POST'])

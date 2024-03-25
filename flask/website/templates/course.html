@@ -26,6 +26,28 @@
     {% if current_user.user_type in ['teacher'] %}
         <h3>Create New Assignment:</h3>
         <a href="{{ url_for('views.createAssignment', course_id=course.id) }}">Link</a>
+    {% endif %}
+
+    {% if current_user.user_type in ['teacher'] %}
+        <h3>Grade Assignments:</h3>
+
+        {% for quiz in quizzes %}
+        <h4>Quiz: {{ quiz.quiz_name }}</h4>
+        <ul>
+            {% for student_id in quiz_submissions[quiz.id] %}
+                <li>Submission of Student Id: {{ student_id }}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+
+        {% for essay in essays %}
+        <h4>Essay: {{ essay.essay_name }}</h4>
+        <ul>
+            {% for student_id in essay_submissions[essay.id] %}
+            <li>Submission of Student Id: {{ student_id }}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
 
     {% endif %}
 
