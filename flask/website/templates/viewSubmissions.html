@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grade Assignments</title>
+    <title>View Submissions</title>
     <link rel="stylesheet" href="../static/css/viewSubmissions.css">
 </head>
 
@@ -14,23 +14,29 @@
         <h2>Assignment Title</h2>
 
         <div class="submissions-list">
-            <div class="student-submission">
-                <p>Student A has made a submission</p>
-                <button type="button" onclick="location.href='grade-submission-url-A'">Grade Submission</button>
-            </div>
-            <div class="student-submission">
-                <p>Student B has made a submission</p>
-                <button type="button" onclick="location.href='grade-submission-url-B'">Grade Submission</button>
-            </div>
-            <div class="student-submission">
-                <p>Student C has made a submission</p>
-                <button type="button" onclick="location.href='grade-submission-url-C'">Grade Submission</button>
-            </div>
-            <!-- ... -->
-        </div>
+            <!-- Loop through quiz submissions -->
+            {% for submission, quiz_name in quiz_submissions_with_names %}
+            <form method="post"
+                action="{{ url_for('views.grade_assignment', course_id=course_id, assignment_id=submission.quiz_id, student_id=submission.student_id) }}">
+                <div class="student-submission">
+                    <p>{{ submission.student_id }} has made a submission for "{{ quiz_name }}"</p>
+                    <button type="submit">Grade Submission</button>
+                </div>
+            </form>
+            {% endfor %}
 
-        <button type="button" class="view-no-submission" onclick="location.href='no-submission-url'">View Students
-            Without Submissions</button>
+            <!-- Loop through essay submissions -->
+            {% for submission, essay_name in essay_submissions_with_names %}
+            <form method="post"
+                action="{{ url_for('views.grade_assignment', course_id=course_id, assignment_id=submission.essay_id, student_id=submission.student_id) }}">
+                <div class="student-submission">
+                    <p>{{ submission.student_id }} has made a submission for "{{ essay_name }}"</p>
+                    <button type="submit">Grade Submission</button>
+                </div>
+            </form>
+            {% endfor %}
+
+        </div>
     </div>
 </body>
 

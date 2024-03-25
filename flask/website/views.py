@@ -222,3 +222,52 @@ def submit_essay():
 
     db.session.commit()
     return redirect(url_for('views.home'))
+
+@views.route('/course/<int:course_id>/submissions')
+@login_required
+def view_submissions(course_id):
+    # Fetch all quizzes and essays for the course
+    quizzes = Quiz.query.filter_by(course_id=course_id).all()
+    essays = Essay.query.filter_by(course_id=course_id).all()
+
+    # Fetch all submissions along with the quiz and essay names
+    quiz_submissions_with_names = db.session.query(QuizSubmission, Quiz.quiz_name).join(Quiz, Quiz.id == QuizSubmission.quiz_id).filter(Quiz.course_id == course_id).all()
+
+    essay_submissions_with_names = db.session.query(EssaySubmission, Essay.essay_name).join(Essay, Essay.id == EssaySubmission.essay_id).filter(Essay.course_id == course_id).all()
+
+    return render_template('viewSubmissions.html', quizzes=quizzes, essays=essays, quiz_submissions_with_names=quiz_submissions_with_names, essay_submissions_with_names=essay_submissions_with_names, course_id=course_id)
+
+@views.route('/course/<int:course_id>/assignment/<int:assignment_id>/grade/<int:student_id>', methods=['GET', 'POST'])
+@login_required
+def grade_assignment(course_id, assignment_id, student_id):
+    # Fetch the course, assignment, and submission details
+    course = Course.query.get_or_404(course_id)
+    student = User.query.get_or_404(student_id)
+    quiz_submission = QuizSubmission.query.filter_by(quiz_id=assignment_id, student_id=student_id).first()
+    essay_submission = EssaySubmission.query.filter_by(essay_id=assignment_id, student_id=student_id).first()
+    
+    if request.method == 'POST':
+        # Process the grading form submission
+        grade = request.form.get('grade')
+        if quiz_submission:
+            quiz_submission.given_grade = grade
+        if essay_submission:
+            essay_submission.given_grade = grade
+        db.session.commit()
+        flash('Assignment graded successfully.', 'success')
+        return redirect(url_for('views.course_page', course_id=course_id))
+
+    # Determine if it's a quiz or essay assignment and fetch the appropriate content
+    assignment_content = None
+    if quiz_submission:
+        assignment_content = quiz_submission.selected_option
+    elif essay_submission:
+        assignment_content = essay_submission.answer_text if essay_submission.answer_type == 'text' else 'File submitted'
+
+    return render_template('gradeAssignment.html', course=course, 
+                           assignment_title="Assignment Title Placeholder",  # Replace with actual title
+                           due_date="15th March, 11:59 pm",  # Replace with actual due date
+                           points=60,  # Replace with actual points
+                           student_name=student.first_name + ' ' + student.last_name,
+                           submission_time="14th March 2024, at 3:14 am",  # Replace with actual submission time
+                           assignment_content=assignment_content)
