@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grades</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/viewGrade.css') }}">
+</head>
+<body>
+
+<h1>Your Grades</h1>
+
+<div class="container">
+    <h2>Quizzes</h2>
+    <table>
+        <tr>
+            <th>Quiz</th>
+            <th>Grade</th>
+        </tr>
+        {% for quiz in quizzes %}
+        <tr>
+            <td>{{ quiz.quiz_name }}</td>
+            <td>{{ quiz_grades[quiz.id] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Essays</h2>
+    <table>
+        <tr>
+            <th>Essay</th>
+            <th>Grade</th>
+        </tr>
+        {% for essay in essays %}
+        <tr>
+            <td>{{ essay.essay_name }}</td>
+            <td>{{ essay_grades[essay.id] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>
