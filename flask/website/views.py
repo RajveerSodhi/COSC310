@@ -290,5 +290,13 @@ def add_discussion(course_id):
         return redirect(url_for('views.course_discussions', course_id=course_id))
     return render_template('add_discussion.html', course_id=course_id)
 
+@views.route('/discussion/<int:discussion_id>/submit_reply', methods=['POST'])
+@login_required
+def submit_reply(discussion_id):
+    content = request.form.get('reply_content')
+    new_reply = Reply(content=content, discussion_id=discussion_id, user_id=current_user.id)
+    db.session.add(new_reply)
+    db.session.commit()
+    return redirect(url_for('views.discussion_detail', discussion_id=discussion_id))
 
 
