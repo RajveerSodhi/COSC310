@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course_name }} Discussion Page</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/discussion.css') }}">
+</head>
+<body>
+    <header>
+        <h1> Discussion Page for {{ course_name }}</h1>
+        <nav>
+            <!-- Navigation items like Home, Courses, Discussions etc. -->
+        </nav>
+    </header>
+    <main>
+        <!-- Section to post a new discussion -->
+        <section id="post-discussion">
+            <h2>Start a Discussion</h2>
+            <form method="POST" action="{{ url_for('views.add_discussion', course_id=course.id) }}">
+                <input type="text" name="title" placeholder="Title" required>
+                <textarea name="content" placeholder="What's on your mind?" required></textarea>
+                <button type="submit">Post</button>
+            </form>
+        </section>
+
+        <!-- Section to display discussions -->
+        <section id="discussions">
+            <h2>Discussions</h2>
+            {% for discussion in discussions %}
+            <article class="discussion">
+                <h3><a href="{{ url_for('views.discussion_detail', discussion_id=discussion.id) }}">{{ discussion.title }}</a></h3>
+                <p>Posted by {{ discussion.author }} on {{ discussion.date_posted }}</p>
+            </article>
+            {% else %}
+            <p>No discussions yet. Be the first to start a conversation!</p>
+            {% endfor %}
+        </section>
+    </main>
+    <footer>
+        <!-- Footer content here -->
+    </footer>
+</body>
+</html>

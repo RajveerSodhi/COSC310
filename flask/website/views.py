@@ -1,7 +1,7 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, jsonify, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from .models import User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission, EssaySubmission
+from .models import Discussion, Reply, User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission, EssaySubmission
 import base64
 
 views = Blueprint('views', __name__)
@@ -110,7 +110,20 @@ def course_page(course_id):
     course = Course.query.get(course_id)
     quizzes = Quiz.query.filter_by(course_id=course_id).all()
     essays = Essay.query.filter_by(course_id=course_id).all()
-    return render_template('course.html', course=course, quizzes=quizzes, essays=essays)
+    
+    quiz_submissions = {}
+    for quiz in quizzes:
+        student_ids = [submission.student_id for submission in QuizSubmission.query.filter_by(quiz_id=quiz.id)]
+        student_ids = list(set(student_ids))    # Unique Student Ids
+        quiz_submissions[quiz.id] = student_ids
+        
+    essay_submissions = {}
+    for essay in essays:
+        student_ids = [submission.student_id for submission in EssaySubmission.query.filter_by(essay_id=essay.id)]
+        student_ids = list(set(student_ids))    # Unique Student Ids
+        essay_submissions[essay.id] = student_ids
+    
+    return render_template('course.html', course=course, quizzes=quizzes, essays=essays, quiz_submissions=quiz_submissions, essay_submissions=essay_submissions)
 
 # Page for Creating Assignment for a particular Course
 @views.route('/course/<int:course_id>/createAssignment', methods=['GET','POST'])
@@ -206,7 +219,7 @@ def submit_essay():
     for key, value in request.form.items():
         if key.startswith('text_answer'):
             question_id = key.replace('text_answer', '')
-            if value: # Check if text response is not empty
+            if value:   # Check if text response is not empty
                 new_submission = EssaySubmission(answer_text=value, answer_file=None, answer_type='text', essay_id=essay_id, essayQuestion_id=question_id, student_id=student_id)
                 db.session.add(new_submission)
 
@@ -215,7 +228,7 @@ def submit_essay():
         if file_key.startswith('file_answer'):
             question_id = file_key.replace('file_answer', '')
             file = request.files[file_key]
-            if file and file.filename != '':  # Check if a file has been uploaded
+            if file and file.filename != '':    # Check if a file has been uploaded
                 essay_file = file.read()         
                 new_submission = EssaySubmission(answer_text=None, answer_file=essay_file, answer_type='file', essay_id=essay_id, essayQuestion_id=question_id, student_id=student_id)
                 db.session.add(new_submission) 
@@ -223,51 +236,67 @@ def submit_essay():
     db.session.commit()
     return redirect(url_for('views.home'))
 
-@views.route('/course/<int:course_id>/submissions')
-@login_required
-def view_submissions(course_id):
-    # Fetch all quizzes and essays for the course
+# View Grade Page - Student View
+@views.route('/course/<int:course_id>/view-grade',methods=['GET'])
+def grade_page(course_id):        
     quizzes = Quiz.query.filter_by(course_id=course_id).all()
     essays = Essay.query.filter_by(course_id=course_id).all()
-
-    # Fetch all submissions along with the quiz and essay names
-    quiz_submissions_with_names = db.session.query(QuizSubmission, Quiz.quiz_name).join(Quiz, Quiz.id == QuizSubmission.quiz_id).filter(Quiz.course_id == course_id).all()
-
-    essay_submissions_with_names = db.session.query(EssaySubmission, Essay.essay_name).join(Essay, Essay.id == EssaySubmission.essay_id).filter(Essay.course_id == course_id).all()
-
-    return render_template('viewSubmissions.html', quizzes=quizzes, essays=essays, quiz_submissions_with_names=quiz_submissions_with_names, essay_submissions_with_names=essay_submissions_with_names, course_id=course_id)
-
-@views.route('/course/<int:course_id>/assignment/<int:assignment_id>/grade/<int:student_id>', methods=['GET', 'POST'])
-@login_required
-def grade_assignment(course_id, assignment_id, student_id):
-    # Fetch the course, assignment, and submission details
-    course = Course.query.get_or_404(course_id)
-    student = User.query.get_or_404(student_id)
-    quiz_submission = QuizSubmission.query.filter_by(quiz_id=assignment_id, student_id=student_id).first()
-    essay_submission = EssaySubmission.query.filter_by(essay_id=assignment_id, student_id=student_id).first()
     
+    # Retrieve quiz grades for the current student
+    student_id = current_user.id
+    quiz_grades = {}
+    for quiz in quizzes:
+        quiz_submissions = QuizSubmission.query.filter_by(quiz_id=quiz.id, student_id=student_id).all()
+        total_grade = sum(submission.given_grade if submission.given_grade else 0 for submission in quiz_submissions)
+        quiz_grades[quiz.id] = total_grade
+        
+    # Retrieve essay grades for the current student
+    student_id = current_user.id
+    essay_grades = {}
+    for essay in essays:
+        essay_submissions = EssaySubmission.query.filter_by(essay_id=essay.id, student_id=student_id).all()
+        total_grade = sum(submission.given_grade if submission.given_grade else 0 for submission in essay_submissions)
+        essay_grades[essay.id] = total_grade
+    
+    return render_template('viewGrade.html', course_id=course_id, quizzes=quizzes, essays=essays, quiz_grades=quiz_grades, essay_grades=essay_grades)
+
+#list discussion for a course
+@views.route('/course/<int:course_id>/discussions',  methods=['GET'])
+@login_required
+def course_discussions(course_id):
+    course = Course.query.get_or_404(course_id)
+    discussions = Discussion.query.filter_by(course_id=course_id).all()
+    course_full_name = f"{course.course_code} {course.course_name}" 
+    return render_template('discussion.html', course_name=course_full_name, course=course, discussions=discussions)
+
+#view a specific discussion 
+@views.route('/discussion/<int:discussion_id>')
+@login_required
+def discussion_detail(discussion_id):
+    discussion = Discussion.query.get_or_404(discussion_id)
+    replies = Reply.query.filter_by(discussion_id=discussion_id).all()
+    return render_template('discussion_detail.html', discussion=discussion, replies=replies)
+
+#add a new discussion
+@views.route('/course/<int:course_id>/discussions/add', methods=['GET', 'POST'])
+@login_required
+def add_discussion(course_id):
     if request.method == 'POST':
-        # Process the grading form submission
-        grade = request.form.get('grade')
-        if quiz_submission:
-            quiz_submission.given_grade = grade
-        if essay_submission:
-            essay_submission.given_grade = grade
+        title = request.form.get('title')
+        content = request.form.get('content')
+        new_discussion = Discussion(title=title, content=content, course_id=course_id, user_id=current_user.id)
+        db.session.add(new_discussion)
         db.session.commit()
-        flash('Assignment graded successfully.', 'success')
-        return redirect(url_for('views.course_page', course_id=course_id))
+        return redirect(url_for('views.course_discussions', course_id=course_id))
+    return render_template('add_discussion.html', course_id=course_id)
 
-    # Determine if it's a quiz or essay assignment and fetch the appropriate content
-    assignment_content = None
-    if quiz_submission:
-        assignment_content = quiz_submission.selected_option
-    elif essay_submission:
-        assignment_content = essay_submission.answer_text if essay_submission.answer_type == 'text' else 'File submitted'
+@views.route('/discussion/<int:discussion_id>/submit_reply', methods=['POST'])
+@login_required
+def submit_reply(discussion_id):
+    content = request.form.get('reply_content')
+    new_reply = Reply(content=content, discussion_id=discussion_id, user_id=current_user.id)
+    db.session.add(new_reply)
+    db.session.commit()
+    return redirect(url_for('views.discussion_detail', discussion_id=discussion_id))
 
-    return render_template('gradeAssignment.html', course=course, 
-                           assignment_title="Assignment Title Placeholder",  # Replace with actual title
-                           due_date="15th March, 11:59 pm",  # Replace with actual due date
-                           points=60,  # Replace with actual points
-                           student_name=student.first_name + ' ' + student.last_name,
-                           submission_time="14th March 2024, at 3:14 am",  # Replace with actual submission time
-                           assignment_content=assignment_content)
+

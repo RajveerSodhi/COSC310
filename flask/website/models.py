@@ -12,6 +12,8 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(150))
     DOB =  db.Column(db.String(150))
     user_type = db.Column(db.String(50))
+    discussions = db.relationship('Discussion', back_populates='author')
+    replies = db.relationship('Reply', back_populates='author')
     
 class Course(db.Model):
     __tablename__ = 'courses'
@@ -84,6 +86,33 @@ class EssaySubmission(db.Model, UserMixin):
     essay_id = db.Column(db.Integer, db.ForeignKey('essays.id'))
     essayQuestion_id = db.Column(db.Integer, db.ForeignKey('essayQuestions.id'))
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+class Discussion(db.Model):
+    __tablename__ = 'discussions'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150))
+    content = db.Column(db.String(1000))
+    date_posted = db.Column(db.DateTime(timezone=True), default=func.now())
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    replies = db.relationship('Reply', backref='discussion', lazy=True)
+
+    # Relationships
+    author = db.relationship('User', back_populates='discussions')
+
+class Reply(db.Model):
+    __tablename__ = 'replies'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(1000))
+    date_posted = db.Column(db.DateTime(timezone=True), default=func.now())
+    discussion_id = db.Column(db.Integer, db.ForeignKey('discussions.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    # Relationships
+    author = db.relationship('User', back_populates='replies')
+
+
+
 
 
 

@@ -9,6 +9,10 @@
     <p>Course Limit : {{ course.course_limit }}</p>
     <p>Teacher Id : {{ course.teacher_id }}</p>
 
+    <!-- Link to the discussion page for the course -->
+    <h3>Discussions:</h3>
+    <a href="{{ url_for('views.course_discussions', course_id=course.id) }}">View Discussions page</a>
+
     <h3>Quizzes:</h3>
     <ul>
         {% for quiz in quizzes %}
@@ -26,7 +30,34 @@
     {% if current_user.user_type in ['teacher'] %}
         <h3>Create New Assignment:</h3>
         <a href="{{ url_for('views.createAssignment', course_id=course.id) }}">Link</a>
+    {% endif %}
 
+    {% if current_user.user_type in ['teacher'] %}
+        <h3>Grade Assignments:</h3>
+
+        {% for quiz in quizzes %}
+        <h4>Quiz: {{ quiz.quiz_name }}</h4>
+        <ul>
+            {% for student_id in quiz_submissions[quiz.id] %}
+                <li>Submission of Student Id: {{ student_id }}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+
+        {% for essay in essays %}
+        <h4>Essay: {{ essay.essay_name }}</h4>
+        <ul>
+            {% for student_id in essay_submissions[essay.id] %}
+            <li>Submission of Student Id: {{ student_id }}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+
+    {% endif %}
+
+    {% if current_user.user_type in ['student'] %}
+        <h3>View Your Grades:</h3>
+        <a href="{{ url_for('views.grade_page', course_id=course.id) }}">Link</a>
     {% endif %}
 
 </body>
