@@ -1,11 +1,11 @@
-This is the reply.html file for the EduPool Flask website
+-- nee file 
 <!DOCTYPE html>
 <html lang="en"></html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question</title>
     <!-- CSS added-->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/discussion_detail.css') }}">
+<link rel="stylesheet" href="../static/css/discussion_detail.css">
     <script>
         function toggleCommentBox() {
             var commentBox = document.getElementById("comment-box");
@@ -46,23 +46,38 @@ This is the reply.html file for the EduPool Flask website
             oldButton.parentNode.replaceChild(newButton, oldButton);
         }
     </script>
-</head>
-<body>
+ </head>
+ <body>
     <header>
-        <h1>Question</h1>
+        <div class="discussion-container">
+            <div class="discussion">
+                <h2>{{ discussion.title }}</h2>
+                <p>{{ discussion.content }}</p>
+                <p>Posted by {{ discussion.author.username }} on {{ discussion.date_posted }}</p>
+            </div>
+        </div>
     </header>
     <main>
         <button id="add-comment-button" onclick="toggleCommentBox()">Reply</button>
-        <div id="comment-box">
-            <form onsubmit="event.preventDefault(); addComment();">
-                <textarea id="comment" name="comment" placeholder="Write your reply here..." required></textarea>
-                <button type="submit">Submit</button>
+        <div id="comment-box" style="display: none;">
+            <!-- form for the comment box -->
+            <form class="reply-form" method="POST" action="{{ url_for('views.submit_reply', discussion_id=discussion.id) }}">
+                <textarea name="reply_content" placeholder="Write your reply here..." required></textarea>
+                <button type="submit" class="submit-reply">Post Reply</button>
             </form>
         </div>
+        <h3>Replies</h3>
         <div id="comments-container">
-            <!-- Existing comments will be displayed here -->
+            {% for reply in replies %}
+            <div class="reply">
+                <p>{{ reply.content }}</p>
+                <p>— {{ reply.author.username }}, {{ reply.date_posted }}</p>
+            </div>
+            {% else %}
+            <p>No replies yet. Be the first to reply!</p>
+            {% endfor %}
         </div>
-    </main>
-    <!-- Footer content here if needed -->
-</body>
-</html>
+    </main>  
+ </body>
+ </html>
+
