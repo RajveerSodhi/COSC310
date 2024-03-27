@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course_name }} Discussion Page</title>
+    
+    <link rel="stylesheet" href="../static/css/discussion.css">
+</head>
+<body>
+    <header>
+        <h1>{{ course_name }} Discussion Page</h1>
+        <nav>
+            <!-- Navigation items like Home, Courses, Discussions etc. -->
+        </nav>
+    </header>
+    <main>
+        <!-- Section to post a new discussion -->
+        <section id="post-discussion">
+            <h2>Start a Discussion</h2>
+            <form method="POST" action="/{{ course_code }}/discussions/create">
+                <input type="text" name="title" placeholder="Title" required>
+                <textarea name="content" placeholder="What's on your mind?" required></textarea>
+                <button type="submit">Post</button>
+            </form>
+        </section>
+
+        <!-- Section to display discussions -->
+        <section id="discussions">
+            <h2>Discussions</h2>
+            {% for discussion in discussions %}
+            <article class="discussion">
+                <h3>{{ discussion.title }}</h3>
+                <p>{{ discussion.content }}</p>
+                <p>Posted by {{ discussion.author }} on {{ discussion.date_posted }}</p>
+                <!-- Reply form -->
+                <form method="POST" action="/{{ course_code }}/discussions/{{ discussion.id }}/reply">
+                    <textarea name="reply" placeholder="Write a reply..." required></textarea>
+                    <button type="submit">Reply</button>
+                </form>
+                <!-- Display replies -->
+                <div class="replies">
+                    <h4>Replies</h4>
+                    {% for reply in discussion.replies %}
+                    <div class="reply">
+                        <p>{{ reply.content }}</p>
+                        <p>— {{ reply.author }}, {{ reply.date_posted }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+            {% else %}
+            <p>No discussions yet. Be the first to start a conversation!</p>
+            {% endfor %}
+        </section>
+    </main>
+    <footer>
+        <!-- Footer content here -->
+    </footer>
+</body>
+</html>
