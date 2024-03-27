@@ -1,32 +1,137 @@
+<!-- This is the reply.html file for the EduPool Flask website -->
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"></html>
     <meta charset="UTF-8">
-    <title>Add Comment</title>
-    <link rel="stylesheet" href="path/to/your/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        main {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #add-comment-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s;
+        }
+        #add-comment-button:hover {
+            background-color: #0056b3;
+        }
+        #comment-box {
+            display: none;
+            margin-bottom: 1rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        textarea {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button[type="submit"] {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .comment-container {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 1rem;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 1rem;
+        }
+        .comment {
+            margin-bottom: 1rem;
+        }
+    </style>
     <script>
         function toggleCommentBox() {
             var commentBox = document.getElementById("comment-box");
             commentBox.style.display = "block";
         }
+
+        function addComment() {
+            var comment = document.getElementById("comment").value;
+            var commentsContainer = document.getElementById("comments-container");
+
+            // Create a new div to contain the comment
+            var commentContainer = document.createElement("div");
+            commentContainer.classList.add("comment-container");
+
+            // Create a new paragraph element to display the comment
+            var newComment = document.createElement("p");
+            newComment.textContent = comment;
+
+            // Append the new comment to the comment container
+            commentContainer.appendChild(newComment);
+
+            // Append the comment container to the comments container
+            commentsContainer.appendChild(commentContainer);
+
+            // Clear the textarea
+            document.getElementById("comment").value = "";
+
+            // Hide the comment box
+            document.getElementById("comment-box").style.display = "none";
+
+            // Generate a new "Reply" button
+            var newButton = document.createElement("button");
+            newButton.textContent = "Reply";
+            newButton.onclick = toggleCommentBox;
+
+            // Replace the existing button with the new one
+            var oldButton = document.getElementById("add-comment-button");
+            oldButton.parentNode.replaceChild(newButton, oldButton);
+        }
     </script>
 </head>
 <body>
     <header>
-        <h1>Add Comment</h1>
-        <!-- Navigation if needed -->
+        <h1>Question</h1>
     </header>
     <main>
-        <button onclick="toggleCommentBox()">Add Comment</button>
-        <div id="comment-box" style="display: none;">
-            <form method="POST" action="path/to/submit/comment">
-                <textarea name="comment" placeholder="Write your comment here..." required></textarea>
+        <button id="add-comment-button" onclick="toggleCommentBox()">Reply</button>
+        <div id="comment-box">
+            <form onsubmit="event.preventDefault(); addComment();">
+                <textarea id="comment" name="comment" placeholder="Write your reply here..." required></textarea>
                 <button type="submit">Submit</button>
             </form>
         </div>
+        <div id="comments-container">
+            <!-- Existing comments will be displayed here -->
+        </div>
     </main>
-    <footer>
-        <!-- Footer content here -->
-    </footer>
+    <!-- Footer content here if needed -->
 </body>
 </html>
