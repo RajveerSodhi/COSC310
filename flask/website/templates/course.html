@@ -9,6 +9,10 @@
     <p>Course Limit : {{ course.course_limit }}</p>
     <p>Teacher Id : {{ course.teacher_id }}</p>
 
+    <!-- Link to the discussion page for the course -->
+    <h3>Discussions:</h3>
+    <a href="{{ url_for('views.course_discussions', course_id=course.id) }}">View Discussions page</a>
+
     <h3>Quizzes:</h3>
     <ul>
         {% for quiz in quizzes %}
