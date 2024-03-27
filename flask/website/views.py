@@ -1,7 +1,7 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, jsonify, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from .models import User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission, EssaySubmission
+from .models import Discussion, Reply, User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission, EssaySubmission
 import base64
 
 views = Blueprint('views', __name__)
@@ -259,3 +259,36 @@ def grade_page(course_id):
         essay_grades[essay.id] = total_grade
     
     return render_template('viewGrade.html', course_id=course_id, quizzes=quizzes, essays=essays, quiz_grades=quiz_grades, essay_grades=essay_grades)
+
+#list discussion for a course
+@views.route('/course/<int:course_id>/discussions',  methods=['GET'])
+@login_required
+def course_discussions(course_id):
+    course = Course.query.get_or_404(course_id)
+    discussions = Discussion.query.filter_by(course_id=course_id).all()
+    course_full_name = f"{course.course_code} {course.course_name}" 
+    return render_template('discussion.html', course_name=course_full_name, course=course, discussions=discussions)
+
+#view a specific discussion 
+@views.route('/discussion/<int:discussion_id>')
+@login_required
+def discussion_detail(discussion_id):
+    discussion = Discussion.query.get_or_404(discussion_id)
+    replies = Reply.query.filter_by(discussion_id=discussion_id).all()
+    return render_template('discussion_detail.html', discussion=discussion, replies=replies)
+
+#add a new discussion
+@views.route('/course/<int:course_id>/discussions/add', methods=['GET', 'POST'])
+@login_required
+def add_discussion(course_id):
+    if request.method == 'POST':
+        title = request.form.get('title')
+        content = request.form.get('content')
+        new_discussion = Discussion(title=title, content=content, course_id=course_id, user_id=current_user.id)
+        db.session.add(new_discussion)
+        db.session.commit()
+        return redirect(url_for('views.course_discussions', course_id=course_id))
+    return render_template('add_discussion.html', course_id=course_id)
+
+
+
