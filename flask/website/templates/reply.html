@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Comment</title>
+    <link rel="stylesheet" href="path/to/your/css/styles.css">
+    <script>
+        function toggleCommentBox() {
+            var commentBox = document.getElementById("comment-box");
+            commentBox.style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Add Comment</h1>
+        <!-- Navigation if needed -->
+    </header>
+    <main>
+        <button onclick="toggleCommentBox()">Add Comment</button>
+        <div id="comment-box" style="display: none;">
+            <form method="POST" action="path/to/submit/comment">
+                <textarea name="comment" placeholder="Write your comment here..." required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <!-- Footer content here -->
+    </footer>
+</body>
+</html>
