@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,19 @@
 
   <h2>Essay Title: {{ essay.essay_name }}</h2>
 
-<!-- The form begins here -->
-<form action="{{ url_for('views.submit_essay') }}" method="POST" enctype="multipart/form-data">
-  <!-- Hidden inputs for essay_id and student_id -->
-  <input type="hidden" name="essay_id" value="{{ essay.id }}">
-  <input type="hidden" name="student_id" value="{{ student_id }}"> <!-- Make sure to replace YOUR_STUDENT_ID_HERE with actual student ID -->
+  <!-- The form begins here -->
+  <form action="{{ url_for('views.submit_essay') }}" method="POST" enctype="multipart/form-data">
+    <!-- Hidden inputs for essay_id and student_id -->
+    <input type="hidden" name="essay_id" value="{{ essay.id }}">
+    <input type="hidden" name="student_id" value="{{ student_id }}">
 
-  {% for question in questions %}
+    {% for question in questions %}
     <div class="question">
       {% if question.question_type == 'file' %}
-        <p class="question-text">{{ loop.index }}. Question:</p>
-        <img src="data:image/jpeg;base64,{{ question.base64_image }}" alt="Question Image">
+      <p class="question-text">{{ loop.index }}. Question:</p>
+      <img src="data:image/jpeg;base64,{{ question.base64_image }}" alt="Question Image">
       {% endif %}
-      
+
       <!-- Student response input options -->
       <div class="response-options">
         <label>
@@ -32,7 +33,8 @@
 
       <!-- Text response input -->
       <div class="text-response">
-        <textarea name="text_answer{{ question.id }}" rows="4" cols="50" placeholder="Enter your text response here"></textarea>
+        <textarea name="text_answer{{ question.id }}" rows="4" cols="50"
+          placeholder="Enter your text response here"></textarea>
       </div>
 
       <!-- File response input -->
@@ -40,29 +42,30 @@
         <input type="file" id="file_answer{{ question.id }}" name="file_answer{{ question.id }}">
       </div>
     </div>
-  {% endfor %}
+    {% endfor %}
 
-  <button type="submit" class="submit-quiz">Submit Answers</button>
-</form>
+    <button type="submit" class="submit-quiz">Submit Answers</button>
+  </form>
 
-<script>
-  // JavaScript to toggle between text and file inputs
-  document.querySelectorAll('.response-options input').forEach(function(radio) {
-    radio.addEventListener('change', function(event) {
-      var questionId = event.target.name.replace('response_type', '');
-      var parentQuestionDiv = event.target.closest('.question');
-      var textResponseDiv = parentQuestionDiv.querySelector('.text-response');
-      var fileResponseDiv = parentQuestionDiv.querySelector('.file-response');
-      if (event.target.value === 'text') {
-        textResponseDiv.style.display = 'block';
-        fileResponseDiv.style.display = 'none';
-      } else {
-        textResponseDiv.style.display = 'none';
-        fileResponseDiv.style.display = 'block';
-      }
+  <script>
+    // JavaScript to toggle between text and file inputs
+    document.querySelectorAll('.response-options input').forEach(function (radio) {
+      radio.addEventListener('change', function (event) {
+        var questionId = event.target.name.replace('response_type', '');
+        var parentQuestionDiv = event.target.closest('.question');
+        var textResponseDiv = parentQuestionDiv.querySelector('.text-response');
+        var fileResponseDiv = parentQuestionDiv.querySelector('.file-response');
+        if (event.target.value === 'text') {
+          textResponseDiv.style.display = 'block';
+          fileResponseDiv.style.display = 'none';
+        } else {
+          textResponseDiv.style.display = 'none';
+          fileResponseDiv.style.display = 'block';
+        }
+      });
     });
-  });
-</script>
+  </script>
 
-</body>
+  </body>
+
 </html>

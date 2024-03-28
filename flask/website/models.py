@@ -45,7 +45,7 @@ class Quiz(db.Model, UserMixin):
 class QuizQuestion(db.Model, UserMixin):
     __tablename__ = 'quizQuestions'
     id=db.Column(db.Integer, primary_key=True)
-    question = db.Column(db.String(150))
+    question_text = db.Column(db.String(150))
     option1 = db.Column(db.String(150))
     option2 = db.Column(db.String(150))
     option3 = db.Column(db.String(150))
@@ -108,13 +108,5 @@ class Reply(db.Model):
     date_posted = db.Column(db.DateTime(timezone=True), default=func.now())
     discussion_id = db.Column(db.Integer, db.ForeignKey('discussions.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    # # Relationships
-    # author = db.relationship('User', back_populates='replies')
-
-
-
-
-
 
 

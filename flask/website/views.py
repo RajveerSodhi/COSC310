@@ -142,7 +142,7 @@ def createAssignment(course_id):
                 question_number = question_key[len('question'):]
                 question_text = request.form[question_key]
                 options = [request.form.get(f'option{question_number}-{i}') for i in range(1, 4)]
-                quiz_question = QuizQuestion(question=question_text, quiz_id=new_quiz.id, option1=options[0], option2=options[1], option3=options[2])
+                quiz_question = QuizQuestion(question_text=question_text, quiz_id=new_quiz.id, option1=options[0], option2=options[1], option3=options[2])
                 db.session.add(quiz_question)
 
         else:
@@ -232,7 +232,7 @@ def submit_essay():
                 essay_file = file.read()         
                 new_submission = EssaySubmission(answer_text=None, answer_file=essay_file, answer_type='file', essay_id=essay_id, essayQuestion_id=question_id, student_id=student_id)
                 db.session.add(new_submission) 
-                       
+
     db.session.commit()
     return redirect(url_for('views.home'))
 
@@ -300,4 +300,61 @@ def submit_reply(discussion_id):
     db.session.commit()
     return redirect(url_for('views.discussion_detail', discussion_id=discussion_id))
 
+# grade quizzes
+@views.route('/grade-quiz/<int:course_id>/<int:quiz_id>/<int:student_id>', methods=['GET', 'POST'])
+@login_required
+def grade_quiz(course_id, quiz_id, student_id):
+    quiz = Quiz.query.get(quiz_id)
+    student = User.query.get(student_id)
+    quiz_questions = QuizQuestion.query.filter_by(quiz_id=quiz_id).all()
+    quiz_submissions = QuizSubmission.query.filter_by(quiz_id=quiz_id, student_id=student_id).all()
 
+    # adding question text and max grade to each submission
+    for submission in quiz_submissions:
+        question_for_submission = (question for question in quiz_questions if question.id == submission.quizQuestion_id)
+        submission.question_text = question_for_submission.question
+        submission.question_option1 = question_for_submission.option1
+        submission.question_option2 = question_for_submission.option2
+        submission.question_option3 = question_for_submission.option3
+        submission.max_grade = question_for_submission.max_grade
+
+    # totaling up the max grades of all the quiz questions to get an overal max grade for the quiz
+    quiz.quiz_max_grade = sum(question.max_grade for question in quiz_questions)
+
+    if request.method == 'POST':
+        for submission in quiz_submissions:
+            grade = request.form.get(f'grade_{submission.id}')
+            submission.given_grade = int(grade)
+        db.session.commit()
+        return redirect(url_for('views.course_page', course_id=course_id))
+
+    return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
+
+# grade essays
+@views.route('/grade-essay/<int:course_id>/<int:essay_id>/<int:student_id>', methods=['GET', 'POST'])
+@login_required
+def grade_essay(course_id, essay_id, student_id):
+    essay = Essay.query.get(essay_id)
+    student = User.query.get(student_id)
+    essay_question = EssayQuestion.query.filter_by(essay_id=essay_id).first()
+    essay_submission = EssaySubmission.query.filter_by(essay_id=essay_id, student_id=student_id).first()
+
+    # adding question text/file and max grade to each submission
+    essay_submission.max_grade = essay_question.max_grade
+    essay_submission.question_type = essay_question.question_type
+    if essay_submission.question_type == 'text':
+        essay_submission.question_text = essay_question.question_text
+    else:
+        essay_submission.question_base64_image = base64.b64encode(essay_question.file_upload).decode('utf-8')
+
+    # adding support for displaying submission file uploads
+    if essay_submission.answer_file and essay_submission.answer_type == 'file':
+            essay_submission.base64_image = base64.b64encode(essay_submission.answer_file).decode('utf-8')
+
+    if request.method == 'POST':
+        essay_grade = request.form.get('essay-grade')
+        essay_submission.given_grade = int(essay_grade)
+        db.session.commit()
+        return redirect(url_for('views.course_page', course_id=course_id))
+
+    return render_template('gradeEssay.html', course_id=course_id, essay=essay, student=student, submission=essay_submission)
