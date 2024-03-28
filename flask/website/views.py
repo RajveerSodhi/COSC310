@@ -172,10 +172,14 @@ def createAssignment(course_id):
 
 # Individual Quiz Page
 @views.route('/course/<int:course_id>/quiz/<int:quiz_id>',methods=['GET'])
-def quiz_page(course_id, quiz_id):        
+def quiz_page(course_id, quiz_id):      
     quiz = Quiz.query.filter_by(id=quiz_id, course_id=course_id).first()
     questions = QuizQuestion.query.filter_by(quiz_id=quiz_id).all()
-    return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz)
+    
+    # Check if the current user has already submitted the quiz
+    already_submitted = QuizSubmission.query.filter_by(quiz_id=quiz_id, student_id=current_user.id).first()  
+    
+    return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz, already_submitted=already_submitted)
 
 # Post Request for Submitting a Quiz
 @views.route('/submit_quiz',methods=['POST'])
@@ -313,7 +317,7 @@ def grade_quiz(course_id, quiz_id, student_id):
     # adding question text and max grade to each submission
     for submission in quiz_submissions:
         question_for_submission = (question for question in quiz_questions if question.id == submission.quizQuestion_id)
-        submission.question_text = question_for_submission.question
+        submission.question_text = question_for_submission.question_text
         submission.question_option1 = question_for_submission.option1
         submission.question_option2 = question_for_submission.option2
         submission.question_option3 = question_for_submission.option3
