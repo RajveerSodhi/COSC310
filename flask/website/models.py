@@ -65,7 +65,7 @@ class Essay(db.Model, UserMixin):
     __tablename__ = 'essays'
     id=db.Column(db.Integer, primary_key=True)
     essay_name = db.Column(db.String(150))
-    max_grade = db.Column(db.Integer)
+
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
 
 class EssayQuestion(db.Model, UserMixin):
@@ -74,7 +74,7 @@ class EssayQuestion(db.Model, UserMixin):
     question_text = db.Column(db.String(150))
     file_upload = db.Column(db.LargeBinary)
     question_type = db.Column(db.String(150))
-    given_grade = db.Column(db.Integer)
+    max_grade = db.Column(db.Integer)
     essay_id = db.Column(db.Integer, db.ForeignKey('essays.id'))
 
 class EssaySubmission(db.Model, UserMixin):
@@ -83,6 +83,7 @@ class EssaySubmission(db.Model, UserMixin):
     answer_text = db.Column(db.String(150))
     answer_file = db.Column(db.LargeBinary)
     answer_type = db.Column(db.String(150))
+    given_grade = db.Column(db.Integer)
     essay_id = db.Column(db.Integer, db.ForeignKey('essays.id'))
     essayQuestion_id = db.Column(db.Integer, db.ForeignKey('essayQuestions.id'))
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
