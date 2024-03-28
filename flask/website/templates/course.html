@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>{{ course.course_code }}</title>
 </head>
+
 <body>
     <h1>{{ course.course_code }} : {{ course.course_name}}</h1>
     <p>Course Description : {{ course.course_desc }}</p>
@@ -16,49 +18,64 @@
     <h3>Quizzes:</h3>
     <ul>
         {% for quiz in quizzes %}
-            <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a></li>
+        <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a>
+        </li>
         {% endfor %}
     </ul>
 
     <h3>Essays:</h3>
     <ul>
         {% for essay in essays %}
-                <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name }}</a></li>
+        <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name
+                }}</a></li>
         {% endfor %}
     </ul>
 
     {% if current_user.user_type in ['teacher'] %}
-        <h3>Create New Assignment:</h3>
-        <a href="{{ url_for('views.createAssignment', course_id=course.id) }}">Link</a>
+    <h3>Create New Assignment:</h3>
+    <a href="{{ url_for('views.createAssignment', course_id=course.id) }}">Link</a>
     {% endif %}
 
     {% if current_user.user_type in ['teacher'] %}
-        <h3>Grade Assignments:</h3>
+    <h3>Grade Assignments:</h3>
 
-        {% for quiz in quizzes %}
-        <h4>Quiz: {{ quiz.quiz_name }}</h4>
-        <ul>
-            {% for student_id in quiz_submissions[quiz.id] %}
-                <li>Submission of Student Id: {{ student_id }}</li>
-            {% endfor %}
-        </ul>
+    {% for quiz in quizzes %}
+    <h4>Quiz: {{ quiz.quiz_name }}</h4>
+    <ul>
+        {% for student_id in quiz_submissions[quiz.id] %}
+        <form method="POST"
+            action="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">
+            <li>
+                Submitted by Student Id: {{ student_id }}
+                <button type="submit">Grade Submission</button>
+            </li>
+        </form>
         {% endfor %}
+    </ul>
+    {% endfor %}
 
-        {% for essay in essays %}
-        <h4>Essay: {{ essay.essay_name }}</h4>
-        <ul>
-            {% for student_id in essay_submissions[essay.id] %}
-            <li>Submission of Student Id: {{ student_id }}</li>
-            {% endfor %}
-        </ul>
+    {% for essay in essays %}
+    <h4>Essay: {{ essay.essay_name }}</h4>
+    <ul>
+        {% for student_id in essay_submissions[essay.id] %}
+        <form method="POST"
+            action="{{ url_for('views.grade_essay', course_id=course.id, essay_id=essay.id, student_id=student_id) }}">
+            <li>
+                Submission of Student Id: {{ student_id }}
+                <button type="submit">Grade Submission</button>
+            </li>
+        </form>
         {% endfor %}
+    </ul>
+    {% endfor %}
 
     {% endif %}
 
     {% if current_user.user_type in ['student'] %}
-        <h3>View Your Grades:</h3>
-        <a href="{{ url_for('views.grade_page', course_id=course.id) }}">Link</a>
+    <h3>View Your Grades:</h3>
+    <a href="{{ url_for('views.grade_page', course_id=course.id) }}">Link</a>
     {% endif %}
 
 </body>
+
 </html>
