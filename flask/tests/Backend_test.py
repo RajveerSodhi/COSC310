@@ -157,6 +157,30 @@ class LoginTestCase(unittest.TestCase):
         user = User.query.filter_by(username="fgfd@gdg.com", password="fdgff").first()
         self.assertIsNotNone(user, "Username and password combination should exist in the database")
 
+    def test_invalid_username_password(self):
+        # Test scenario: Invalid username and password
+        
+        driver = self.driver
+        driver.get("http://127.0.0.1:5000")  # Navigate to Login Page URL
+
+        # Enter invalid username and password
+        username_field = driver.find_element(By.ID, "username")
+        username_field.send_keys("invalid_username@gmail.com")
+
+        password_field = driver.find_element(By.ID, "password")
+        password_field.send_keys("invalid_password")
+
+        # Find and click the login button
+        login_button = driver.find_element(By.ID, "submit")
+        login_button.click()
+
+        # Check if the screen remains on the login page
+        self.assertEqual(driver.current_url, "http://127.0.0.1:5000/login?next=%2F", "Screen should remain on login page")
+	  # Check if the username and password combination does not exist in the database
+        user = User.query.filter_by(username="invalid_username@gmail.com", password="invalid_password").first()
+        self.assertIsNone(user, "Username and password combination should not exist in the database")
+
+
     def tearDown(self):
         self.driver.quit()  # Clean up after the test
 
