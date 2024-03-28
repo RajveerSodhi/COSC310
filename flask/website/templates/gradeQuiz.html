@@ -10,12 +10,15 @@
 
 <body>
     <div class="grading-container">
-        <h1>Grade Quiz</h1>
-        <h3>Assignment Name: {{ quiz.quiz_name }}</h3>
-        <h3>Student: {{ student.first_name }} {{ student.last_name }}</h3>
-        <h3>Max Grade: {{ quiz.quiz_max_grade }}</h3>
+        <div class="assignment-details">
+            <h1>Grade Quiz</h1>
+            <h3>Assignment Name: {{ quiz.quiz_name }}</h3>
+            <h3>Student: {{ student.first_name }} {{ student.last_name }}</h3>
+            <h3>Max Grade: {{ quiz.quiz_max_grade }}</h3>
+        </div>
 
-        <form action="{{ url_for('views.grade_quiz', course_id=course_id, quiz_id=quiz.id, student_id=student.id) }}"
+        <form name="grading"
+            action="{{ url_for('views.grade_quiz', course_id=course_id, quiz_id=quiz.id, student_id=student.id) }}"
             method="POST">
             {% for submission in submissions %}
             <div class="question">
@@ -37,7 +40,8 @@
                     required>
             </div>
             {% endfor %}
-            <button type="submit">Submit Grades</button>
+
+            <button type="submit">Submit Grade</button>
         </form>
     </div>
 </body>
