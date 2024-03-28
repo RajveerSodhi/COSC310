@@ -50,8 +50,10 @@ def createCourse():
         teacher_enrollment = Enrollment(user_id=teacher_id,course_id=new_course.id)
         db.session.add(teacher_enrollment)
         db.session.commit()
+    
+    teachers = User.query.filter_by(user_type='teacher').all()
         
-    return render_template("createCourse.html", user=current_user)
+    return render_template("createCourse.html", user=current_user, teachers=teachers)
 
 # Post Request for Creating Enrollment Request
 @views.route('/create-request', methods=['POST'])
@@ -326,7 +328,7 @@ def grade_quiz(course_id, quiz_id, student_id):
             submission.given_grade = int(grade)
         db.session.commit()
         return redirect(url_for('views.course_page', course_id=course_id))
-
+    
     return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
 
 # grade essays
@@ -357,3 +359,4 @@ def grade_essay(course_id, essay_id, student_id):
         return redirect(url_for('views.course_page', course_id=course_id))
 
     return render_template('gradeEssay.html', course_id=course_id, essay=essay, student=student, submission=essay_submission)
+
