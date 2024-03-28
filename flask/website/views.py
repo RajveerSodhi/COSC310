@@ -274,7 +274,6 @@ def course_discussions(course_id):
 @login_required
 def discussion_detail(discussion_id):
     discussion = Discussion.query.get_or_404(discussion_id)
-    replies = Reply.query.filter_by(discussion_id=discussion_id).all()
     replies = db.session.query(Reply, User.username).join(User, User.id == Reply.user_id).filter(Reply.discussion_id == discussion_id).all()
     return render_template('discussion_detail.html', discussion=discussion, replies=replies)
 
