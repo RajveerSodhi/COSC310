@@ -17,8 +17,7 @@
             <h3>Max Grade: {{ submission.max_grade }}</h3>
         </div>
 
-        <form name="grading"
-            action="{{ url_for('views.grade_essay', course_id=course_id, essay_id=essay.id, student_id=student.id) }}"
+        <form action="{{ url_for('views.grade_essay', course_id=course_id, essay_id=essay.id, student_id=student.id) }}"
             method="POST">
             <div class="question">
                 <h4>Essay Question:</h4>
