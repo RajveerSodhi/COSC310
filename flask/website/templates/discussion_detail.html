@@ -1,4 +1,3 @@
--- nee file 
 <!DOCTYPE html>
 <html lang="en"></html>
     <meta charset="UTF-8">
@@ -46,14 +45,14 @@
             oldButton.parentNode.replaceChild(newButton, oldButton);
         }
     </script>
- </head>
- <body>
+</head>
+<body>
     <header>
         <div class="discussion-container">
             <div class="discussion">
                 <h2>{{ discussion.title }}</h2>
                 <p>{{ discussion.content }}</p>
-                <p>Posted by {{ discussion.author.username }} on {{ discussion.date_posted }}</p>
+                <p>Posted by {{ discussion.user_id }} on {{ discussion.date_posted }}</p>
             </div>
         </div>
     </header>
@@ -68,16 +67,16 @@
         </div>
         <h3>Replies</h3>
         <div id="comments-container">
-            {% for reply in replies %}
+            {% for reply, username in replies %}
             <div class="reply">
                 <p>{{ reply.content }}</p>
-                <p>— {{ reply.author.username }}, {{ reply.date_posted }}</p>
+                <p>— {{ username }}, {{ reply.date_posted }}</p>
             </div>
             {% else %}
             <p>No replies yet. Be the first to reply!</p>
             {% endfor %}
         </div>
     </main>  
- </body>
- </html>
+</body>
+</html>
 
