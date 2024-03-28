@@ -51,9 +51,9 @@
     <header>
         <div class="discussion-container">
             <div class="discussion">
-                <h1> {{ discussion.title }}</h1>
-                <p> {{ discussion.content }}</p>
-                <p> -Posted by {{ discussion.author.username }}</p>
+                <h2>{{ discussion.title }}</h2>
+                <p>{{ discussion.content }}</p>
+                <p>Posted by {{ discussion.author.username }}</p>
             </div>
         </div>
     </header>
@@ -70,8 +70,8 @@
         <div id="comments-container">
             {% for reply in replies %}
             <div class="reply">
-                <p> {{ reply.content }}</p>
-                <p> — {{ reply.author.username }}, {{ reply.date_posted }}</p>
+                <p>{{ reply.content }}</p>
+                <p>— {{ reply.author.username }}, {{ reply.date_posted }}</p>
             </div>
             {% else %}
             <p>No replies yet. Be the first to reply!</p>
