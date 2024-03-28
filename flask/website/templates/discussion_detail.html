@@ -1,83 +1,83 @@
--- nee file 
-<!DOCTYPE html>
-<html lang="en"></html>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question</title>
-    <!-- CSS added-->
-<link rel="stylesheet" href="../static/css/discussion_detail.css">
-    <script>
-        function toggleCommentBox() {
-            var commentBox = document.getElementById("comment-box");
-            commentBox.style.display = "block";
-        }
+    -- nee file 
+    <!DOCTYPE html>
+    <html lang="en"></html>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Question</title>
+        <!-- CSS added-->
+    <link rel="stylesheet" href="../static/css/discussion_detail.css">
+        <script>
+            function toggleCommentBox() {
+                var commentBox = document.getElementById("comment-box");
+                commentBox.style.display = "block";
+            }
 
-        function addComment() {
-            var comment = document.getElementById("comment").value;
-            var commentsContainer = document.getElementById("comments-container");
+            function addComment() {
+                var comment = document.getElementById("comment").value;
+                var commentsContainer = document.getElementById("comments-container");
 
-            // Create a new div to contain the comment
-            var commentContainer = document.createElement("div");
-            commentContainer.classList.add("comment-container");
+                // Create a new div to contain the comment
+                var commentContainer = document.createElement("div");
+                commentContainer.classList.add("comment-container");
 
-            // Create a new paragraph element to display the comment
-            var newComment = document.createElement("p");
-            newComment.textContent = comment;
+                // Create a new paragraph element to display the comment
+                var newComment = document.createElement("p");
+                newComment.textContent = comment;
 
-            // Append the new comment to the comment container
-            commentContainer.appendChild(newComment);
+                // Append the new comment to the comment container
+                commentContainer.appendChild(newComment);
 
-            // Append the comment container to the comments container
-            commentsContainer.appendChild(commentContainer);
+                // Append the comment container to the comments container
+                commentsContainer.appendChild(commentContainer);
 
-            // Clear the textarea
-            document.getElementById("comment").value = "";
+                // Clear the textarea
+                document.getElementById("comment").value = "";
 
-            // Hide the comment box
-            document.getElementById("comment-box").style.display = "none";
+                // Hide the comment box
+                document.getElementById("comment-box").style.display = "none";
 
-            // Generate a new "Reply" button
-            var newButton = document.createElement("button");
-            newButton.textContent = "Reply";
-            newButton.onclick = toggleCommentBox;
+                // Generate a new "Reply" button
+                var newButton = document.createElement("button");
+                newButton.textContent = "Reply";
+                newButton.onclick = toggleCommentBox;
 
-            // Replace the existing button with the new one
-            var oldButton = document.getElementById("add-comment-button");
-            oldButton.parentNode.replaceChild(newButton, oldButton);
-        }
-    </script>
- </head>
- <body>
-    <header>
-        <div class="discussion-container">
-            <div class="discussion">
-                <h2>{{ discussion.title }}</h2>
-                <p>{{ discussion.content }}</p>
-                <p>Posted by {{ discussion.author.username }} on {{ discussion.date_posted }}</p>
+                // Replace the existing button with the new one
+                var oldButton = document.getElementById("add-comment-button");
+                oldButton.parentNode.replaceChild(newButton, oldButton);
+            }
+        </script>
+    </head>
+    <body>
+        <header>
+            <div class="discussion-container">
+                <div class="discussion">
+                    <h2>{{ discussion.title }}</h2>
+                    <p>{{ discussion.content }}</p>
+                    <p>Posted by {{ discussion.user_id }} on {{ discussion.date_posted }}</p>
+                </div>
             </div>
-        </div>
-    </header>
-    <main>
-        <button id="add-comment-button" onclick="toggleCommentBox()">Reply</button>
-        <div id="comment-box" style="display: none;">
-            <!-- form for the comment box -->
-            <form class="reply-form" method="POST" action="{{ url_for('views.submit_reply', discussion_id=discussion.id) }}">
-                <textarea name="reply_content" placeholder="Write your reply here..." required></textarea>
-                <button type="submit" class="submit-reply">Post Reply</button>
-            </form>
-        </div>
-        <h3>Replies</h3>
-        <div id="comments-container">
-            {% for reply in replies %}
-            <div class="reply">
-                <p>{{ reply.content }}</p>
-                <p>— {{ reply.author.username }}, {{ reply.date_posted }}</p>
+        </header>
+        <main>
+            <button id="add-comment-button" onclick="toggleCommentBox()">Reply</button>
+            <div id="comment-box" style="display: none;">
+                <!-- form for the comment box -->
+                <form class="reply-form" method="POST" action="{{ url_for('views.submit_reply', discussion_id=discussion.id) }}">
+                    <textarea name="reply_content" placeholder="Write your reply here..." required></textarea>
+                    <button type="submit" class="submit-reply">Post Reply</button>
+                </form>
             </div>
-            {% else %}
-            <p>No replies yet. Be the first to reply!</p>
-            {% endfor %}
-        </div>
-    </main>  
- </body>
- </html>
+            <h3>Replies</h3>
+            <div id="comments-container">
+                {% for reply, username in replies %}
+                <div class="reply">
+                    <p>{{ reply.content }}</p>
+                    <p>— {{ username }}, {{ reply.date_posted }}</p>
+                </div>
+                {% else %}
+                <p>No replies yet. Be the first to reply!</p>
+                {% endfor %}
+            </div>
+        </main>  
+    </body>
+    </html>
 
