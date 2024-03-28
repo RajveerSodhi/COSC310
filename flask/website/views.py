@@ -50,8 +50,10 @@ def createCourse():
         teacher_enrollment = Enrollment(user_id=teacher_id,course_id=new_course.id)
         db.session.add(teacher_enrollment)
         db.session.commit()
+    
+    teachers = User.query.filter_by(user_type='teacher').all()
         
-    return render_template("createCourse.html", user=current_user)
+    return render_template("createCourse.html", user=current_user, teachers=teachers)
 
 # Post Request for Creating Enrollment Request
 @views.route('/create-request', methods=['POST'])
@@ -170,10 +172,14 @@ def createAssignment(course_id):
 
 # Individual Quiz Page
 @views.route('/course/<int:course_id>/quiz/<int:quiz_id>',methods=['GET'])
-def quiz_page(course_id, quiz_id):        
+def quiz_page(course_id, quiz_id):      
     quiz = Quiz.query.filter_by(id=quiz_id, course_id=course_id).first()
     questions = QuizQuestion.query.filter_by(quiz_id=quiz_id).all()
-    return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz)
+    
+    # Check if the current user has already submitted the quiz
+    already_submitted = QuizSubmission.query.filter_by(quiz_id=quiz_id, student_id=current_user.id).first()  
+    
+    return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz, already_submitted=already_submitted)
 
 # Post Request for Submitting a Quiz
 @views.route('/submit_quiz',methods=['POST'])
@@ -311,7 +317,7 @@ def grade_quiz(course_id, quiz_id, student_id):
     # adding question text and max grade to each submission
     for submission in quiz_submissions:
         question_for_submission = (question for question in quiz_questions if question.id == submission.quizQuestion_id)
-        submission.question_text = question_for_submission.question
+        submission.question_text = question_for_submission.question_text
         submission.question_option1 = question_for_submission.option1
         submission.question_option2 = question_for_submission.option2
         submission.question_option3 = question_for_submission.option3
@@ -326,7 +332,7 @@ def grade_quiz(course_id, quiz_id, student_id):
             submission.given_grade = int(grade)
         db.session.commit()
         return redirect(url_for('views.course_page', course_id=course_id))
-
+    
     return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
 
 # grade essays
@@ -357,3 +363,33 @@ def grade_essay(course_id, essay_id, student_id):
         return redirect(url_for('views.course_page', course_id=course_id))
 
     return render_template('gradeEssay.html', course_id=course_id, essay=essay, student=student, submission=essay_submission)
+
+# Instantiate a DB with dummy records whenever an instance is deleted.
+@views.route('/instantiate-db')
+def instantiate_db():
+    # Users
+    new_user1 = User(username="stu@gmail.com",password=1,first_name="Jonathan",last_name="Trott",DOB="2024-03-29",user_type="student")
+    db.session.add(new_user1)
+    new_user2 = User(username="teach@gmail.com",password=2,first_name="David",last_name="Latham",DOB="2024-03-20",user_type="teacher")
+    db.session.add(new_user2)
+    new_user3 = User(username="admin@gmail.com",password=3,first_name="Kim",last_name="Yong",DOB="2024-03-25",user_type="admin")
+    db.session.add(new_user3)
+    db.session.commit()
+    
+    # Courses
+    new_course1 = Course(course_code="Math 100", course_name="Differential Calculus", course_desc="Introduction to derivatives and rate of change", course_limit=120, teacher_id=2)
+    db.session.add(new_course1)
+    new_course2 = Course(course_code="DATA 101", course_name="Intro to R Programming", course_desc="Introduction to basic programming and related concepts", course_limit=90, teacher_id=2)
+    db.session.add(new_course2)
+    db.session.commit()
+    
+    # Enrollments
+    teacher_enrollment1 = Enrollment(user_id=2,course_id=1)
+    db.session.add(teacher_enrollment1)
+    student_enrollment1 = Enrollment(user_id=1,course_id=1)
+    db.session.add(student_enrollment1)
+    student_enrollment2 = Enrollment(user_id=1,course_id=2)
+    db.session.add(student_enrollment2)
+    db.session.commit() 
+    
+    return "<h3>Instantiated DB</h3>"

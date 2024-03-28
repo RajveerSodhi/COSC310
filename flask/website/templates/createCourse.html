@@ -36,7 +36,11 @@
 
       <div class="form-group">
         <label for="teacher_id">Teacher ID</label>
-        <input type="text" id="teacher_id" name="teacher_id">
+        <select id="teacher_id" name="teacher_id">
+            {% for teacher in teachers %}
+                <option value="{{ teacher.id }}">{{ teacher.id }}</option>
+            {% endfor %}
+        </select>
       </div>
 
       <button class="form-group" id="create_course_button" type="submit">Create Course</button>
