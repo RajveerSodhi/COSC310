@@ -6,7 +6,7 @@ class LoginTestCase(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()  # Initialize WebDriver
 
-    def test_blank_course_code(self):
+    def test_blank_course_code(self): # Test scenario: Create account with blank course code
         driver = self.driver
         driver.get("http://127.0.0.1:5000/create-course")  # Navigate to Create Account URL
 
@@ -17,7 +17,7 @@ class LoginTestCase(unittest.TestCase):
         # Check if the screen remains on the same page
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/create-course", "Screen should remain on the same page")
 
-    def test_blank_course_name(self):
+    def test_blank_course_name(self): # Test scenario: Create account with blank course name
         driver = self.driver
         driver.get("http://127.0.0.1:5000/create-course")  # Navigate to Create Account URL
 
@@ -31,7 +31,7 @@ class LoginTestCase(unittest.TestCase):
 
         # Check if the screen remains on the same page
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/create-course", "Screen should remain on the same page")
-    def test_cancel_button(self):
+    def test_cancel_button(self):# Test scenario: Clicking cancel button redirects to previous page
         driver = self.driver
         driver.get("http://127.0.0.1:5000/create-course")  # Navigate to Create Account URL
 

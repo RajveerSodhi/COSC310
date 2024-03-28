@@ -6,7 +6,7 @@ class LoginTestCase(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()  # Initialize WebDriver
 
-    def test_create_account_blank_email(self):
+    def test_create_account_blank_email(self): # Test scenario: Create account with blank email
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
@@ -17,7 +17,7 @@ class LoginTestCase(unittest.TestCase):
         # Check if the screen remains on the same page
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should remain on the same page")
 
-    def test_create_account_blank_password(self):
+    def test_create_account_blank_password(self): # Test scenario: Create account with blank password
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
@@ -32,7 +32,7 @@ class LoginTestCase(unittest.TestCase):
         # Check if the screen remains on the same page
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should remain on the same page")
 
-    def test_create_account_blank_first_name(self):
+    def test_create_account_blank_first_name(self): # Test scenario: Create account with blank first name
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
@@ -50,7 +50,7 @@ class LoginTestCase(unittest.TestCase):
         # Check if the screen remains on the same page
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should remain on the same page")
 
-    def test_create_account_blank_last_name(self):
+    def test_create_account_blank_last_name(self): # Test scenario: Create account with blank last name
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
@@ -71,7 +71,7 @@ class LoginTestCase(unittest.TestCase):
         # Check if the screen remains on the same page
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should remain on the same page")
 
-    def test_create_account_blank_dob(self):
+    def test_create_account_blank_dob(self): # Test scenario: Create account with blank date of birth
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
@@ -95,7 +95,7 @@ class LoginTestCase(unittest.TestCase):
         # Check if the screen remains on the same page
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should remain on the same page")
 
-    def test_create_account_blank_user_type(self):
+    def test_create_account_blank_user_type(self): # Test scenario: Create account with no user type selected
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
@@ -121,7 +121,7 @@ class LoginTestCase(unittest.TestCase):
 
         # Check if the screen remains on the same page
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should remain on the same page")
-    def test_create_account_filled_all_fields(self):
+    def test_create_account_filled_all_fields(self): # Test scenario: Create account with all fields filled out
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
@@ -151,7 +151,7 @@ class LoginTestCase(unittest.TestCase):
 
         # Check if the screen changes to the specified window
         self.assertEqual(driver.current_url, "http://127.0.0.1:5000/signup", "Screen should change to the specified window")
-    def test_cancel_button_redirects_to_login(self):
+    def test_cancel_button_redirects_to_login(self): # Test scenario: Clicking cancel button redirects to login page
         driver = self.driver
         driver.get("http://127.0.0.1:5000/signup")  # Navigate to Create Account URL
 
