@@ -134,7 +134,7 @@ class LoginTestCase(unittest.TestCase):
         # Create the database tables
         db.create_all()
 
-    def test_valid_username_password(self):
+    def test_valid_username_password(self): # Test scenario: Valid username and password login
         driver = self.driver
         driver.get("http://127.0.0.1:5000")  # Navigate to Login Page URL
 
@@ -157,7 +157,7 @@ class LoginTestCase(unittest.TestCase):
         user = User.query.filter_by(username="fgfd@gdg.com", password="fdgff").first()
         self.assertIsNotNone(user, "Username and password combination should exist in the database")
 
-    def test_invalid_username_password(self):
+    def test_invalid_username_password(self): # Test scenario: Invalid username and password login
         # Test scenario: Invalid username and password
         
         driver = self.driver
