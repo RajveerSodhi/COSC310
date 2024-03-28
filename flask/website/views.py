@@ -364,3 +364,32 @@ def grade_essay(course_id, essay_id, student_id):
 
     return render_template('gradeEssay.html', course_id=course_id, essay=essay, student=student, submission=essay_submission)
 
+# Instantiate a DB with dummy records whenever an instance is deleted.
+@views.route('/instantiate-db')
+def instantiate_db():
+    # Users
+    new_user1 = User(username="stu@gmail.com",password=1,first_name="Jonathan",last_name="Trott",DOB="2024-03-29",user_type="student")
+    db.session.add(new_user1)
+    new_user2 = User(username="teach@gmail.com",password=2,first_name="David",last_name="Latham",DOB="2024-03-20",user_type="teacher")
+    db.session.add(new_user2)
+    new_user3 = User(username="admin@gmail.com",password=3,first_name="Kim",last_name="Yong",DOB="2024-03-25",user_type="admin")
+    db.session.add(new_user3)
+    db.session.commit()
+    
+    # Courses
+    new_course1 = Course(course_code="Math 100", course_name="Differential Calculus", course_desc="Introduction to derivatives and rate of change", course_limit=120, teacher_id=2)
+    db.session.add(new_course1)
+    new_course2 = Course(course_code="DATA 101", course_name="Intro to R Programming", course_desc="Introduction to basic programming and related concepts", course_limit=90, teacher_id=2)
+    db.session.add(new_course2)
+    db.session.commit()
+    
+    # Enrollments
+    teacher_enrollment1 = Enrollment(user_id=2,course_id=1)
+    db.session.add(teacher_enrollment1)
+    student_enrollment1 = Enrollment(user_id=1,course_id=1)
+    db.session.add(student_enrollment1)
+    student_enrollment2 = Enrollment(user_id=1,course_id=2)
+    db.session.add(student_enrollment2)
+    db.session.commit() 
+    
+    return "<h3>Instantiated DB</h3>"
