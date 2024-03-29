@@ -134,7 +134,7 @@ class LoginTestCase(unittest.TestCase):
         # Create the database tables
         db.create_all()
 
-    def test_valid_username_password_unittest(self):
+    def test_valid_username_password_unittest(self): # Test scenario: Valid username and password login
         # Initialize WebDriver and navigate to the login page
         driver = self.driver
         driver.get("http://127.0.0.1:5000")  # Navigate to Login Page URL
