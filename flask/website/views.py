@@ -316,22 +316,36 @@ def grade_quiz(course_id, quiz_id, student_id):
 
     # adding question text and max grade to each submission
     for submission in quiz_submissions:
-        question_for_submission = (question for question in quiz_questions if question.id == submission.quizQuestion_id)
-        submission.question_text = question_for_submission.question_text
-        submission.question_option1 = question_for_submission.option1
-        submission.question_option2 = question_for_submission.option2
-        submission.question_option3 = question_for_submission.option3
-        submission.max_grade = question_for_submission.max_grade
+        question_for_submission = next((question for question in quiz_questions if question.id == submission.quizQuestion_id), None)
+        if question_for_submission is not None:
+            submission.question_text = question_for_submission.question_text
+            submission.question_option1 = question_for_submission.option1
+            submission.question_option2 = question_for_submission.option2
+            submission.question_option3 = question_for_submission.option3
+            submission.max_grade = question_for_submission.max_grade if question_for_submission.max_grade else 1
 
     # totaling up the max grades of all the quiz questions to get an overal max grade for the quiz
-    quiz.quiz_max_grade = sum(question.max_grade for question in quiz_questions)
+    quiz.quiz_max_grade = sum(question.max_grade if question.max_grade is not None else 1 for question in quiz_questions)
 
     if request.method == 'POST':
+        all_grades_valid = True
         for submission in quiz_submissions:
-            grade = request.form.get(f'grade_{submission.id}')
-            submission.given_grade = int(grade)
-        db.session.commit()
-        return redirect(url_for('views.course_page', course_id=course_id))
+            grade_str = request.form.get(f'grade_{submission.id}')
+            try:
+                grade = int(grade_str) if grade_str is not None else None
+            except ValueError:
+                grade = None
+            if grade is None or not (0 <= grade <= submission.max_grade):
+                all_grades_valid = False
+            if all_grades_valid:
+                submission.given_grade = grade
+        if all_grades_valid:
+            db.session.commit()
+            return redirect(url_for('views.course_page', course_id=course_id))
+        else:
+            # If not all grades are valid, do not commit and re-render the template
+            # This will display flash messages to the user
+            return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
     
     return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
 
@@ -343,7 +357,6 @@ def grade_essay(course_id, essay_id, student_id):
     student = User.query.get(student_id)
     essay_question = EssayQuestion.query.filter_by(essay_id=essay_id).first()
     essay_submission = EssaySubmission.query.filter_by(essay_id=essay_id, student_id=student_id).first()
-
     # adding question text/file and max grade to each submission
     essay_submission.max_grade = essay_question.max_grade
     essay_submission.question_type = essay_question.question_type
@@ -351,17 +364,14 @@ def grade_essay(course_id, essay_id, student_id):
         essay_submission.question_text = essay_question.question_text
     else:
         essay_submission.question_base64_image = base64.b64encode(essay_question.file_upload).decode('utf-8')
-
     # adding support for displaying submission file uploads
     if essay_submission.answer_file and essay_submission.answer_type == 'file':
             essay_submission.base64_image = base64.b64encode(essay_submission.answer_file).decode('utf-8')
-
     if request.method == 'POST':
         essay_grade = request.form.get('essay-grade')
         essay_submission.given_grade = int(essay_grade)
         db.session.commit()
         return redirect(url_for('views.course_page', course_id=course_id))
-
     return render_template('gradeEssay.html', course_id=course_id, essay=essay, student=student, submission=essay_submission)
 
 # Instantiate a DB with dummy records whenever an instance is deleted.
