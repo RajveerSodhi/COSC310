@@ -10,6 +10,10 @@
   <div class="quiz-container">
     <form class="quiz-form" method="POST" action="/submit_quiz">
       <h2>Quiz Title: {{ quiz.quiz_name }}</h2>
+      
+      {% if already_submitted %}
+      <p>You have already submitted this quiz.</p>
+      {% else %}  
 
       {% for question in questions %}
       <div class="question">
@@ -31,6 +35,8 @@
       <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
 
       <button type="submit" class="submit-quiz">Submit Answers</button>
+      {% endif %}
+
     </form>
   </div>
 </body>
