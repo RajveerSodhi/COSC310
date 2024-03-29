@@ -19,8 +19,8 @@ def home():
 def edit_details():
      if request.method == 'POST':
         # Retrieve the updated details from the form
-        email = request.form.get('email')
-        user = User.query.filter_by(username=email).first()
+       # email = request.form.get('email')
+        user = User.query.filter_by(username=current_user.username).first()
         if user:
             user.password = request.form.get('password')
             user.first_name = request.form.get('firstName')
@@ -316,22 +316,36 @@ def grade_quiz(course_id, quiz_id, student_id):
 
     # adding question text and max grade to each submission
     for submission in quiz_submissions:
-        question_for_submission = (question for question in quiz_questions if question.id == submission.quizQuestion_id)
-        submission.question_text = question_for_submission.question_text
-        submission.question_option1 = question_for_submission.option1
-        submission.question_option2 = question_for_submission.option2
-        submission.question_option3 = question_for_submission.option3
-        submission.max_grade = question_for_submission.max_grade
+        question_for_submission = next((question for question in quiz_questions if question.id == submission.quizQuestion_id), None)
+        if question_for_submission is not None:
+            submission.question_text = question_for_submission.question_text
+            submission.question_option1 = question_for_submission.option1
+            submission.question_option2 = question_for_submission.option2
+            submission.question_option3 = question_for_submission.option3
+            submission.max_grade = question_for_submission.max_grade if question_for_submission.max_grade else 1
 
     # totaling up the max grades of all the quiz questions to get an overal max grade for the quiz
-    quiz.quiz_max_grade = sum(question.max_grade for question in quiz_questions)
+    quiz.quiz_max_grade = sum(question.max_grade if question.max_grade is not None else 1 for question in quiz_questions)
 
     if request.method == 'POST':
+        all_grades_valid = True
         for submission in quiz_submissions:
-            grade = request.form.get(f'grade_{submission.id}')
-            submission.given_grade = int(grade)
-        db.session.commit()
-        return redirect(url_for('views.course_page', course_id=course_id))
+            grade_str = request.form.get(f'grade_{submission.id}')
+            try:
+                grade = int(grade_str) if grade_str is not None else None
+            except ValueError:
+                grade = None
+            if grade is None or not (0 <= grade <= submission.max_grade):
+                all_grades_valid = False
+            if all_grades_valid:
+                submission.given_grade = grade
+        if all_grades_valid:
+            db.session.commit()
+            return redirect(url_for('views.course_page', course_id=course_id))
+        else:
+            # If not all grades are valid, do not commit and re-render the template
+            # This will display flash messages to the user
+            return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
     
     return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
 
