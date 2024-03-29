@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade Essay</title>
-    <link rel="stylesheet" href="../static/css/gradeAssignment.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gradeAssignment.css') }}">
 </head>
 
 <body>
@@ -23,7 +23,8 @@
             <div class="question">
                 <h4>Essay Question:</h4>
                 {% if submission.question_type == 'file' %}
-                <img src="data:image/jpeg;base64,{{ submission.quetion_base64_image }}" alt="Essay Question">
+                <embed src="data:application/pdf;base64,{{ submission.question_pdf }}" type="application/pdf"
+                    width="90%" height="300px">
                 {% elif submission.question_type == 'text' %}
                 <p>{{ submission.question_text }}</p>
                 {% endif %}
@@ -32,9 +33,10 @@
                 {% if submission.answer_type == 'text' %}
                 <p>{{ submission.answer_text }}</p>
                 {% elif submission.answer_type == 'file' %}
-                <img src="data:image/jpeg;base64,{{ submission.base64_image}}" alt="Essay Submission">
+                <embed src="data:application/pdf;base64,{{ submission.answer_pdf }}" type="application/pdf" width="90%"
+                    height="400px">
                 {% endif %}
-
+                <br>
                 <label for="essay-grade">Grade Essay:</label>
                 <input type="number" name="essay-grade" placeholder="Grade out of {{ submission.max_grade }}" min="0"
                     max="{{ submission.max_grade }}" required>

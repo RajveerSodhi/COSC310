@@ -357,21 +357,30 @@ def grade_essay(course_id, essay_id, student_id):
     student = User.query.get(student_id)
     essay_question = EssayQuestion.query.filter_by(essay_id=essay_id).first()
     essay_submission = EssaySubmission.query.filter_by(essay_id=essay_id, student_id=student_id).first()
-    # adding question text/file and max grade to each submission
-    essay_submission.max_grade = essay_question.max_grade
-    essay_submission.question_type = essay_question.question_type
-    if essay_submission.question_type == 'text':
+
+    # adding question text/file and max grade to the submission
+    essay_submission.max_grade = essay_question.max_grade if essay_question.max_grade is not None else 100
+    if essay_question.question_type == 'text':
         essay_submission.question_text = essay_question.question_text
-    else:
-        essay_submission.question_base64_image = base64.b64encode(essay_question.file_upload).decode('utf-8')
+    elif essay_question.file_upload and essay_question.question_type == 'file':
+        essay_submission.question_pdf = base64.b64encode(essay_question.file_upload).decode('utf-8')
+
     # adding support for displaying submission file uploads
-    if essay_submission.answer_file and essay_submission.answer_type == 'file':
-            essay_submission.base64_image = base64.b64encode(essay_submission.answer_file).decode('utf-8')
+    if essay_submission.answer_type == 'file':
+        essay_submission.answer_pdf = base64.b64encode(essay_submission.answer_file).decode('utf-8')
+
     if request.method == 'POST':
-        essay_grade = request.form.get('essay-grade')
-        essay_submission.given_grade = int(essay_grade)
-        db.session.commit()
-        return redirect(url_for('views.course_page', course_id=course_id))
+        grade_str = request.form.get('essay-grade')
+        try:
+            essay_grade = int(grade_str) if grade_str else None
+        except ValueError:
+            essay_grade = None
+
+        if essay_grade is not None and 0 <= essay_grade <= essay_submission.max_grade:
+            essay_submission.given_grade = essay_grade
+            db.session.commit()
+            return redirect(url_for('views.course_page', course_id=course_id))
+
     return render_template('gradeEssay.html', course_id=course_id, essay=essay, student=student, submission=essay_submission)
 
 # Instantiate a DB with dummy records whenever an instance is deleted.
