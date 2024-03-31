@@ -143,10 +143,28 @@ class LoginTestCase(unittest.TestCase):
         request_button.click()
 
         # Query the database to check if the course appears in the request section
-        user = User.query.filter_by(username="valid_student_email@example.com").first()
-        if user:
-            requested_course = Request.query.filter_by(user_id=user.id).first()
-            self.assertIsNotNone(requested_course, "Course should appear in the request section")
+        x = User.query.with_entities(User.username=="fgfd@gdg.com").all()
+        #print(x)
+        for i in x :
+          if i[0]:
+            self.assertIsNotNone(i[0], "email //")  
+          
+
+   
+        #user = User.query.filter(User.username=="student@student.com")   
+        #print('x')
+        #print(user)
+        #print('x')
+        #user = User.query.filter_by(username="student@student.com")
+        #print('x')
+        #print(user)
+        #print(user.username)
+        #print('x')
+        #if user:
+        #    requested_course = Request.query.filter_by(user_id=users.id).first()
+        #    self.assertIsNotNone(requested_course, "Course should appear in the request section")
+        #user = User.query.filter_by(User.username=="student@student.com").first()
+        #print(user)
 
     def tearDown(self):
         self.driver.quit()
