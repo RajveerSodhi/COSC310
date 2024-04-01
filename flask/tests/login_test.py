@@ -30,8 +30,13 @@ class TestLoginPage(TestCase):
             response = self.client.post('/login', data={'username': 'stu@gmail.com', 'password': '1'})
 
             # Check if the response is a redirect (assuming successfully
-            expected_url = url_for('views.home', _external=True)  
-            self.assertRedirects(response, expected_url)
+    #       expected_url = url_for('home', _external=True)  
+    #       self.assertRedirects(response, expected_url)
+
+            # Manually check the status code and location header
+            self.assertEqual(response.status_code, 302)  # 302 is the standard HTTP status code for a redirect
+            expected_url = url_for('views.home', _external=True)  # Replace 'home' with your actual view function name
+            self.assertEqual(response.headers['Location'], expected_url)
 
             # Check if the user's info is saved in the database
             user = User.query.filter_by(username='stu@gmail.com').first()
