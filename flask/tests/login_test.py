@@ -33,9 +33,9 @@ class TestLoginPage(TestCase):
             self.assert_redirects(response, 'http://localhost/')
 
             # Check if the user's info is saved in the database
-            user = User.query.filter_by(username='testuser').first()
+            user = User.query.filter_by(username='stu@gmail.com').first()
             self.assertIsNotNone(user)  # Check if user exists
-            self.assertEqual(user.password, 'testpassword')  # Check if password is correct
+            self.assertEqual(user.password, '1')  # Check if password is correct
 
 if __name__ == '__main__':
     unittest.main()
