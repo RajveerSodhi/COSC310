@@ -27,7 +27,7 @@ class TestLoginPage(TestCase):
     def test_login_submission(self):
         # Simulate a user submitting login information
         with self.client:
-            response = self.client.post('/login', data={'username': 'testuser', 'password': 'testpassword'})
+            response = self.client.post('/login', data={'username': 'stu@gmail.com', 'password': '1'})
 
             # Check if the response is a redirect (assuming successful login redirects somewhere)
             self.assert_redirects(response, '/')
