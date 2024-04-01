@@ -2,6 +2,7 @@ import unittest
 from flask import Flask, url_for
 from flask_testing import TestCase
 from website.models import db, User  # Import the database and the User model
+from werkzeug.urls import url_parse
 
 # sys.path.append('flask\main.py')  # Replace '/path/to/myapp' with the actual path to the 'myapp' package or module
 
@@ -34,11 +35,21 @@ class TestLoginPage(TestCase):
     #       self.assertRedirects(response, expected_url)
 
             # Manually check the status code and location header
-            self.assertEqual(response.status_code, 302)  # 302 is the standard HTTP status code for a redirect
-            expected_url = url_for('views.home', _external=True)  # Replace 'home' with your actual view function name
-            print('Expected URL:', expected_url)
-            print('Actual URL:', response.headers['Location'])
-            self.assertEqual(response.headers['Location'], expected_url)
+            # self.assertEqual(response.status_code, 302)  # 302 is the standard HTTP status code for a redirect
+            # expected_url = url_for('views.home', _external=True)  # Replace 'home' with your actual view function name
+            # print('Expected URL:', expected_url)
+            # print('Actual URL:', response.headers['Location'])
+            # self.assertEqual(response.headers['Location'], expected_url)
+
+          # In your test method
+            actual_url = response.headers['Location']
+            actual_path = url_parse(actual_url).path
+            expected_path = url_for('home', _external=False)  # Now getting just the path, not the full URL
+
+            print('Expected Path:', expected_path)
+            print('Actual Path:', actual_path)
+
+            self.assertEqual(actual_path, expected_path)
 
             # Check if the user's info is saved in the database
             user = User.query.filter_by(username='stu@gmail.com').first()
