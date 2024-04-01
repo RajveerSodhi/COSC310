@@ -30,7 +30,8 @@ class TestLoginPage(TestCase):
             response = self.client.post('/login', data={'username': 'stu@gmail.com', 'password': '1'})
 
             # Check if the response is a redirect (assuming successfully
-            self.assertRedirects(response,"http://127.0.0.1:5000/")
+            expected_url = url_for('home.html', _external=True)  
+            self.assertRedirects(response, expected_url)
 
             # Check if the user's info is saved in the database
             user = User.query.filter_by(username='stu@gmail.com').first()
