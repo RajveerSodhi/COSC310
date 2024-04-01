@@ -36,6 +36,8 @@ class TestLoginPage(TestCase):
             # Manually check the status code and location header
             self.assertEqual(response.status_code, 302)  # 302 is the standard HTTP status code for a redirect
             expected_url = url_for('views.home', _external=True)  # Replace 'home' with your actual view function name
+            print('Expected URL:', expected_url)
+            print('Actual URL:', response.headers['Location'])
             self.assertEqual(response.headers['Location'], expected_url)
 
             # Check if the user's info is saved in the database
