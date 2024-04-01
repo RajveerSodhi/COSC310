@@ -14,7 +14,7 @@ from flask import app
 
 class TestLoginPage(TestCase):
     def create_app(self):
-        app = create_app(config_name='')  # Assume you have different configurations, including a 'testing' config
+        app = create_app()  # Assume you have different configurations, including a 'testing' config
         return app
 
     def setUp(self):
