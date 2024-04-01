@@ -1,5 +1,5 @@
 import unittest
-from flask import Flask
+from flask import Flask, url_for
 from flask_testing import TestCase
 from website.models import db, User  # Import the database and the User model
 
