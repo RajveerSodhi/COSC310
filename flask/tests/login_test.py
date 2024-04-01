@@ -30,7 +30,7 @@ class TestLoginPage(TestCase):
             response = self.client.post('/login', data={'username': 'stu@gmail.com', 'password': '1'})
 
             # Check if the response is a redirect (assuming successfully
-            expected_url = url_for('home', _external=True)  
+            expected_url = url_for('views.home', _external=True)  
             self.assertRedirects(response, expected_url)
 
 
