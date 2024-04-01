@@ -30,7 +30,7 @@ class TestLoginPage(TestCase):
             response = self.client.post('/login', data={'username': 'testuser', 'password': 'testpassword'})
 
             # Check if the response is a redirect (assuming successful login redirects somewhere)
-            self.assert_redirects(response, '/dashboard')
+            self.assert_redirects(response, '/')
 
             # Check if the user's info is saved in the database
             user = User.query.filter_by(username='testuser').first()
