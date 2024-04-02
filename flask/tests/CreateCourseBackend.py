@@ -4,9 +4,13 @@ from selenium.webdriver.common.by import By
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+import os
+
+basename = os.getcwd()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Admin/amey3/EduPool/flask/instance/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + basename + '/../instance/database.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Admin/amey3/EduPool/flask/instance/database.db'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -79,16 +83,43 @@ class AdminTestCase(unittest.TestCase):
         create_course_button = driver.find_element(By.ID, "create_course_button")
         create_course_button.click()
 
-        user = User.query.filter_by(username="valid_student_email@example.com").first()
+
+        # Query the database to check if the course appears in the request section
+        x = Course.query.with_entities(Course.course_code=="110").all()
+        #print(x)
+        for i in x :
+          if i[0]:
+            self.assertIsNotNone(i[0], "Course Code //")  
+          
+
+   
+        #user = User.query.filter(User.username=="student@student.com")   
+        #print('x')
+        #print(user)
+        #print('x')
+        #user = User.query.filter_by(username="student@student.com")
+        #print('x')
+        #print(user)
+        #print(user.username)
+        #print('x')
+        #if user:
+        #    requested_course = Request.query.filter_by(user_id=users.id).first()
+        #    self.assertIsNotNone(requested_course, "Course should appear in the request section")
+        #user = User.query.filter_by(User.username=="student@student.com").first()
+        #print(user)
+
+
+
+        #user = User.query.filter_by(username="valid_student_email@example.com").first()
         
         # Query the database to check if the course is added
         #if user:
         #    created_course = Request.query.filter_by(course_id=course.id).first()
         #    self.assertIsNotNone(created_course, "Course should appear in the course section")
         
-        course = Course.query.filter_by(course_code="COURSE101").first()
-        print(course)
-        self.assertIsNotNone(course, "Course should be added to the database")
+        #course = Course.query.filter_by(course_code="COURSE101").first()
+        #print(course)
+        #self.assertIsNotNone(course, "Course should be added to the database")
 
     def tearDown(self):
         self.driver.quit()

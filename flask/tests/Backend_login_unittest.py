@@ -5,9 +5,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 #from sqlalchemy.sql import func
 import flask
+import os
 
 import sys
-sys.path.append('C:/Users/Admin/amey3/EduPool/flask/')
+sys.path.append('../')
+#sys.path.append('C:/Users/Admin/amey3/EduPool/flask/')
 #from . import db
 
 
@@ -15,10 +17,15 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 
 
-
+basename = os.getcwd()
+ 
+# Print the base name  
+print(basename)
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Admin/amey3/EduPool/flask/instance/database.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Admin/amey4/EduPool/flask/instance/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + basename + '/../instance/database.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../instance/database.db'
 db = SQLAlchemy(app)
 
 
