@@ -22,7 +22,7 @@
           <form method="POST" action="{{ url_for('views.createRequest') }}">
             <input type="hidden" name="course_id" value="{{ course.id }}">
             <input type="hidden" name="user_id" value="{{ user.id }}">
-            <input type="submit" class="enrollButton" value="Request to Enroll">
+            <input type="submit" id="request_enroll_button" class="enrollButton" value="Request to Enroll">
           </form>
         </div>
       </li>

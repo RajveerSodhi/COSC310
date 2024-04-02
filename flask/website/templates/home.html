@@ -41,13 +41,13 @@
     <!-- Student View of Link to Enrolling in Courses -->
     {% if current_user.user_type in ['student'] %}
         <h3>Enroll in a New Course:</h3>
-        <a href="{{ url_for('views.display_courses') }}">Clicking this link will redirect you to the enroll course page</a>
+        <a id="enroll_course_link" href="{{ url_for('views.display_courses') }}">Clicking this link will redirect you to the enroll course page</a>
     {% endif %}
 
      <!-- Admin View of Link to Creating Courses -->
     {% if current_user.user_type in ['admin'] %}
      <h3>Create a Course:</h3>
-     <a href="{{ url_for('views.createCourse') }}">Clicking this link will redirect you to the create course page</a>
+     <a id="create_course_link" href="{{ url_for('views.createCourse') }}">Clicking this link will redirect you to the create course page</a>
     {% endif %}
 
     <!-- Admin View of Link to Accepting/Declining Student Enrollment Requests for Courses -->
