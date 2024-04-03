@@ -27,7 +27,7 @@ class TestLoginPage(TestCase):
     def test_login_submission(self):
         # Simulate a user submitting login information
         with self.client:
-            response = self.client.post('/login', data={'username': 'stu@gmail.com', 'password': '1'})
+            response = self.client.post('/login', data={'username': 'stu@gmail.com', 'password': '1'}, follow_redirects=True)
 
             # Check if the response is a redirect (assuming successfully
             expected_url = url_for('views.home', _external=True)  
