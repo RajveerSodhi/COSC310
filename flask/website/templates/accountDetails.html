@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Details</title>
+    <style>
+        /* Main Content Styles */
+        body {
+            background-color: #f3f3f3;
+        }
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .details-container {
+            border: 1px solid #ccc; /* Border color */
+            padding: 20px; /* Padding around the details */
+            border-radius: 8px; /* Rounded corners */
+            background-color: white; /* White background */
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        li span {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'sidebar.html' %}
+    <div class="main-content">
+        <h2>Account Details</h2>
+        <div class="details-container">
+            <ul>
+                <li><span>Username:</span> {{ user.username }}</li>
+                <li><span>First Name:</span> {{ user.first_name }}</li>
+                <li><span>Last Name:</span> {{ user.last_name }}</li>
+                <li><span>DOB:</span> {{ user.DOB }}</li>
+                <li><span>Role:</span> {{ user.user_type }}</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
