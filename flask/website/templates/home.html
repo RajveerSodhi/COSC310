@@ -12,12 +12,21 @@
             position: fixed;
             top: 0;
             left: 0;
-            background-color: rgba(10, 75, 251, 0.8);
-            padding-top: 20px;
+            background-color: rgba(20, 49, 130, 0.8);
+            padding-top: 40px;
             color: #333;
             font-family: Arial, sans-serif;
         }
-
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: white;
+        }
         .sidebar ul {
             list-style-type: none;
             padding: 0;
@@ -139,14 +148,7 @@
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <ul>
-            <li><a href="{{ url_for('views.home') }}">Dashboard</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-        </ul>
-    </div>
+    {% include 'sidebar.html' %}
     <div class="main-content">
         <div class="dashboard-title">
             Dashboard
