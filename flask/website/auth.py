@@ -1,3 +1,4 @@
+import bcrypt
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from .models import User,db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -11,7 +12,7 @@ def login():
         password = request.form.get('password')
 
         user = User.query.filter_by(username=username).first()
-        if user:
+        if user and bcrypt.check_password_hash(user.password, password):
             if (user.password==password):
                 print("Logged in Successfully!")
                 login_user(user, remember=True)
