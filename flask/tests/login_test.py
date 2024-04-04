@@ -10,36 +10,31 @@
 
 
 import unittest
+import pytest
+
 from selenium import webdriver
+
+options = webdriver.FirefoxOptions()
+options.headless = True
+
+
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.firefox import GeckoDriverManager
+#from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-#from webdriver_manager.chrome import ChromeDriverManager
+from flask import Flask
+from webdriver_manager.chrome import ChromeDriverManager
 
 #driver = webdriver.Chrome(ChromeDriverManager().install())
-
-
-from selenium import webdriver
-#import chromedriver_autoinstaller
-
-#chromedriver_autoinstaller.install()
-
-#Chrome options
-#chrome_options = webdriver.ChromeOptions()
-#chrome_options.add_argument('--no-sandbox')
-#chrome_options.add_argument("--disable-infobars")
-#chrome_options.add_argument('--disable-dev-shm-usage')
-
-#Run chrome
-#driver = webdriver.Chrome(options=chrome_options)
-
-from flask import Flask
-
 
 app = Flask(__name__)
 
 class LoginTestCase(unittest.TestCase):
     def setUp(self):
-        self.driver = webdriver.Firefox()  # Initialize WebDriver
+        self.driver = webdriver.Firefox(options=options)  # Initialize WebDriver
         #self.driver = webdriver.Chrome()  # Initialize WebDriver
 
     def test_login_username_required(self):
