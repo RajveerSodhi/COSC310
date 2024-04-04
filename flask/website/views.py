@@ -1,6 +1,6 @@
+import magic
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, jsonify, render_template, request, redirect, url_for
-import magic
 from werkzeug.utils import secure_filename
 from .models import Discussion, Reply, User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission, EssaySubmission
 import base64
@@ -18,9 +18,9 @@ def home():
 @views.route('/editDetails', methods=['GET', 'POST'])
 @login_required
 def edit_details():
-     if request.method == 'POST':
+    if request.method == 'POST':
         # Retrieve the updated details from the form
-       # email = request.form.get('email')
+        # email = request.form.get('email')
         user = User.query.filter_by(username=current_user.username).first()
         if user:
             user.password = request.form.get('password')
@@ -33,7 +33,7 @@ def edit_details():
         else:
             flash("User not found!", category="error")
     
-     return render_template("EditDetails.html", user=current_user)
+    return render_template("EditDetails.html", user=current_user)
 
 # Page for Creating a New Course - Admin
 @views.route('/create-course', methods=['GET','POST'])
@@ -70,7 +70,13 @@ def createRequest():
 # Page for Enrolling in a New Course - Student
 @views.route('/enroll-courses')
 def display_courses():
-    courses = Course.query.all()
+    requested_course_ids = db.session.query(Request.course_id).filter_by(user_id=current_user.id).all()
+    requested_course_ids = [r.course_id for r in requested_course_ids]
+
+    enrolled_course_ids = db.session.query(Enrollment.course_id).filter_by(user_id=current_user.id).all()
+    enrolled_course_ids = [e.course_id for e in enrolled_course_ids]
+
+    courses = Course.query.filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
     return render_template('enrollCourse.html', user=current_user, courses=courses)
 
 # Page for Accepting Student Request - Admin
