@@ -82,10 +82,10 @@
             height: 200px;
             margin-right: 50px;
             margin-bottom: 20px;
-            border-radius: 5px;
-            padding: 10px;
+            border-radius: 8px;
+            padding: 20px;
             box-sizing: border-box;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.79);
             box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease;
             display: flex;
@@ -143,8 +143,12 @@
 
         /* Background color */
         body {
-            background-color: #f3f3f3;
+            background: #f3f3f3;
         }
+        html, body {
+            height: 100%;
+        }
+        
     </style>
 </head>
 <body>
@@ -189,10 +193,19 @@
                     {% endif %}
                 
                     {% if current_user.user_type in ['admin'] %}
-                    <div class="card">
-                        <h3>Create a New Course</h3>
-                        <a id="create_course_link" href="{{ url_for('views.createCourse') }}">Click here to create a new course</a>
-                    </div>
+                    <a href="{{ url_for('views.createCourse') }}">
+                        <div class="card">
+                            <h3>Create a New Course</h3>
+                        </div>
+                    </a>
+                    {% endif %}
+
+                    {% if current_user.user_type in ['admin'] %}
+                    <a href="{{ url_for('views.display_requests') }}">
+                        <div class="card">
+                            <h3>Accept and Decline Student Enrollment Requests For Courses</h3>
+                        </div>
+                    </a>
                     {% endif %}
 
                     <a href="{{ url_for('views.edit_details') }}">
