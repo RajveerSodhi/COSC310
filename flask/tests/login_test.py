@@ -1,7 +1,12 @@
 import unittest
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath('..'))
 from flask import Flask, url_for
 from flask_testing import TestCase
-from website.models import db, User  # Import the database and the User model
+from website.models import db, User # Import the database and the User model
+#from website.models import db, User  # Import the database and the User model
 
 # sys.path.append('flask\main.py')  # Replace '/path/to/myapp' with the actual path to the 'myapp' package or module
 
@@ -27,11 +32,12 @@ class TestLoginPage(TestCase):
     def test_login_submission(self):
         # Simulate a user submitting login information
         with self.client:
-            response = self.client.post('/login', data={'username': 'stu@gmail.com', 'password': '1'})
+            response = self.client.post('/login', data={'username': 'stu@gmail.com', 'password': '1'}, follow_redirects=True)
 
             # Check if the response is a redirect (assuming successfully
             expected_url = url_for('views.home', _external=True)  
-            self.assertRedirects(response, expected_url)
+            print(response.status_code)
+            self.assertRedirects(response=response, location=expected_url)
 
 
 
