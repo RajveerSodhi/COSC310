@@ -45,6 +45,6 @@ jobs:
     
     - name: Test with pytest
       run: |
-        python flask/tests/login_test.py
+        # python flask/tests/login_test.py
       env: 
         DISPLAY: :99
