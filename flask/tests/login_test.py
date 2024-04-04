@@ -1,12 +1,12 @@
-from selenium.webdriver import Firefox, FirefoxOptions
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from webdriver_manager.firefox import GeckoDriverManager
+#from selenium.webdriver import Firefox, FirefoxOptions
+#from selenium.webdriver.firefox.service import Service as FirefoxService
+#from webdriver_manager.firefox import GeckoDriverManager
 
-options = FirefoxOptions()
-options.binary ='C:/Program Files/Mozilla Firefox/firefox.exe' # on Windows
+#options = FirefoxOptions()
+#options.binary ='C:/Program Files/Mozilla Firefox/firefox.exe' # on Windows
 
-driver = Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
-driver.get('https://www.google.com')
+#driver = Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
+#driver.get('https://www.google.com')
 
 
 import unittest
