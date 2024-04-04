@@ -16,8 +16,7 @@ import pytest
 
 from selenium import webdriver
 
-options = webdriver.FirefoxOptions()
-options.headless = True
+
 
 from unittest.mock import MagicMock
 
@@ -39,6 +38,8 @@ app = Flask(__name__)
 
 class LoginTestCase(unittest.TestCase):
     def setUp(self):
+        options = webdriver.FirefoxOptions()
+        options.headless = True
         self.driver = webdriver.Firefox(options=options)  # Initialize WebDriver
         # Mocking the WebDriver
         driver = MagicMock()
