@@ -3,79 +3,239 @@
 
 <head>
     <title>{{ course.course_code }}</title>
+    <style>
+        /* Sidebar Styles */
+        .sidebar {
+            height: 100%;
+            width: 175px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(10, 75, 251, 0.8);
+            padding-top: 20px;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sidebar li:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar li a {
+            text-decoration: none;
+            color: white;
+            transition: color 0.3s;
+            font-weight: normal;
+        }
+
+        .sidebar li a:hover {
+            color: #0056b3;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .card {
+            width: 330px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            max-width: 80%;
+            margin: auto;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>{{ course.course_code }} : {{ course.course_name}}</h1>
-    <p>Course Description : {{ course.course_desc }}</p>
-    <p>Course Limit : {{ course.course_limit }}</p>
-    <p>Teacher Id : {{ course.teacher_id }}</p>
+    <div class="sidebar">
+        <ul>
+            <li><a href="#">Link 1</a></li>
+            <li><a href="#">Link 2</a></li>
+            <li><a href="#">Link 3</a></li>
+            <!-- Add more links as needed -->
+        </ul>
+    </div>
 
-    <!-- Link to the discussion page for the course -->
-    <h3>Discussions:</h3>
-    <a href="{{ url_for('views.course_discussions', course_id=course.id) }}">View Discussions page</a>
+    <div class="main-content">
+        <div class="container">
+            <h1>{{ course.course_code }} : {{ course.course_name}}</h1>
+            <div class="info-box">
+                <p><strong>Course Description:</strong> {{ course.course_desc }}</p>
+                <p><strong>Course Limit:</strong> {{ course.course_limit }}</p>
+                <p><strong>Teacher ID:</strong> {{ course.teacher_id }}</p>
+            </div>
 
-    <h3>Quizzes:</h3>
-    <ul>
-        {% for quiz in quizzes %}
-        <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+            <h3>Quizzes:</h3>
+            <ul>
+                {% for quiz in quizzes %}
+                <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a></li>
+                {% endfor %}
+            </ul>
 
-    <h3>Essays:</h3>
-    <ul>
-        {% for essay in essays %}
-        <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name
-                }}</a></li>
-        {% endfor %}
-    </ul>
+            <h3>Essays:</h3>
+            <ul>
+                {% for essay in essays %}
+                <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name }}</a></li>
+                {% endfor %}
+            </ul>
 
-    {% if current_user.user_type in ['teacher'] %}
-    <h3>Create New Assignment:</h3>
-    <a href="{{ url_for('views.createAssignment', course_id=course.id) }}">Link</a>
-    {% endif %}
+            <div class="card">
+                <h3>Discussions:</h3>
+                <button id="discussion-button">Open Discussions</button>
+            </div>
 
-    {% if current_user.user_type in ['teacher'] %}
-    <h3>Grade Assignments:</h3>
+            <div class="card">
+                <h3>View Your Grades:</h3>
+                <button id="grades-button">View Grades</button>
+            </div>
+        </div>
+    </div>
 
-    {% for quiz in quizzes %}
-    <h4>Quiz: {{ quiz.quiz_name }}</h4>
-    <ul>
-        {% for student_id in quiz_submissions[quiz.id] %}
-        <form method="POST"
-            action="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">
-            <li>
-                Submitted by Student Id: {{ student_id }}
-                <button type="submit">Grade Submission</button>
-            </li>
-        </form>
-        {% endfor %}
-    </ul>
-    {% endfor %}
+    <!-- Modal Window for Course Preview -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Course Preview</h2>
+            <!-- Add course preview content here -->
+        </div>
+    </div>
 
-    {% for essay in essays %}
-    <h4>Essay: {{ essay.essay_name }}</h4>
-    <ul>
-        {% for student_id in essay_submissions[essay.id] %}
-        <form method="POST"
-            action="{{ url_for('views.grade_essay', course_id=course.id, essay_id=essay.id, student_id=student_id) }}">
-            <li>
-                Submission of Student Id: {{ student_id }}
-                <button type="submit">Grade Submission</button>
-            </li>
-        </form>
-        {% endfor %}
-    </ul>
-    {% endfor %}
+    <script>
+        // Get the modal
+        var modal = document.getElementById('modal');
 
-    {% endif %}
+        // Get the button that opens the modal
+        var btn = document.getElementById("preview-button");
 
-    {% if current_user.user_type in ['student'] %}
-    <h3>View Your Grades:</h3>
-    <a href="{{ url_for('views.grade_page', course_id=course.id) }}">Link</a>
-    {% endif %}
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
 
-</body>
+        // When the user clicks the button, open the modal 
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
 
-</html>
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Open discussions modal
+        var discussionButton = document.getElementById("discussion-button");
+        discussionButton.onclick = function () {
+            modal.style.display = "block";
+            // Add logic to open
