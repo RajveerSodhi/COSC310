@@ -164,11 +164,18 @@
                     <h3>Discussions:</h3>
                     <a href="{{ url_for('views.course_discussions', course_id=course.id) }}"><button>Open Discussions</button></a>
                 </div>
-
+                {% if current_user.user_type in ['student'] %}
                 <div class="card">
                     <h3>View Your Grades:</h3>
                     <a href="{{ url_for('views.grade_page', course_id=course.id) }}"><button>View Grades</button></a>
                 </div>
+                {% endif %}
+                {% if current_user.user_type in ['teacher'] %}
+                <div class="card">
+                    <h3>Create Assignment:</h3>
+                    <a href="{{ url_for('views.createAssignment', course_id=course.id) }}"><button>Create Assignment</button></a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
