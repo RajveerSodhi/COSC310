@@ -146,7 +146,7 @@ class LoginTestCase(unittest.TestCase):
         username_field.send_keys("fgfd@gdg.com")
 
         password_field = driver.find_element(By.ID, "password")
-        password_field.send_keys("fdgff")
+        password_field.send_keys("aaaa")
 
         # Find the login button and click it
         login_button = driver.find_element(By.ID, "submit")
@@ -157,7 +157,7 @@ class LoginTestCase(unittest.TestCase):
         self.assertNotEqual(driver.current_url, "http://127.0.0.1:5000", "Screen should change after successful login")
 
         # Check if the username and password combination exists in the database
-        user = User.query.filter_by(username="fgfd@gdg.com", password="fdgff").first()
+        user = User.query.filter_by(username="fgfd@gdg.com", password="aaaa").first()
         self.assertIsNotNone(user, "Username and password combination should exist in the database")
 
     def test_invalid_username_password(self): # Test scenario: Invalid username and password login
