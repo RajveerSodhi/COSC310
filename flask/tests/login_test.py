@@ -25,6 +25,7 @@ from unittest.mock import MagicMock
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from webdriver_manager.firefox import GeckoDriverManager
 #from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -38,11 +39,12 @@ app = Flask(__name__)
 
 class LoginTestCase(unittest.TestCase):
     def setUp(self):
-        options = webdriver.FirefoxOptions()
-        options.headless = True
+        options = FirefoxOptions()
+        options.add_argument("--headless")
+        #options.headless = True
         self.driver = webdriver.Firefox(options=options)  # Initialize WebDriver
         # Mocking the WebDriver
-        driver = MagicMock()
+        # driver = MagicMock()
         #self.driver = webdriver.Chrome()  # Initialize WebDriver
 
     def test_login_username_required(self):
