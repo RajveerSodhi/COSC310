@@ -17,7 +17,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 #driver = webdriver.Chrome(ChromeDriverManager().install())
 
-#from flask import Flask
+from flask import Flask
 
 
 app = Flask(__name__)
