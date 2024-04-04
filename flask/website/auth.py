@@ -34,7 +34,9 @@ def signup():
         dob = request.form.get('dob')
         user_type = request.form.get('user_type')
         flash("Account created succesfully!", category="success")
-        new_user = User(username=email,password=password,first_name=firstName,last_name=lastName,DOB=dob,user_type=user_type)
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        new_user = User(username=email, password=hashed_password, first_name=firstName, last_name=lastName, DOB=dob, user_type=user_type)
+        
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user, remember=True)
