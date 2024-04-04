@@ -29,9 +29,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
+    - uses: actions/checkout@v2
+    - uses: nanasess/setup-chromedriver@v2
     - name: chromedriver
-      run: |
-       uses: nanasess/setup-chromedriver@master
+    - run: |
+        export DISPLAY=:99
+        chromedriver --url-base=/wd/hub &
+        sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -39,9 +44,7 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-    - name: flaskrun
-      run: |
-        python flask/main.py run
+    
     - name: Test with pytest
       run: |
         python flask/tests/login_test.py
