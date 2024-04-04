@@ -11,6 +11,7 @@
 <body>
 
   <div class="courseList">
+    <h1>Available Courses</h1>
     <ul>
       {% for course in courses %}
       <li>
@@ -30,9 +31,35 @@
     </ul>
   </div>
 
+  <div id="toastBox">
+  </div>
+
   <script>
-    function filterCourses() {
-    }
+    document.addEventListener('DOMContentLoaded', (event) => {
+      let toastBox = document.getElementById('toastBox');
+
+      function showToast() {
+        let toast = document.createElement('div');
+        toast.classList.add('toast');
+        toast.innerText = "Enrollment Request Sent";
+        toastBox.appendChild(toast);
+
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+
+      document.querySelectorAll('.enrollButton').forEach(button => {
+        button.addEventListener('click', function (event) {
+          event.preventDefault();
+          showToast();
+          let form = this.closest('form');
+          setTimeout(() => {
+            if (form) form.submit();
+          }, 3000);
+        });
+      });
+    });
   </script>
 
 </body>
