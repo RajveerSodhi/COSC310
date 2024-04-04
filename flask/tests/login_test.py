@@ -49,8 +49,8 @@ class LoginTestCase(unittest.TestCase):
 
     def test_login_username_required(self):
         driver = self.driver
-        #driver.get("http://127.0.0.1:5000")  # Navigate to URL
-        driver.get('https://www.google.com/')  # Navigate to URL
+        driver.get("https://127.0.0.1:5000")  # Navigate to URL
+        #driver.get('https://www.google.com/')  # Navigate to URL
         
         # Find the login button and click it without entering username/password
         login_button = driver.find_element(By.ID, "submit")
