@@ -22,19 +22,17 @@
             method="POST">
             <div class="question">
                 <h4>Essay Question:</h4>
-                {% if submission.question_type == 'file' %}
-                <embed src="data:application/pdf;base64,{{ submission.question_pdf }}" type="application/pdf"
-                    width="90%" height="300px">
+                {% if question.question_type == 'file' %}
+                <embed src="{{ question_data_uri }}" width="90%" height="300px">
                 {% elif submission.question_type == 'text' %}
-                <p>{{ submission.question_text }}</p>
+                <p>{{ question.question_text }}</p>
                 {% endif %}
 
                 <h4>Student Answer:</h4>
                 {% if submission.answer_type == 'text' %}
                 <p>{{ submission.answer_text }}</p>
                 {% elif submission.answer_type == 'file' %}
-                <embed src="data:application/pdf;base64,{{ submission.answer_pdf }}" type="application/pdf" width="90%"
-                    height="400px">
+                <embed src="{{ submission.answer_data_uri }}" width="90%" height="400px">
                 {% endif %}
                 <br>
                 <label for="essay-grade">Grade Essay:</label>

@@ -5,20 +5,23 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 #from sqlalchemy.sql import func
 import flask
+import os
 
 import sys
-sys.path.append('C:/Users/Admin/amey3/EduPool/flask/')
+sys.path.append('../')
+#sys.path.append('C:/Users/Admin/amey3/EduPool/flask/')
 #from . import db
 
 
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-
+basename = os.getcwd()
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Admin/amey3/EduPool/flask/instance/database.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Admin/amey3/EduPool/flask/instance/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + basename + '/../instance/database.db'
 db = SQLAlchemy(app)
 
 
