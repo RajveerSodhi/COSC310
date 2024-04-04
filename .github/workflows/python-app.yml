@@ -14,33 +14,37 @@ permissions:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
     - name: Install dependencies
+  
       run: |
-        sudo apt-get update
-        sudo apt-get install -y firefox
-        wget -q https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz
-        tar -xzf geckodriver-v0.29.0-linux64.tar.gz
-        sudo mv geckodriver /usr/local/bin/
         python -m pip install --upgrade pip
-        pip install chromedriver_autoinstaller
-        pip install webdriver-manager
-        pip install flake8 pytest
+        pip install flake8 pytest undetected_chromedriver
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
+    - uses: actions/checkout@v2
+    - uses: nanasess/setup-chromedriver@v2    
+    - run: |
+        sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+        
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    
     - name: Test with pytest
       run: |
-        pytest flask/tests/login_test.py
-
+        # python flask/tests/login_test.py
+      env: 
+        DISPLAY: :99

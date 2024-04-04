@@ -14,6 +14,12 @@ def home():
     enrolled_courses = Course.query.join(Enrollment).filter(Enrollment.user_id == current_user.id).all()
     return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses)
 
+# Account Details
+@views.route('/accountDetails')
+@login_required
+def account_details():
+    return render_template("accountDetails.html", user=current_user)
+
 # Edit User Details Page
 @views.route('/editDetails', methods=['GET', 'POST'])
 @login_required

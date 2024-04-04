@@ -2,40 +2,116 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width = device-width, initial-scale = 1.0">
-  <title>Accept Student Enrolment Requests</title>
-  <link rel="stylesheet" href="../static/css/acceptIntoCourse.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accept Student Enrollment Requests</title>
+    <style>
+        /* Main Content Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+        }
+
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            color: #333;
+        }
+
+        .requestContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 0 auto; /* Center the boxes */
+            max-width: 900px; /* Optional: Limit the maximum width */
+        }
+
+        .request {
+            width: calc(50% - 35px); /* Adjusted width */
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            margin-right: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            box-sizing: border-box; /* Include padding and border in the width calculation */
+        }
+
+        .request h3 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center; /* Center the text */
+        }
+
+        .request p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .req-action-form {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .acceptButton,
+        .declineButton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 0; /* Adjusted padding */
+            width: 45%; /* Adjusted width */
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .declineButton {
+            background-color: #f44336;
+        }
+
+        .acceptButton:hover,
+        .declineButton:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="header">
-    <h2>Accept Student Enrolment Requests</h2>
-  </div>
-
-  <div class="requestContainer">
-    <ul>
-      {% for request in requests %}
-      <li>
-        <div class="request">
-          <h3>{{ request.course_id }}</h3>
-          <p><strong>{{ request.user_id }}</strong> has requested to enroll in this course</p>
-          <form method="POST" action="{{ url_for('views.acceptRequest') }}" class="req-action-form">
-            <input type="hidden" name="course_id" value="{{ request.course_id }}">
-            <input type="hidden" name="user_id" value="{{ request.user_id }}">
-            <input type="submit" class="acceptButton" value="Accept">
-          </form>
-          <form method="POST" action="{{ url_for('views.declineRequest') }}" class="req-action-form">
-            <input type="hidden" name="course_id" value="{{ request.course_id }}">
-            <input type="hidden" name="user_id" value="{{ request.user_id }}">
-            <input type="submit" class="declineButton" value="Decline">
-          </form>
+    {% include 'sidebar.html' %}
+    <div class="main-content">
+        <div class="header">
+            <h2>Accept Student Enrolment Requests</h2>
         </div>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
 
+        <div class="requestContainer">
+            {% for request in requests %}
+            <div class="request">
+                <h3>Course ID : {{ request.course_id }}</h3>
+                <p>Student <strong>{{ request.user_id }}</strong> has requested to enroll in this course</p>
+                <form method="POST" action="{{ url_for('views.acceptRequest') }}" class="req-action-form">
+                    <input type="hidden" name="course_id" value="{{ request.course_id }}">
+                    <input type="hidden" name="user_id" value="{{ request.user_id }}">
+                    <input type="submit" class="acceptButton" value="Accept">
+                    <input type="submit" class="declineButton" value="Decline">
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 
 </html>

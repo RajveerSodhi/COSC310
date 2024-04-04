@@ -112,4 +112,9 @@ body {
     width: 50%; /* Adjust width as needed */
     height: auto; /* Maintains the aspect ratio of the image */
   }
-  
+  .title-container {
+    text-align: center;
+  }
+  .question-text {
+    font-weight: bold;
+  }

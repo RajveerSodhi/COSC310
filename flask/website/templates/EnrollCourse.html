@@ -2,39 +2,113 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width = device-width, initial-scale = 1.0">
-  <title>Course Enrollment</title>
-  <link rel="stylesheet" href="../static/css/enrollCourse.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment</title>
+    <style>
+        /* Main Content Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;
+        }
+
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .courseList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Distribute courses evenly */
+            max-width: 1000px; /* Adjust as needed */
+            margin: auto;
+            padding: 20px;
+        }
+
+        .course {
+            width: calc(50% - 20px); /* Two courses in each row with a small gap */
+            background: #ffffff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            box-sizing: border-box; /* Include padding and border in width calculation */
+        }
+
+        .course h3 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .course p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .course p strong {
+            color: #000;
+        }
+
+        .enrollButton {
+            background-color: #4CAF50;
+            color: white;
+            width: 100%;
+            text-align: center;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin-top: 20px;
+        }
+
+        .enrollButton:hover {
+            background: #45a049;
+        }
+
+        label {
+            color: #FFF;
+        }
+
+        select {
+            appearance: none;
+        }
+    </style>
 </head>
 
 <body>
-
-  <div class="courseList">
-    <ul>
-      {% for course in courses %}
-      <li>
-        <div class="course">
-          <h3>{{ course.course_code }}: {{ course.course_name }}</h3>
-          <p>{{ course.course_desc }}</p>
-          <p><strong>Instructor: </strong>{{ course.teacher_id }}</p>
-          <p><strong>Total Students: </strong>{{ course.course_limit }}</p>
-          <form method="POST" action="{{ url_for('views.createRequest') }}">
-            <input type="hidden" name="course_id" value="{{ course.id }}">
-            <input type="hidden" name="user_id" value="{{ user.id }}">
-            <input type="submit" id="request_enroll_button" class="enrollButton" value="Request to Enroll">
-          </form>
+    {% include 'sidebar.html' %}
+    <div class="main-content">
+        <h2>Enroll Courses</h2>
+        <div class="courseList">
+            {% for course in courses %}
+            <div class="course">
+                <h3>{{ course.course_code }}: {{ course.course_name }}</h3>
+                <p>{{ course.course_desc }}</p>
+                <p><strong>Instructor:</strong> {{ course.teacher_id }}</p>
+                <p><strong>Total Students:</strong> {{ course.course_limit }}</p>
+                <form method="POST" action="{{ url_for('views.createRequest') }}">
+                    <input type="hidden" name="course_id" value="{{ course.id }}">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <input type="submit" class="enrollButton" value="Request to Enroll">
+                </form>
+            </div>
+            {% endfor %}
         </div>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
 
-  <script>
-    function filterCourses() {
-    }
-  </script>
-
+        <script>
+            function filterCourses() {}
+        </script>
+    </div>
 </body>
 
 </html>
