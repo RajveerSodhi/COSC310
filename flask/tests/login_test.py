@@ -11,7 +11,7 @@
 
 import unittest
 import pytest
-
+import undetected_chromedriver as uc
 
 
 from selenium import webdriver
@@ -39,16 +39,20 @@ app = Flask(__name__)
 
 class LoginTestCase(unittest.TestCase):
     def setUp(self):
-        options = ChromeOptions()
-        options.add_argument("--headless=new")
+        #options = ChromeOptions()
+        #options.add_argument("--headless=new")
         #options.headless = True
         #self.driver = webdriver.Firefox(options=options)  # Initialize WebDriver
         # Mocking the WebDriver
         # driver = MagicMock()
-        self.driver = webdriver.Chrome(options=options)  # Initialize WebDriver
+        #self.driver = webdriver.Chrome(options=options)  # Initialize WebDriver
+
+        chrome_options = uc.ChromeOptions()
+        chrome_options.add_argument('--headless=new')
+        self.browser = uc.Chrome(options=chrome_options, version_main=110)
 
     def test_login_username_required(self):
-        driver = self.driver
+        driver = self.browser
         driver.get("https://127.0.0.1:5000")  # Navigate to URL
         #driver.get('https://www.google.com/')  # Navigate to URL
         
