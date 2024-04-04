@@ -56,8 +56,6 @@
     <h2>Edit User Details</h2>
     <form id="editUserDetailsForm" method="post" action="{{ url_for('views.edit_details') }}">
        
-        
-
         <!-- First Name Field -->
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="firstName" placeholder="{{ current_user.first_name }}" >
