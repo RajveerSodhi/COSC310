@@ -173,16 +173,11 @@
             <div class="section">
                 <h2 class="section-title">Other Options:</h2>
                 <div class="section-content">
-                    <div class="card">
-                        <h3>Your Account Details:</h3>
-                        <ul>
-                            <li>Username: {{ user.username }}</li>
-                            <li>First Name: {{ user.first_name }}</li>
-                            <li>Last Name: {{ user.last_name }}</li>
-                            <li>DOB: {{ user.DOB }}</li>
-                            <li>Role: {{ user.user_type }}</li>
-                        </ul>
-                    </div>
+                    <a href="{{ url_for('views.account_details') }}">
+                        <div class="card">
+                            <h3>Your Account Details</h3>
+                        </div>
+                    </a>
 
                     {% if current_user.user_type in ['student'] %}
                     <a href="{{ url_for('views.display_courses') }}">
