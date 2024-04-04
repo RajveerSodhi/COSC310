@@ -21,17 +21,38 @@ def edit_details():
      if request.method == 'POST':
         # Retrieve the updated details from the form
        # email = request.form.get('email')
-        user = User.query.filter_by(username=current_user.username).first()
+        user = User.query.filter_by(username=current_user.username).first()      
         if user:
-            user.password = request.form.get('password')
-            user.first_name = request.form.get('firstName')
-            user.last_name = request.form.get('lastName')
-            user.DOB = request.form.get('dob')
+            # Only update fields if they are provided in the form
+            new_password = request.form.get('password')
+            if new_password is not None and new_password != "":
+                user.password = new_password
+            else:
+                user.password = current_user.password
+
+            new_first_name = request.form.get('firstName')
+            if new_first_name is not None and new_first_name != "":
+                user.first_name = new_first_name
+            else:
+                user.first_name = current_user.first_name
+
+            new_last_name = request.form.get('lastName')
+            if new_last_name is not None and new_last_name != "":
+                user.last_name = new_last_name
+            else:
+               user.last_name = current_user.last_name
+
+            new_dob = request.form.get('dob')
+            if new_dob is not None and new_dob != "":
+                user.DOB = new_dob
+
+            else:  user.DOB = current_user.DOB    
             db.session.commit()
             flash("Details updated successfully!", category="success")
             return redirect(url_for('views.home'))
         else:
             flash("User not found!", category="error")
+            return redirect(url_for('views.edit_details'))
     
      return render_template("EditDetails.html", user=current_user)
 
