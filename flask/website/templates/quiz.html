@@ -7,9 +7,13 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
 </head>
 <body>
+  {% include 'sidebar.html' %}
+  <div class="main-content">
+    <div class="quiz-title">
+      <h2>Quiz Title: {{ quiz.quiz_name }}</h2>
+    </div>
   <div class="quiz-container">
     <form class="quiz-form" method="POST" action="/submit_quiz">
-      <h2>Quiz Title: {{ quiz.quiz_name }}</h2>
       
       {% if already_submitted %}
       <p>You have already submitted this quiz.</p>
@@ -17,7 +21,7 @@
 
       {% for question in questions %}
       <div class="question">
-        <p class="question-text">{{ loop.index }}. {{ question.question }}</p>
+        <p class="question-text">{{ loop.index }}. {{ question.question_text }}</p>
         <div class="options">
           <label class="option">
             <input type="radio" name="{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}
@@ -38,6 +42,7 @@
       {% endif %}
 
     </form>
+  </div>
   </div>
 </body>
 </html>

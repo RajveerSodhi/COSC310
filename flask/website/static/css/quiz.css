@@ -30,9 +30,9 @@ body {
   }
   
   .question-text {
+    font-weight: bold;
     font-size: 18px;
     margin: 0 0 10px 0;
-    color: #555;
   }
   
   .options {
@@ -55,7 +55,7 @@ body {
   }
   
   .submit-quiz {
-    background-color: #007bff;
+    background-color: #4CAF50;
     color: #ffffff;
     border: none;
     padding: 10px 15px;
@@ -66,6 +66,10 @@ body {
   }
   
   .submit-quiz:hover {
-    background-color: #0056b3;
+    background-color: #4CAF50;
   }
   
+  .quiz-title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
