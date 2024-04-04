@@ -1,5 +1,6 @@
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, jsonify, render_template, request, redirect, url_for
+import magic
 from werkzeug.utils import secure_filename
 from .models import Discussion, Reply, User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission, EssaySubmission
 import base64
@@ -20,36 +21,12 @@ def edit_details():
      if request.method == 'POST':
         # Retrieve the updated details from the form
        # email = request.form.get('email')
-       # Retrieve the updated details from the form
         user = User.query.filter_by(username=current_user.username).first()
         if user:
-            # Only update fields if they are provided in the form
-            new_password = request.form.get('password')
-            if new_password is not None and new_password != "":
-                user.password = new_password
-            else:
-                user.password = current_user.password
-
-        
-
-            new_first_name = request.form.get('firstName')
-            if new_first_name is not None and new_first_name != "":
-                user.first_name = new_first_name
-            else:
-                user.first_name = current_user.first_name
-
-            new_last_name = request.form.get('lastName')
-            if new_last_name is not None and new_last_name != "":
-                user.last_name = new_last_name
-            else:
-               user.last_name = current_user.last_name
-
-            new_dob = request.form.get('dob')
-            if new_dob is not None and new_dob != "":
-                user.DOB = new_dob
-
-            else:  user.DOB = current_user.DOB    
-
+            user.password = request.form.get('password')
+            user.first_name = request.form.get('firstName')
+            user.last_name = request.form.get('lastName')
+            user.DOB = request.form.get('dob')
             db.session.commit()
             flash("Details updated successfully!", category="success")
             return redirect(url_for('views.home'))
@@ -340,22 +317,36 @@ def grade_quiz(course_id, quiz_id, student_id):
 
     # adding question text and max grade to each submission
     for submission in quiz_submissions:
-        question_for_submission = (question for question in quiz_questions if question.id == submission.quizQuestion_id)
-        submission.question_text = question_for_submission.question_text
-        submission.question_option1 = question_for_submission.option1
-        submission.question_option2 = question_for_submission.option2
-        submission.question_option3 = question_for_submission.option3
-        submission.max_grade = question_for_submission.max_grade
+        question_for_submission = next((question for question in quiz_questions if question.id == submission.quizQuestion_id), None)
+        if question_for_submission is not None:
+            submission.question_text = question_for_submission.question_text
+            submission.question_option1 = question_for_submission.option1
+            submission.question_option2 = question_for_submission.option2
+            submission.question_option3 = question_for_submission.option3
+            submission.max_grade = question_for_submission.max_grade if question_for_submission.max_grade else 1
 
     # totaling up the max grades of all the quiz questions to get an overal max grade for the quiz
-    quiz.quiz_max_grade = sum(question.max_grade for question in quiz_questions)
+    quiz.quiz_max_grade = sum(question.max_grade if question.max_grade is not None else 1 for question in quiz_questions)
 
     if request.method == 'POST':
+        all_grades_valid = True
         for submission in quiz_submissions:
-            grade = request.form.get(f'grade_{submission.id}')
-            submission.given_grade = int(grade)
-        db.session.commit()
-        return redirect(url_for('views.course_page', course_id=course_id))
+            grade_str = request.form.get(f'grade_{submission.id}')
+            try:
+                grade = int(grade_str) if grade_str is not None else None
+            except ValueError:
+                grade = None
+            if grade is None or not (0 <= grade <= submission.max_grade):
+                all_grades_valid = False
+            if all_grades_valid:
+                submission.given_grade = grade
+        if all_grades_valid:
+            db.session.commit()
+            return redirect(url_for('views.course_page', course_id=course_id))
+        else:
+            # If not all grades are valid, do not commit and re-render the template
+            # This will display flash messages to the user
+            return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
     
     return render_template('gradeQuiz.html', course_id=course_id, quiz=quiz, student=student, submissions=quiz_submissions)
 
@@ -368,25 +359,37 @@ def grade_essay(course_id, essay_id, student_id):
     essay_question = EssayQuestion.query.filter_by(essay_id=essay_id).first()
     essay_submission = EssaySubmission.query.filter_by(essay_id=essay_id, student_id=student_id).first()
 
-    # adding question text/file and max grade to each submission
-    essay_submission.max_grade = essay_question.max_grade
-    essay_submission.question_type = essay_question.question_type
-    if essay_submission.question_type == 'text':
+    # adding question text/file and max grade to the submission
+    essay_submission.max_grade = essay_question.max_grade if essay_question.max_grade is not None else 100
+
+    if essay_question.question_type == 'text':
         essay_submission.question_text = essay_question.question_text
-    else:
-        essay_submission.question_base64_image = base64.b64encode(essay_question.file_upload).decode('utf-8')
+    elif essay_question.file_upload and essay_question.question_type == 'file':
+        mime_type = magic.from_buffer(essay_question.file_upload, mime=True)
+        base64_file = base64.b64encode(essay_question.file_upload).decode('utf-8')
+        question_data_uri = f'data:{mime_type};base64,{base64_file}'
 
     # adding support for displaying submission file uploads
     if essay_submission.answer_file and essay_submission.answer_type == 'file':
-            essay_submission.base64_image = base64.b64encode(essay_submission.answer_file).decode('utf-8')
+        mime_type = magic.from_buffer(essay_submission.answer_file, mime=True)
+        base64_file = base64.b64encode(essay_submission.answer_file).decode('utf-8')
+        essay_submission.answer_data_uri = f'data:{mime_type};base64,{base64_file}'
+    else:
+        essay_submission.answer_text = essay_submission.answer_text
 
     if request.method == 'POST':
-        essay_grade = request.form.get('essay-grade')
-        essay_submission.given_grade = int(essay_grade)
-        db.session.commit()
-        return redirect(url_for('views.course_page', course_id=course_id))
+        grade_str = request.form.get('essay-grade')
+        try:
+            essay_grade = int(grade_str) if grade_str else None
+        except ValueError:
+            essay_grade = None
 
-    return render_template('gradeEssay.html', course_id=course_id, essay=essay, student=student, submission=essay_submission)
+        if essay_grade is not None and 0 <= essay_grade <= essay_submission.max_grade:
+            essay_submission.given_grade = essay_grade
+            db.session.commit()
+            return redirect(url_for('views.course_page', course_id=course_id))
+
+    return render_template('gradeEssay.html', course_id=course_id, essay=essay, question=essay_question, student=student, question_data_uri=question_data_uri, submission=essay_submission)
 
 # Instantiate a DB with dummy records whenever an instance is deleted.
 @views.route('/instantiate-db')
