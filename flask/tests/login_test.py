@@ -17,6 +17,21 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 #driver = webdriver.Chrome(ChromeDriverManager().install())
 
+
+from selenium import webdriver
+import chromedriver_autoinstaller
+
+chromedriver_autoinstaller.install()
+
+#Chrome options
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument("--disable-infobars")
+chrome_options.add_argument('--disable-dev-shm-usage')
+
+#Run chrome
+driver = webdriver.Chrome(options=chrome_options)
+
 from flask import Flask
 
 
