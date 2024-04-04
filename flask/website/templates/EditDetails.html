@@ -62,20 +62,20 @@
 
         <!-- First Name Field -->
         <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" >
+        <input type="text" id="firstName" name="firstName" placeholder="{{ current_user.first_name }}" >
 
         <!-- Last Name Field -->
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName">
+        <input type="text" id="lastName" name="lastName" placeholder="{{ current_user.last_name}}">
 
          <!-- Date of Birth (DOB) Field -->
          <label for="dob">Date of Birth (DOB):</label>
-         <input type="date" id="dob" name="dob" >
+         <input type="date" id="dob" name="dob" placeholder="{{ current_user.dob }}" >
          <br><br>
 
         <!-- Password Field -->
         <label for="password">New Password:</label>
-        <input type="password" id="password" name="password" >
+        <input type="password" id="password" name="password"  >
 
         <!-- Confirm Password Field -->
         <label for="confirmPassword">Confirm New Password:</label>
