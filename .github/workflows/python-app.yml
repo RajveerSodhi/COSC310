@@ -18,8 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: nanasess/setup-chromedriver@v2
+    - uses: actions/checkout@v2
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
@@ -31,9 +30,11 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
-    - name: chromedriver
+    - uses: actions/checkout@v2
+    - uses: nanasess/setup-chromedriver@v2    
     - run: |
         sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+        
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
