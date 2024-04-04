@@ -12,10 +12,15 @@
 import unittest
 import pytest
 
+
+
 from selenium import webdriver
 
 options = webdriver.FirefoxOptions()
 options.headless = True
+
+from unittest.mock import MagicMock
+
 
 
 from selenium.webdriver.chrome.service import Service
@@ -35,6 +40,8 @@ app = Flask(__name__)
 class LoginTestCase(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox(options=options)  # Initialize WebDriver
+        # Mocking the WebDriver
+        driver = MagicMock()
         #self.driver = webdriver.Chrome()  # Initialize WebDriver
 
     def test_login_username_required(self):
