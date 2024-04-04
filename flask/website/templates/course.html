@@ -3,81 +3,131 @@
 
 <head>
     <title>{{ course.course_code }}</title>
+    <style>
+        /* Main Content Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-content {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .card {
+            width: 330px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .discussion-grades {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
     {% include 'sidebar.html' %}
     <div class="main-content">
         <h1>{{ course.course_code }} : {{ course.course_name}}</h1>
-        <p>Course Description : {{ course.course_desc }}</p>
-        <p>Course Limit : {{ course.course_limit }}</p>
-        <p>Teacher Id : {{ course.teacher_id }}</p>
-
-        <!-- Link to the discussion page for the course -->
-        <h3>Discussions:</h3>
-        <a href="{{ url_for('views.course_discussions', course_id=course.id) }}">View Discussions page</a>
+        <div class="info-box">
+            <p><strong>Course Description:</strong> {{ course.course_desc }}</p>
+            <p><strong>Course Limit:</strong> {{ course.course_limit }}</p>
+            <p><strong>Teacher ID:</strong> {{ course.teacher_id }}</p>
+        </div>
 
         <h3>Quizzes:</h3>
         <ul>
             {% for quiz in quizzes %}
-            <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a>
-            </li>
+            <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a></li>
             {% endfor %}
         </ul>
 
         <h3>Essays:</h3>
         <ul>
             {% for essay in essays %}
-            <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name
-                    }}</a></li>
+            <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name }}</a></li>
             {% endfor %}
         </ul>
 
-        {% if current_user.user_type in ['teacher'] %}
-        <h3>Create New Assignment:</h3>
-        <a href="{{ url_for('views.createAssignment', course_id=course.id) }}">Link</a>
-        {% endif %}
+        <div class="discussion-grades">
+            <div class="card">
+                <h3>Discussions:</h3>
+                <a href="{{ url_for('views.course_discussions', course_id=course.id) }}"><button>Open Discussions</button></a>
+            </div>
 
-        {% if current_user.user_type in ['teacher'] %}
-        <h3>Grade Assignments:</h3>
-
-        {% for quiz in quizzes %}
-        <h4>Quiz: {{ quiz.quiz_name }}</h4>
-        <ul>
-            {% for student_id in quiz_submissions[quiz.id] %}
-            <form method="POST"
-                action="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">
-                <li>
-                    Submitted by Student Id: {{ student_id }}
-                    <button type="submit">Grade Submission</button>
-                </li>
-            </form>
-            {% endfor %}
-        </ul>
-        {% endfor %}
-
-        {% for essay in essays %}
-        <h4>Essay: {{ essay.essay_name }}</h4>
-        <ul>
-            {% for student_id in essay_submissions[essay.id] %}
-            <form method="POST"
-                action="{{ url_for('views.grade_essay', course_id=course.id, essay_id=essay.id, student_id=student_id) }}">
-                <li>
-                    Submission of Student Id: {{ student_id }}
-                    <button type="submit">Grade Submission</button>
-                </li>
-            </form>
-            {% endfor %}
-        </ul>
-        {% endfor %}
-
-        {% endif %}
-
-        {% if current_user.user_type in ['student'] %}
-        <h3>View Your Grades:</h3>
-        <a href="{{ url_for('views.grade_page', course_id=course.id) }}">Link</a>
-        {% endif %}
-    </div> 
+            <div class="card">
+                <h3>View Your Grades:</h3>
+                <a href="{{ url_for('views.grade_page', course_id=course.id) }}"><button>View Grades</button></a>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,23 +1,32 @@
+/* Reset default margin and padding */
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply background color */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f2f5;
-    margin: 0;
     padding: 20px;
 }
+
+/* Style header */
 header {
     background-color: #007bff;
     color: #ffffff;
     padding: 10px 20px;
     text-align: left;
-  
+    border-radius: 8px; /* Rounded corners */
 }
 
+/* Apply margin to headings */
 h1, h2, h3, h4 {
     margin-top: 20px;
 }
 
-
-
+/* Style main content */
 main {
     padding: 20px;
     display: flex;
@@ -26,6 +35,7 @@ main {
     margin: 20px;
 }
 
+/* Style add comment button */
 #add-comment-button {
     background-color: #007bff;
     color: #fff;
@@ -34,31 +44,37 @@ main {
     cursor: pointer;
     margin-bottom: 20px;
     transition: background-color 0.3s;
+    border-radius: 8px; /* Rounded corners */
 }
 
 #add-comment-button:hover {
     background-color: #0056b3;
 }
 
+/* Style comment box */
 #comment-box {
     display: none;
     margin-bottom: 20px;
+    border-radius: 8px; /* Rounded corners */
 }
 
+/* Style form */
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+/* Style textarea */
 textarea {
     width: 100%;
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px; /* Rounded corners */
 }
 
+/* Style submit button */
 button[type="submit"] {
     background-color: #28a745;
     color: #fff;
@@ -66,28 +82,33 @@ button[type="submit"] {
     padding: 10px 20px;
     cursor: pointer;
     transition: background-color 0.3s;
+    border-radius: 8px; /* Rounded corners */
 }
 
 button[type="submit"]:hover {
     background-color: #218838;
 }
 
+/* Style comment container */
 .comment-container {
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 20px;
     width: 100%;
     max-width: 600px;
     margin-bottom: 20px;
 }
 
+/* Style individual comment */
 .comment {
     margin-bottom: 20px;
 }
+
+/* Style reply container */
 .reply {
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-top: 10px;
 }

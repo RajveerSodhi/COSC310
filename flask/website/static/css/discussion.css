@@ -1,21 +1,42 @@
+/* Reset default margin and padding */
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply background gradient */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+    background: linear-gradient(to bottom, #ffffff, #f0f2f5);
     margin: 0;
     padding: 20px;
 }
 
+/* Style section */
+section {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft box shadow */
+}
+
+/* Style header */
 header {
     background-color: #007bff;
     color: #ffffff;
     padding: 10px 20px;
     text-align: center;
+    border-radius: 8px; /* Rounded corners */
 }
 
+/* Apply margin to headings */
 h1, h2, h3, h4 {
     margin-top: 20px;
 }
 
+/* Style navigation */
 nav {
     margin-top: 10px;
     text-align: center;
@@ -28,36 +49,42 @@ nav a {
     display: inline-block;
 }
 
+/* Style discussions */
 #post-discussion, #discussions {
     background-color: #ffffff;
     padding: 20px;
     margin-top: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(56, 46, 46, 0.1);
 }
 
-input[type="text"], textarea {
+/* Style form inputs */
+input[type="text"],
+textarea {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
     box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px; /* Rounded corners */
 }
 
+/* Style buttons */
 button {
     background-color: #007bff;
     color: #ffffff;
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px; /* Rounded corners */
     cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition */
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Darker color on hover */
 }
 
+/* Style discussion cards */
 .discussion {
     border-bottom: 1px solid #eee;
     padding-bottom: 20px;
@@ -68,6 +95,7 @@ button:hover {
     border-bottom: none;
 }
 
+/* Style replies */
 .replies {
     margin-top: 20px;
 }
@@ -76,12 +104,4 @@ button:hover {
     padding-left: 20px;
     border-left: 3px solid #007bff;
     margin-bottom: 10px;
-}
-
-footer {
-    margin-top: 40px;
-    text-align: center;
-    padding: 20px;
-    background-color: #007bff;
-    color: #ffffff;
 }
