@@ -67,37 +67,36 @@
         <h2>Edit User Details</h2>
 
     <div class="container">
-        <form id="editUserDetailsForm" method="post" action="{{ url_for('views.edit_details') }}">
-        
+    
+    <form id="editUserDetailsForm" method="post" action="{{ url_for('views.edit_details') }}">
+       
+        <!-- added placeholders -->
+        <!-- First Name Field -->
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" placeholder="{{ current_user.first_name }}" >
 
-            <!-- Email Field -->
-            
+        <!-- Last Name Field -->
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" placeholder="{{ current_user.last_name}}">
 
-            <!-- First Name Field -->
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" >
+         <!-- Date of Birth (DOB) Field -->
+         <label for="dob">Date of Birth (DOB):</label>
+         <input type="date" id="dob" name="dob" placeholder="{{ current_user.dob }}" >
+         <br><br>
 
-            <!-- Last Name Field -->
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName">
+        <!-- Password Field -->
+        <label for="password">New Password:</label>
+        <input type="password" id="password" name="password"  >
 
-            <!-- Date of Birth (DOB) Field -->
-            <label for="dob">Date of Birth (DOB):</label>
-            <input type="date" id="dob" name="dob" >
+        <!-- Confirm Password Field -->
+        <label for="confirmPassword">Confirm New Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" >
 
-            <!-- Password Field -->
-            <label for="password">New Password:</label>
-            <input type="password" id="password" name="password" >
-
-            <!-- Confirm Password Field -->
-            <label for="confirmPassword">Confirm New Password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" >
-
-            <!-- Submit Button -->
-            <input type="submit" value="Save Changes">
-            <!-- Cancel Button -->
-            <input type="button" value="Cancel" onclick="cancelEdit()">
-        </form>
+        <!-- Submit Button -->
+        <input type="submit" value="Save Changes">
+        <!-- Cancel Button -->
+        <input type="button" value="Cancel" onclick="cancelEdit()">
+    </form>
     </div>
 
 
