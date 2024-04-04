@@ -16,10 +16,11 @@
         margin-bottom: 20px;
     }
     
-    .sidebar-header img {
-        width: 120px; /* Adjust the width of the logo as needed */
+    .sidebar-header h2 {
+        margin: 0;
+        font-size: 24px;
+        color: white;
     }
-
     .sidebar ul {
         list-style-type: none;
         padding: 0;
@@ -53,7 +54,7 @@
 
 <div class="sidebar">
     <div class="sidebar-header">
-        <img src="static/blacklogo.svg" alt="Edupool Logo">
+        <h2>Edupool</h2>
     </div>
     <ul>
         <li><a href="{{ url_for('views.home') }}">- &nbsp;Dashboard</a></li>

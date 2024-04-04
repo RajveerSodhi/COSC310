@@ -9,16 +9,21 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background: #f3f3f3;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
         }
 
         .main-content {
-            margin: 0 auto;
             max-width: 800px;
             padding: 20px;
         }
 
         h1 {
-            font-size: 32px;
+            font-size: 26px;
             color: #333;
             margin-bottom: 10px;
             text-align: center;
@@ -63,12 +68,15 @@
 
         .card {
             width: 330px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.79);
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin: 10px;
             padding: 20px;
             transition: box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .card:hover {
@@ -76,7 +84,7 @@
         }
 
         .info-box {
-            background-color: #f8f8f8;
+            background-color: rgba(255, 255, 255, 0.79);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -94,37 +102,39 @@
 
 <body>
     {% include 'sidebar.html' %}
-    <div class="main-content">
-        <h1>{{ course.course_code }} : {{ course.course_name}}</h1>
-        <div class="info-box">
-            <p><strong>Course Description:</strong> {{ course.course_desc }}</p>
-            <p><strong>Course Limit:</strong> {{ course.course_limit }}</p>
-            <p><strong>Teacher ID:</strong> {{ course.teacher_id }}</p>
-        </div>
-
-        <h3>Quizzes:</h3>
-        <ul>
-            {% for quiz in quizzes %}
-            <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a></li>
-            {% endfor %}
-        </ul>
-
-        <h3>Essays:</h3>
-        <ul>
-            {% for essay in essays %}
-            <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name }}</a></li>
-            {% endfor %}
-        </ul>
-
-        <div class="discussion-grades">
-            <div class="card">
-                <h3>Discussions:</h3>
-                <a href="{{ url_for('views.course_discussions', course_id=course.id) }}"><button>Open Discussions</button></a>
+    <div class="main-container">
+        <div class="main-content">
+            <h1>{{ course.course_code }} : {{ course.course_name}}</h1>
+            <div class="info-box">
+                <p><strong>Course Description:</strong> {{ course.course_desc }}</p>
+                <p><strong>Course Limit:</strong> {{ course.course_limit }}</p>
+                <p><strong>Teacher ID:</strong> {{ course.teacher_id }}</p>
             </div>
 
-            <div class="card">
-                <h3>View Your Grades:</h3>
-                <a href="{{ url_for('views.grade_page', course_id=course.id) }}"><button>View Grades</button></a>
+            <h3>Quizzes:</h3>
+            <ul>
+                {% for quiz in quizzes %}
+                <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a></li>
+                {% endfor %}
+            </ul>
+
+            <h3>Essays:</h3>
+            <ul>
+                {% for essay in essays %}
+                <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name }}</a></li>
+                {% endfor %}
+            </ul>
+
+            <div class="discussion-grades">
+                <div class="card">
+                    <h3>Discussions:</h3>
+                    <a href="{{ url_for('views.course_discussions', course_id=course.id) }}"><button>Open Discussions</button></a>
+                </div>
+
+                <div class="card">
+                    <h3>View Your Grades:</h3>
+                    <a href="{{ url_for('views.grade_page', course_id=course.id) }}"><button>View Grades</button></a>
+                </div>
             </div>
         </div>
     </div>

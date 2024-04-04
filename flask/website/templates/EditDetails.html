@@ -12,20 +12,30 @@
             background-color: #f3f3f3; /* Login page color */
         }
         .container {
-            max-width: 400px;
-            margin: 50px auto;
+            max-width: 450px; /* Adjusted width */
+            margin: 40px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            line-height: 1.6;
         }
+        
         h2 {
             text-align: center;
             margin-bottom: 20px;
+            color: #333; /* Heading color */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333; /* Label text color */
         }
         input[type="text"],
         input[type="email"],
         input[type="password"],
+        input[type="date"],
         input[type="submit"],
         input[type="button"] {
             width: 100%;
@@ -51,65 +61,67 @@
     </style>
 </head>
 <body>
+    {% include 'sidebar.html' %}
+    <div class="main-content">
 
-<div class="container">
-    <h2>Edit User Details</h2>
-    <form id="editUserDetailsForm" method="post" action="{{ url_for('views.edit_details') }}">
-       
+        <h2>Edit User Details</h2>
 
-        <!-- Email Field -->
+    <div class="container">
+        <form id="editUserDetailsForm" method="post" action="{{ url_for('views.edit_details') }}">
         
 
-        <!-- First Name Field -->
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" >
+            <!-- Email Field -->
+            
 
-        <!-- Last Name Field -->
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName">
+            <!-- First Name Field -->
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" >
 
-         <!-- Date of Birth (DOB) Field -->
-         <label for="dob">Date of Birth (DOB):</label>
-         <input type="date" id="dob" name="dob" >
-         <br><br>
+            <!-- Last Name Field -->
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName">
 
-        <!-- Password Field -->
-        <label for="password">New Password:</label>
-        <input type="password" id="password" name="password" >
+            <!-- Date of Birth (DOB) Field -->
+            <label for="dob">Date of Birth (DOB):</label>
+            <input type="date" id="dob" name="dob" >
 
-        <!-- Confirm Password Field -->
-        <label for="confirmPassword">Confirm New Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" >
+            <!-- Password Field -->
+            <label for="password">New Password:</label>
+            <input type="password" id="password" name="password" >
 
-        <!-- Submit Button -->
-        <input type="submit" value="Save Changes">
-        <!-- Cancel Button -->
-        <input type="button" value="Cancel" onclick="cancelEdit()">
-    </form>
-</div>
+            <!-- Confirm Password Field -->
+            <label for="confirmPassword">Confirm New Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" >
+
+            <!-- Submit Button -->
+            <input type="submit" value="Save Changes">
+            <!-- Cancel Button -->
+            <input type="button" value="Cancel" onclick="cancelEdit()">
+        </form>
+    </div>
 
 
 
-<script>
-    function cancelEdit() {
-        // Redirect to home page when cancel button is clicked
-        window.location.href = "/";
-    }
-
-    // Additional JavaScript for password validation if needed
-    document.getElementById("editUserDetailsForm").onsubmit = function() {
-        // Validate password and confirm password
-        var password = document.getElementById("password").value;
-        var confirmPassword = document.getElementById("confirmPassword").value;
-
-        if (password !== confirmPassword) {
-            alert("Passwords do not match.");
-            return false; // Prevent form submission
-        } else {
-            return true; // Allow form submission
+    <script>
+        function cancelEdit() {
+            // Redirect to home page when cancel button is clicked
+            window.location.href = "/";
         }
-    };
-</script>
 
+        // Additional JavaScript for password validation if needed
+        document.getElementById("editUserDetailsForm").onsubmit = function() {
+            // Validate password and confirm password
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return false; // Prevent form submission
+            } else {
+                return true; // Allow form submission
+            }
+        };
+    </script>
+</div>
 </body>
 </html>
