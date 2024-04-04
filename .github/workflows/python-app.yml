@@ -30,8 +30,6 @@ jobs:
         tar -xzf geckodriver-v0.29.0-linux64.tar.gz
         sudo mv geckodriver /usr/local/bin/
         python -m pip install --upgrade pip
-        pip install chromedriver_autoinstaller
-        pip install webdriver-manager
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
