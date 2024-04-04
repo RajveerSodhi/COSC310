@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -23,15 +24,18 @@ jobs:
       with:
         python-version: "3.10"
     - name: Install dependencies
+  
       run: |
-        sudo apt-get update
-        sudo apt-get install -y firefox
-        wget -q https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz
-        tar -xzf geckodriver-v0.29.0-linux64.tar.gz
-        sudo mv geckodriver /usr/local/bin/
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: geckodriver/firefox
+      run: |
+       echo "geckodriver/firefox"
+       which geckodriver
+       geckodriver --version
+       which firefox
+       firefox --version
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -40,5 +44,4 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest flask/tests/login_test.py
-
+        pytest
