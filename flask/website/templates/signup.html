@@ -109,6 +109,19 @@
         // Redirect or perform other action when cancel button is clicked
         window.location.href = "/login"; // Replace "index.html" with the appropriate URL
     }
+     // Function to add constraint to DOB field
+     var dobField = document.getElementById("dob");
+        dob.setAttribute("max", "2013-01-01");
+        dobField.addEventListener("input", function() {
+            var selectedDate = new Date(this.value);
+            var cutoffDate = new Date("2013-01-01"); // January 1, 2013
+            if (selectedDate >= cutoffDate) {
+                alert("Please select a date before January 1, 2013.");
+                this.value = ""; // Reset the value
+            }
+        });
+        // Call the function to set the initial constraint
+        dobField.dispatchEvent(new Event('input'));
 
     document.getElementById("createAccountForm").onsubmit = function() {
         // Validate password and confirm password
