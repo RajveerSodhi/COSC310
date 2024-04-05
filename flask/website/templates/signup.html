@@ -77,7 +77,7 @@
 
         <!-- Date of Birth (DOB) Field -->
         <label for="dob">Date of Birth (DOB):</label>
-        <input type="date" id="dob" name="dob" required>
+        <input type="date" id="dob" name="dob" required >
         <br><br>
 
         <!-- User Type Selection -->
@@ -116,9 +116,11 @@
         var confirmPassword = document.getElementById("confirmPassword").value;
 
         if (password !== confirmPassword) {
-            document.getElementById("passwordError").style.display = "inline";
-            return false; // Prevent form submission
-        }
+                alert("Passwords do not match.");
+                return false; // Prevent form submission
+            } else {
+                return true; // Allow form submission
+            }
        
     };
 </script>
