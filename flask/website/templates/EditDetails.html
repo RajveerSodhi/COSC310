@@ -81,7 +81,7 @@
 
          <!-- Date of Birth (DOB) Field -->
          <label for="dob">Date of Birth (DOB):</label>
-         <input type="date" id="dob" name="dob" placeholder="{{ current_user.dob }}" >
+         <input type="date" id="dob" name="dob" placeholder="{{ current_user.dob }}"  >
          <br><br>
 
         <!-- Password Field -->
@@ -93,9 +93,9 @@
         <input type="password" id="confirmPassword" name="confirmPassword" >
 
         <!-- Submit Button -->
-        <input type="submit" value="Save Changes">
+        <input type="submit" value="Save Changes" >
         <!-- Cancel Button -->
-        <input type="button" value="Cancel" onclick="cancelEdit()">
+        <input type="button" value="Cancel" onClick="cancelEdit()">
     </form>
     </div>
 
@@ -106,7 +106,21 @@
             // Redirect to home page when cancel button is clicked
             window.location.href = "/";
         }
-
+       
+        // Function to add constraint to DOB field
+        var dobField = document.getElementById("dob");
+        dob.setAttribute("max", "2013-01-01");
+        dobField.addEventListener("input", function() {
+            var selectedDate = new Date(this.value);
+            var cutoffDate = new Date("2013-01-01"); // January 1, 2013
+            if (selectedDate >= cutoffDate) {
+                alert("Please select a date before January 1, 2013.");
+                this.value = ""; // Reset the value
+            }
+        });
+        // Call the function to set the initial constraint
+        dobField.dispatchEvent(new Event('input'));
+        
         // Additional JavaScript for password validation if needed
         document.getElementById("editUserDetailsForm").onsubmit = function() {
             // Validate password and confirm password
@@ -117,6 +131,7 @@
                 alert("Passwords do not match.");
                 return false; // Prevent form submission
             } else {
+                
                 return true; // Allow form submission
             }
         };
