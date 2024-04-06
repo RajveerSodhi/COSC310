@@ -35,6 +35,12 @@ def signup():
         dob = request.form.get('dob')
         user_type = request.form.get('user_type')
         flash("Account created succesfully!", category="success")
+
+        existing_user = User.query.filter_by(username=email).first()
+        if existing_user:
+            flash("Email already exists. Please use a different email.", category="error")
+            return redirect(url_for('auth.signup'))
+        
         new_user = User(username=email,password=generate_password_hash(password, method='pbkdf2:sha256'),first_name=firstName,last_name=lastName,DOB=dob,user_type=user_type)
         db.session.add(new_user)
         db.session.commit()
