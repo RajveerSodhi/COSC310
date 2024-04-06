@@ -29,9 +29,6 @@ def signup():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        if password != request.form.get('confirm_password'):
-            flash("Passwords don't match!", category="error")
-            return redirect(url_for('auth.signup'))
         firstName = request.form.get('firstName')
         lastName = request.form.get('lastName')
         dob = request.form.get('dob')
