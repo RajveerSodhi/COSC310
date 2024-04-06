@@ -97,7 +97,13 @@ def createRequest():
 # Page for Enrolling in a New Course - Student
 @views.route('/enroll-courses')
 def display_courses():
-    courses = Course.query.all()
+    requested_course_ids = db.session.query(Request.course_id).filter_by(user_id=current_user.id).all()
+    requested_course_ids = [r.course_id for r in requested_course_ids]
+
+    enrolled_course_ids = db.session.query(Enrollment.course_id).filter_by(user_id=current_user.id).all()
+    enrolled_course_ids = [e.course_id for e in enrolled_course_ids]
+
+    courses = Course.query.filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
     return render_template('enrollCourse.html', user=current_user, courses=courses)
 
 # Page for Accepting Student Request - Admin
