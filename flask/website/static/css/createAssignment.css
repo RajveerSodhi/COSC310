@@ -14,10 +14,6 @@ body {
   border-radius: 8px;
 }
 
-.essay-content {
-  display: none;
-}
-
 .assignment-form h2 {
   text-align: center;
   margin-bottom: 20px;
@@ -34,6 +30,7 @@ body {
 }
 
 .assignment-form input[type="text"],
+.assignment-form input[type="number"],
 .assignment-form input[type="file"],
 .assignment-form textarea {
   width: 100%;
@@ -84,19 +81,25 @@ button[type="submit"] {
   text-align: left;
 }
 
-.mcq-option {
+.mcq-option,
+.essay-max-grade {
   margin-bottom: 5px;
   text-align: left;
   align-items: center;
+  display: flex;
+  justify-content: space-between;
 }
 
-.mcq-option label {
+.mcq-option label,
+.essay-max-grade label {
   display: inline-block;
-  width: 20px;
   margin-right: 10px;
 }
 
-.mcq-option input[type="text"] {
+.mcq-option input[type="text"],
+.mcq-option input[type="number"],
+.essay-max-grade input[type="number"] {
   display: inline-block;
-  width: calc(100% - 35px);
+  width: calc(100% - 110px);
+  vertical-align: middle;
 }

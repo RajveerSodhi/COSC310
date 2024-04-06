@@ -10,7 +10,8 @@
 
 <body>
   <div class="form-container">
-    <form class="assignment-form" method="POST" action="/course/{{ course_id }}/createAssignment" enctype="multipart/form-data">
+    <form class="assignment-form" method="POST" action="/course/{{ course_id }}/createAssignment"
+      enctype="multipart/form-data">
       <h2>Create Assignment</h2>
 
       <label for="title" class="items">Title</label>
@@ -25,22 +26,6 @@
 
       <div class="quiz-content">
         <div id="quiz-questions">
-          <label for="question1" class="items">Question #1</label>
-          <input type="text" id="question1" name="question1" class="question-input">
-          <div class="mcq-options" id="mcq-options-1">
-            <div class="mcq-option" id="mcq-option-1">
-              <label for="option1-1">A:</label>
-              <input type="text" id="option1-1" name="option1-1">
-            </div>
-            <div class="mcq-option" id="mcq-option-2">
-              <label for="option1-2">B:</label>
-              <input type="text" id="option1-2" name="option1-2">
-            </div>
-            <div class="mcq-option" id="mcq-option-3">
-              <label for="option1-3">C:</label>
-              <input type="text" id="option1-3" name="option1-3">
-            </div>
-          </div>
           <button type="button" id="add-question-button" onclick="addQuestion()">Add Question</button>
         </div>
       </div>
@@ -65,6 +50,12 @@
           <label for="text-entry-essay">Text Entry</label>
           <textarea id="text-entry-essay" name="text-entry-essay"></textarea>
         </div>
+
+        <div class="essay-max-grade">
+          <label for="essay-max-grade-input" id="essay-max-grade-label" class="items">Max Grade:</label>
+          <input type="number" id="essay-max-grade-input" name="essay_max_grade" min="1" max="100"
+            placeholder="Enter max grade" required>
+        </div>
       </div>
 
       <button type="submit">Post Assignment</button>
@@ -78,6 +69,10 @@
       var essayContent = document.querySelector('.essay-content');
       quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
       essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
+
+      if (assignmentType === 'quiz') {
+        addQuestion();
+      }
     }
 
     function toggleContentMethod(assignmentType) {
@@ -115,6 +110,7 @@
 
         let optionInput = document.createElement('input');
         optionInput.type = 'text';
+        optionInput.placeholder = 'Option';
         optionInput.id = `option${questionCount}-${i}`;
         optionInput.name = `option${questionCount}-${i}`;
 
@@ -123,10 +119,32 @@
         mcqOptionsDiv.appendChild(mcqOptionDiv);
       }
 
+      var gradeDiv = document.createElement('div');
+      gradeDiv.classList.add('mcq-option');
+
+      var gradeInputLabel = document.createElement('label');
+      gradeInputLabel.setAttribute('for', 'question-max-grade' + questionCount);
+      gradeInputLabel.textContent = 'Max Grade:';
+
+      quizQuestions.insertBefore(gradeInputLabel, addButton);
+      var gradeInput = document.createElement('input');
+      gradeInput.type = 'number';
+      gradeInput.classList.add('que-max-grade');
+      gradeInput.id = 'question-max-grade' + questionCount;
+      gradeInput.name = 'question_max_grade' + questionCount;
+      gradeInput.min = '1';
+      gradeInput.max = '100';
+      gradeInput.placeholder = 'Max grade';
+
+      gradeDiv.appendChild(gradeInputLabel);
+      gradeDiv.appendChild(gradeInput);
+
       var addButton = quizQuestions.querySelector('button');
       quizQuestions.insertBefore(newLabel, addButton);
       quizQuestions.insertBefore(newInput, addButton);
       quizQuestions.insertBefore(mcqOptionsDiv, addButton);
+      quizQuestions.insertBefore(gradeInputLabel, addButton);
+      quizQuestions.insertBefore(gradeInput, addButton);
     }
 
   </script>

@@ -177,8 +177,9 @@ def createAssignment(course_id):
             for question_key in question_keys:
                 question_number = question_key[len('question'):]
                 question_text = request.form[question_key]
+                question_max_grade = request.form.get(f'question-max-grade{question_number}')
                 options = [request.form.get(f'option{question_number}-{i}') for i in range(1, 4)]
-                quiz_question = QuizQuestion(question_text=question_text, quiz_id=new_quiz.id, option1=options[0], option2=options[1], option3=options[2])
+                quiz_question = QuizQuestion(question_text=question_text, quiz_id=new_quiz.id, option1=options[0], option2=options[1], option3=options[2], max_grade=question_max_grade)
                 db.session.add(quiz_question)
 
         else:
@@ -195,8 +196,8 @@ def createAssignment(course_id):
                 file = request.files['file-upload-essay']
                 if file and file.filename != '':  # Check if a file has been uploaded
                     essay_file = file.read()
-            
-            essay_question = EssayQuestion(essay_id = new_essay.id, question_type = question_type, file_upload = essay_file, question_text = essay_text)
+            essay_max_grade = request.form.get('essay-max-grade')
+            essay_question = EssayQuestion(essay_id = new_essay.id, question_type = question_type, file_upload = essay_file, question_text = essay_text, max_grade = essay_max_grade)
             db.session.add(essay_question)
 
         db.session.commit()
