@@ -84,14 +84,21 @@
          <input type="date" id="dob" name="dob" placeholder="{{ current_user.dob }}"  >
          <br><br>
 
-        <!-- Password Field -->
-        <label for="password">New Password:</label>
-        <input type="password" id="password" name="password"  >
+         <!-- Password Field -->
+         <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}"
+                title="Password must contain at least one number, one uppercase letter, one lowercase letter, one special character, and at least 8 or more characters">
+          
+        </div>
 
         <!-- Confirm Password Field -->
-        <label for="confirmPassword">Confirm New Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" >
-
+        <div>
+            <label for="confirmPassword">Confirm New Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required
+                title="Must match the password entered above.">
+        </div>
         <!-- Submit Button -->
         <input type="submit" value="Save Changes" >
         <!-- Cancel Button -->
