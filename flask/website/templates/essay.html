@@ -12,6 +12,9 @@
   <div class="title-container">
     <h2>Essay Title: {{ essay.essay_name }}</h2>
   </div>
+  {% if already_submitted %}
+    <p>You have already submitted this quiz.</p>
+  {% else %}  
 
   <!-- The form begins here -->
   <form action="{{ url_for('views.submit_essay') }}" method="POST" enctype="multipart/form-data">
