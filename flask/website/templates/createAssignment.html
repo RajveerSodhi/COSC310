@@ -26,6 +26,27 @@
 
       <div class="quiz-content">
         <div id="quiz-questions">
+          <label for="question1" class="items">Question #1</label>
+          <input type="text" id="question1" name="question1" class="question-input">
+          <div class="mcq-options" id="mcq-options-1">
+            <div class="mcq-option" id="mcq-option-1">
+              <label for="option1-1">A:</label>
+              <input type="text" id="option1-1" name="option1-1">
+            </div>
+            <div class="mcq-option" id="mcq-option-2">
+              <label for="option1-2">B:</label>
+              <input type="text" id="option1-2" name="option1-2">
+            </div>
+            <div class="mcq-option" id="mcq-option-3">
+              <label for="option1-3">C:</label>
+              <input type="text" id="option1-3" name="option1-3">
+            </div>
+          </div>
+          <div class="mcq-option">
+            <label for="question-max-grade1">Max Grade:</label>
+            <input type="number" id="question-max-grade1" class="que-max-grade" name="question_max_grade1" min="1"
+              max="100" placeholder="Enter max grade" required>
+          </div>
           <button type="button" id="add-question-button" onclick="addQuestion()">Add Question</button>
         </div>
       </div>
@@ -70,9 +91,6 @@
       quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
       essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
 
-      if (assignmentType === 'quiz' && document.querySelectorAll('.question-input').length === 0) {
-        addQuestion();
-    }
     }
 
     function toggleContentMethod(assignmentType) {
@@ -148,27 +166,27 @@
     }
 
     function validateForm() {
-        const assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
-        if (assignmentType === 'quiz') {
-            const questionInputs = document.querySelectorAll('.question-input');
-            for (let input of questionInputs) {
-                if (input.value.trim() === '') {
-                    alert('Please fill in all the quiz questions.');
-                    return false;
-                }
-            }
-        } else if (assignmentType === 'essay') {
-            const fileRadio = document.getElementById('fileRadio');
-            const fileUpload = document.getElementById('file-upload-essay');
-            if (fileRadio.checked && !fileUpload.files.length) {
-                alert('Please upload a file for the essay.');
-                return false;
-            }
+      const assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
+      if (assignmentType === 'quiz') {
+        const questionInputs = document.querySelectorAll('.question-input');
+        for (let input of questionInputs) {
+          if (input.value.trim() === '') {
+            alert('Please fill in all the quiz questions.');
+            return false;
+          }
         }
-        return true;
+      } else if (assignmentType === 'essay') {
+        const fileRadio = document.getElementById('fileRadio');
+        const fileUpload = document.getElementById('file-upload-essay');
+        if (fileRadio.checked && !fileUpload.files.length) {
+          alert('Please upload a file for the essay.');
+          return false;
+        }
+      }
+      return true;
     }
-    </script>
-    
+  </script>
+
 </body>
 
 </html>
