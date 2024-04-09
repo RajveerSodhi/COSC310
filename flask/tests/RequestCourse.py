@@ -4,9 +4,13 @@ from selenium.webdriver.common.by import By
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+import os
+
+basename = os.getcwd()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Admin/amey3/EduPool/flask/instance/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + basename + '/../instance/database.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Admin/amey3/EduPool/flask/instance/database.db'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -119,12 +123,15 @@ class LoginTestCase(unittest.TestCase):
         driver = self.driver
         driver.get("http://127.0.0.1:5000")  # Navigate to Login Page URL
 
-        # Fill in the login fields with a valid student username and password
+        # Query the database to retrieve a random user of type "Student"
+        random_user = User.query.filter_by(user_type='student').order_by(func.random()).first()
+
+        # Fill in the login fields with the username and password of the random user
         username_field = driver.find_element(By.ID, "username")
-        username_field.send_keys("student@student.com")
+        username_field.send_keys(random_user.username)
 
         password_field = driver.find_element(By.ID, "password")
-        password_field.send_keys("aaaa")
+        password_field.send_keys(random_user.password)
 
         # Find the login button and click it
         login_button = driver.find_element(By.ID, "submit")
