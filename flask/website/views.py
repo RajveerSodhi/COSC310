@@ -26,7 +26,7 @@ def account_details():
 @views.route('/editDetails', methods=['GET', 'POST'])
 @login_required
 def edit_details():
-     if request.method == 'POST':
+    if request.method == 'POST':
         # Retrieve the updated details from the form
         user = User.query.filter_by(username=current_user.username).first()      
         if user:
@@ -45,7 +45,7 @@ def edit_details():
             if new_last_name is not None and new_last_name != "":
                 user.last_name = new_last_name
             else:
-               user.last_name = current_user.last_name
+                user.last_name = current_user.last_name
 
             new_dob = request.form.get('dob')
             if new_dob is not None and new_dob != "":
@@ -59,7 +59,7 @@ def edit_details():
             flash("User not found!", category="error")
             return redirect(url_for('views.edit_details'))
     
-     return render_template("EditDetails.html", user=current_user)
+    return render_template("EditDetails.html", user=current_user)
 
 # Page for Creating a New Course - Admin
 @views.route('/create-course', methods=['GET','POST'])
@@ -89,7 +89,7 @@ def createRequest():
     if request.method == 'POST':
         user_id = request.form.get('user_id')
         course_id = request.form.get('course_id')
-        new_request = Request(user_id=user_id, course_id=course_id)
+        new_request = Request(user_id=user_id, course_id=course_id, status='pending')
         db.session.add(new_request)
         db.session.commit()
     return redirect(url_for('views.display_courses'))
@@ -104,13 +104,15 @@ def display_courses():
     enrolled_course_ids = [e.course_id for e in enrolled_course_ids]
 
     courses = Course.query.filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
-    return render_template('enrollCourse.html', user=current_user, courses=courses)
+    rejected = Course.query.join(Request).filter(Request.course_id == Course.id, Request.user_id == current_user.id, Request.status == "declined").all()
+
+    return render_template('enrollCourse.html', user=current_user, courses=courses, rejected=rejected)
 
 # Page for Accepting Student Request - Admin
 @views.route('/requests')
 def display_requests():
     #requests = Request.query.all()
-    requests = db.session.query(Request.user_id, Course.course_code).join(Course, Request.course_id == Course.id).all()
+    requests = db.session.query(Request.user_id, Request.course_id, Course.course_code, User.first_name, User.last_name).join(Course, Request.course_id == Course.id).join(User, Request.user_id == User.id).filter(Request.status == "pending").all()
     return render_template('acceptCourse.html', requests=requests)
 
 # Post Requst for Accepting Enrollment Request
@@ -120,12 +122,11 @@ def acceptRequest():
         user_id = request.form.get('user_id')
         course_id = request.form.get('course_id')
         new_enrolment = Enrollment(user_id=user_id, course_id=course_id)
-        if new_enrolment:
-            db.session.add(new_enrolment)
-            db.session.commit()
-            request_to_delete = Request.query.filter_by(user_id=user_id, course_id=course_id).first()
-            db.session.delete(request_to_delete)
-            db.session.commit()
+        db.session.add(new_enrolment)
+        db.session.commit()
+        request_approved = Request.query.filter_by(user_id=user_id, course_id=course_id, status='pending').first()
+        request_approved.status = "approved"
+        db.session.commit()
         
     return redirect(url_for('views.display_requests'))
 
@@ -135,10 +136,9 @@ def declineRequest():
     if request.method == 'POST':
         user_id = request.form.get('user_id')
         course_id = request.form.get('course_id')
-        request_to_delete = Request.query.filter_by(user_id=user_id, course_id=course_id).first()
-        if request_to_delete:
-            db.session.delete(request_to_delete)
-            db.session.commit()
+        request_declined = Request.query.filter_by(user_id=user_id, course_id=course_id, status='pending').first()
+        request_declined.status = "declined"
+        db.session.commit()
     return redirect(url_for('views.display_requests'))
 
 # Individual Course Page
