@@ -109,7 +109,8 @@ def display_courses():
 # Page for Accepting Student Request - Admin
 @views.route('/requests')
 def display_requests():
-    requests = Request.query.all()
+    #requests = Request.query.all()
+    requests = db.session.query(Request.user_id, Course.course_code).join(Course, Request.course_id == Course.id).all()
     return render_template('acceptCourse.html', requests=requests)
 
 # Post Requst for Accepting Enrollment Request
