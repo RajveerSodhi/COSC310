@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/discussion.css') }}">
 </head>
 <body>
+    {% include 'sidebar.html' %}
+    <div class="main-content">
     <header>
         <h1> Discussion Page for {{ course_name }}</h1>
         <nav>
@@ -40,5 +42,6 @@
     <footer>
         <!-- Footer content here -->
     </footer>
+    </div>
 </body>
 </html>
