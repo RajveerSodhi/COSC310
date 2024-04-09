@@ -289,15 +289,21 @@ def grade_page(course_id):
     quiz_grades = {}
     for quiz in quizzes:
         quiz_submissions = QuizSubmission.query.filter_by(quiz_id=quiz.id, student_id=student_id).all()
-        total_grade = sum(submission.given_grade if submission.given_grade else 0 for submission in quiz_submissions)
-        quiz_grades[quiz.id] = total_grade
+        if quiz_submissions and any(submission.given_grade is not None for submission in quiz_submissions):
+            total_grade = sum(submission.given_grade for submission in quiz_submissions if submission.given_grade is not None)
+        else:
+            total_grade = "N/A"
+    quiz_grades[quiz.id] = total_grade
         
     # Retrieve essay grades for the current student
     student_id = current_user.id
     essay_grades = {}
     for essay in essays:
         essay_submissions = EssaySubmission.query.filter_by(essay_id=essay.id, student_id=student_id).all()
-        total_grade = sum(submission.given_grade if submission.given_grade else 0 for submission in essay_submissions)
+        if essay_submissions and any(submission.given_grade is not None for submission in essay_submissions):
+            total_grade = sum(submission.given_grade for submission in essay_submissions if submission.given_grade is not None)
+        else:
+            total_grade = "N/A"
         essay_grades[essay.id] = total_grade
     
     return render_template('viewGrade.html', course_id=course_id, quizzes=quizzes, essays=essays, quiz_grades=quiz_grades, essay_grades=essay_grades)
