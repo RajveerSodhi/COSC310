@@ -11,7 +11,7 @@
 <body>
   <div class="form-container">
     <form class="assignment-form" method="POST" action="/course/{{ course_id }}/createAssignment"
-      enctype="multipart/form-data">
+      enctype="multipart/form-data" onsubmit="return validateForm()">
       <h2>Create Assignment</h2>
 
       <label for="title" class="items">Title</label>
@@ -70,9 +70,9 @@
       quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
       essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
 
-      if (assignmentType === 'quiz') {
+      if (assignmentType === 'quiz' && document.querySelectorAll('.question-input').length === 0) {
         addQuestion();
-      }
+    }
     }
 
     function toggleContentMethod(assignmentType) {
@@ -147,7 +147,28 @@
       quizQuestions.insertBefore(gradeInput, addButton);
     }
 
-  </script>
+    function validateForm() {
+        const assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
+        if (assignmentType === 'quiz') {
+            const questionInputs = document.querySelectorAll('.question-input');
+            for (let input of questionInputs) {
+                if (input.value.trim() === '') {
+                    alert('Please fill in all the quiz questions.');
+                    return false;
+                }
+            }
+        } else if (assignmentType === 'essay') {
+            const fileRadio = document.getElementById('fileRadio');
+            const fileUpload = document.getElementById('file-upload-essay');
+            if (fileRadio.checked && !fileUpload.files.length) {
+                alert('Please upload a file for the essay.');
+                return false;
+            }
+        }
+        return true;
+    }
+    </script>
+    
 </body>
 
 </html>
