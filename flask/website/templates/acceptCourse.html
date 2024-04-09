@@ -155,7 +155,7 @@
         <div class="requestContainer">
             {% for request in requests %}
             <div class="request">
-                <h3>Course Code : {{request.course_code}}</h3>
+                <h3>Course Code : {{ request.course_code}}</h3>
                 <p>Student <strong>{{ request.user_id }}</strong> has requested to enroll in this course</p>
                 <form method="POST" action="{{ url_for('views.acceptRequest') }}" class="req-action-form">
                     <input type="hidden" name="course_id" value="{{ request.course_id }}">
