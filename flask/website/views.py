@@ -77,6 +77,7 @@ def createCourse():
         teacher_enrollment = Enrollment(user_id=teacher_id,course_id=new_course.id)
         db.session.add(teacher_enrollment)
         db.session.commit()
+        return redirect(url_for('views.home'))
     
     teachers = User.query.filter_by(user_type='teacher').all()
         
