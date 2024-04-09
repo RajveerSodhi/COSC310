@@ -246,8 +246,11 @@ def essay_page(course_id, essay_id):
         if question.file_upload and question.question_type == 'file':
             question.base64_image = base64.b64encode(question.file_upload).decode('utf-8')
     student_id = current_user.id 
+    
+    # Check if the current user has already submitted the essay
+    already_submitted = EssaySubmission.query.filter_by(essay_id=essay_id, student_id=current_user.id).first()  
 
-    return render_template('essay.html', course_id=course_id, questions=questions, essay=essay,student_id=student_id)
+    return render_template('essay.html', course_id=course_id, questions=questions, essay=essay,student_id=student_id, already_submitted=already_submitted)
 
 # Post Request for Submitting an Essay
 @views.route('/submit_essay', methods=['POST'])
