@@ -11,7 +11,7 @@
 <body>
   <div class="form-container">
     <form class="assignment-form" method="POST" action="/course/{{ course_id }}/createAssignment"
-      enctype="multipart/form-data" onsubmit="return validateForm()">
+      enctype="multipart/form-data">
       <h2>Create Assignment</h2>
 
       <label for="title" class="items">Title</label>
@@ -19,9 +19,9 @@
 
       <div class="assignment-type radio-group">
         <label class="items">Assignment Type</label>
-        <label><input type="radio" name="assignmentType" value="quiz" onclick="toggleAssignmentType()" required>
+        <label><input type="radio" name="assignmentType" value="quiz" id="quiz" onclick="toggleAssignmentType()" required>
           Quiz</label>
-        <label><input type="radio" name="assignmentType" value="essay" onclick="toggleAssignmentType()"> Essay</label>
+        <label><input type="radio" name="assignmentType" value="essay" id="essay" onclick="toggleAssignmentType()"> Essay</label>
       </div>
 
       <div class="quiz-content">
@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <button type="submit">Post Assignment</button>
+      <button type="submit" id="post-assignment-button">Post Assignment</button>
     </form>
   </div>
 
@@ -70,9 +70,9 @@
       quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
       essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
 
-      if (assignmentType === 'quiz' && document.querySelectorAll('.question-input').length === 0) {
+      if (assignmentType === 'quiz') {
         addQuestion();
-    }
+      }
     }
 
     function toggleContentMethod(assignmentType) {
@@ -95,6 +95,9 @@
       newInput.id = 'question' + questionCount;
       newInput.name = 'question' + questionCount;
       newInput.classList.add('question-input');
+      
+      // Add ID to the input text box
+      newInput.setAttribute('id', 'question-input' + questionCount);
 
       var mcqOptionsDiv = document.createElement('div');
       mcqOptionsDiv.classList.add('mcq-options');
@@ -113,6 +116,9 @@
         optionInput.placeholder = 'Option';
         optionInput.id = `option${questionCount}-${i}`;
         optionInput.name = `option${questionCount}-${i}`;
+
+        // Add ID to the option input box
+        optionInput.setAttribute('id', `option${questionCount}-${i}`);
 
         mcqOptionDiv.appendChild(optionLabel);
         mcqOptionDiv.appendChild(optionInput);
@@ -147,28 +153,7 @@
       quizQuestions.insertBefore(gradeInput, addButton);
     }
 
-    function validateForm() {
-        const assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
-        if (assignmentType === 'quiz') {
-            const questionInputs = document.querySelectorAll('.question-input');
-            for (let input of questionInputs) {
-                if (input.value.trim() === '') {
-                    alert('Please fill in all the quiz questions.');
-                    return false;
-                }
-            }
-        } else if (assignmentType === 'essay') {
-            const fileRadio = document.getElementById('fileRadio');
-            const fileUpload = document.getElementById('file-upload-essay');
-            if (fileRadio.checked && !fileUpload.files.length) {
-                alert('Please upload a file for the essay.');
-                return false;
-            }
-        }
-        return true;
-    }
-    </script>
-    
+  </script>
 </body>
 
 </html>
