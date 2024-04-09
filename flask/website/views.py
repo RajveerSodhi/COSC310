@@ -4,6 +4,7 @@ import magic
 from werkzeug.utils import secure_filename
 from .models import Discussion, Reply, User, db, Course, Request, Enrollment, Quiz, Essay, QuizQuestion, EssayQuestion, QuizSubmission, EssaySubmission
 import base64
+from werkzeug.security import generate_password_hash, check_password_hash
 
 views = Blueprint('views', __name__)
 
@@ -12,7 +13,8 @@ views = Blueprint('views', __name__)
 @login_required
 def home():
     enrolled_courses = Course.query.join(Enrollment).filter(Enrollment.user_id == current_user.id).all()
-    return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses)
+    all_courses = Course.query.all()
+    return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses, all_courses=all_courses)
 
 # Account Details
 @views.route('/accountDetails')
@@ -26,15 +28,12 @@ def account_details():
 def edit_details():
      if request.method == 'POST':
         # Retrieve the updated details from the form
-       # email = request.form.get('email')
         user = User.query.filter_by(username=current_user.username).first()      
         if user:
             # Only update fields if they are provided in the form
             new_password = request.form.get('password')
             if new_password is not None and new_password != "":
-                user.password = new_password
-            else:
-                user.password = current_user.password
+                user.password = generate_password_hash(new_password)
 
             new_first_name = request.form.get('firstName')
             if new_first_name is not None and new_first_name != "":
