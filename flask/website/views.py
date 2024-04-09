@@ -13,7 +13,8 @@ views = Blueprint('views', __name__)
 @login_required
 def home():
     enrolled_courses = Course.query.join(Enrollment).filter(Enrollment.user_id == current_user.id).all()
-    return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses)
+    all_courses = Course.query.all()
+    return render_template("home.html", user=current_user, enrolled_courses=enrolled_courses, all_courses=all_courses)
 
 # Account Details
 @views.route('/accountDetails')
