@@ -38,7 +38,10 @@
 
       <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
 
-      <button type="submit" class="submit-quiz">Submit Answers</button>
+      {% if current_user.user_type not in ['admin'] %}
+        <button type="submit" class="submit-quiz">Submit Answers</button>
+      {% endif %}
+
       {% endif %}
 
     </form>
