@@ -142,15 +142,17 @@
             window.location.href = "/login"; // Replace "index.html" with the appropriate URL
         }
         // Function to add constraint to DOB field
-        var dobField = document.getElementById("dob");
-        dobField.addEventListener("input", function () {
+        var dob = document.getElementById("dob");
+        var today = new Date();
+        dob.setAttribute("max", today.toISOString().split("T")[0]); // Set max date to today
+        dob.addEventListener("input", function () {
             var selectedDate = new Date(this.value);
             var cutoffDate = new Date();
             cutoffDate.setFullYear(cutoffDate.getFullYear() - 18); // User must be at least 18 years old
             if (selectedDate >= cutoffDate) {
-                dobField.setCustomValidity("You must be at least 18 years old.");
+                dob.setCustomValidity("You must be at least 18 years old.");
             } else {
-                dobField.setCustomValidity("");
+                dob.setCustomValidity("");
             }
         });
 
