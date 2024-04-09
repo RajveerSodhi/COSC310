@@ -52,11 +52,11 @@
     <header>
         <div class="discussion-container">
             <div class="discussion">
-                <h1>{{ discussion.title }}</h1>
-                <p>{{ discussion.content }}</p>
+                <h1>Discussion Title: {{ discussion.title }}</h1>
+                <p> Description: {{ discussion.content }}</p>
 
 
-                <p>Posted by {{ discussion.user_id }} on {{ discussion.date_posted }}</p>
+                <p>Posted by {{ discussion_author }} on {{ discussion.date_posted }}</p>
 
             </div>
         </div>

@@ -325,8 +325,9 @@ def course_discussions(course_id):
 @login_required
 def discussion_detail(discussion_id):
     discussion = Discussion.query.get_or_404(discussion_id)
+    discussion_author = User.query.get(discussion.user_id).username
     replies = db.session.query(Reply, User.username).join(User, User.id == Reply.user_id).filter(Reply.discussion_id == discussion_id).all()
-    return render_template('discussion_detail.html', discussion=discussion, replies=replies)
+    return render_template('discussion_detail.html', discussion=discussion, discussion_author=discussion_author, replies=replies)
 
 #add a new discussion
 @views.route('/course/<int:course_id>/discussions/add', methods=['GET', 'POST'])
