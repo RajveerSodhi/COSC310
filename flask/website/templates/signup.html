@@ -142,15 +142,16 @@
             window.location.href = "/login"; // Replace "index.html" with the appropriate URL
         }
         // Function to add constraint to DOB field
-        var dobField = document.getElementById("dob");
-        dobField.addEventListener("input", function () {
-            var selectedDate = new Date(this.value);
-            var cutoffDate = new Date();
-            cutoffDate.setFullYear(cutoffDate.getFullYear() - 18); // User must be at least 18 years old
+        var dob = document.getElementById("dob");
+        var selectedDate = new Date(this.value);
+        var cutoffDate = new Date();
+        cutoffDate.setFullYear(cutoffDate.getFullYear() - 17); // User must be at least 17 years old
+        dob.setAttribute("max", cutoffDate.toISOString().split("T")[0]);
+        dob.addEventListener("input", function () {
             if (selectedDate >= cutoffDate) {
-                dobField.setCustomValidity("You must be at least 18 years old.");
+                dob.setCustomValidity("You must be at least 17 years old.");
             } else {
-                dobField.setCustomValidity("");
+                dob.setCustomValidity("");
             }
         });
 
@@ -176,6 +177,14 @@
             return true; // Allow form submission
         };
     </script>
+
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+    {% if messages %}
+    <script>
+        alert("{{ messages[0] }}");
+    </script>
+    {% endif %}
+    {% endwith %}
 
 </body>
 
