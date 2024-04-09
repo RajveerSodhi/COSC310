@@ -24,7 +24,7 @@
                 <h4>Essay Question:</h4>
                 {% if question.question_type == 'file' %}
                 <embed src="{{ question_data_uri }}" width="90%" height="300px">
-                {% elif submission.question_type == 'text' %}
+                {% elif question.question_type == 'text' %}
                 <p>{{ question.question_text }}</p>
                 {% endif %}
 
@@ -32,7 +32,7 @@
                 {% if submission.answer_type == 'text' %}
                 <p>{{ submission.answer_text }}</p>
                 {% elif submission.answer_type == 'file' %}
-                <embed src="{{ submission.answer_data_uri }}" width="90%" height="400px">
+                <embed src="{{ answer_data_uri }}" width="90%" height="400px">
                 {% endif %}
                 <br>
                 <label for="essay-grade">Grade Essay:</label>
