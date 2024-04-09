@@ -161,6 +161,18 @@
       {% endif %}
     </div>
 
+    <h2>Rejected Enrollment Requests</h2>
+    <div class='rejected-courses'>
+      {% for course in rejected %}
+      <div class="course">
+        <h3>{{ course.course_code }}: {{ course.course_name }}</h3>
+        <p>{{ course.course_desc }}</p>
+        <p><strong>Instructor:</strong> {{ course.teacher_id }}</p>
+        <p><strong>Total Students:</strong> {{ course.course_limit }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
     <div id="toastBox"></div>
 
 
