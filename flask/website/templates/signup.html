@@ -148,9 +148,9 @@
         dob.addEventListener("input", function () {
             var selectedDate = new Date(this.value);
             var cutoffDate = new Date();
-            cutoffDate.setFullYear(cutoffDate.getFullYear() - 18); // User must be at least 18 years old
+            cutoffDate.setFullYear(cutoffDate.getFullYear() - 17); // User must be at least 17 years old
             if (selectedDate >= cutoffDate) {
-                dob.setCustomValidity("You must be at least 18 years old.");
+                dob.setCustomValidity("You must be at least 17 years old.");
             } else {
                 dob.setCustomValidity("");
             }
