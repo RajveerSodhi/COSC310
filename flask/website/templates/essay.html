@@ -29,6 +29,9 @@
         <p class="question-text">{{ loop.index }}. Question:</p>
       </div>
       <img src="data:image/jpeg;base64,{{ question.base64_image }}" alt="Question Image">
+      {% else %}
+            <!-- Display the question text if it's not a file type -->
+            <p class="question-text">{{ loop.index }}. Question: {{ question.question_text }}</p>
       {% endif %}
 
       <!-- Student response input options -->
