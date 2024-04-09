@@ -44,13 +44,15 @@ class AdminTestCase(unittest.TestCase):
     def test_create_course(self):
         driver = self.driver
         driver.get("http://127.0.0.1:5000")  # Navigate to Login Page URL
+        # Query the database to retrieve a random user of type "Admin"
+        random_user = User.query.filter_by(user_type='admin').order_by(func.random()).first()
 
-        # Fill in the login fields with a valid admin username and password
+        # Fill in the login fields with the username and password of the random user
         username_field = driver.find_element(By.ID, "username")
-        username_field.send_keys("admin@admin.com")
+        username_field.send_keys(random_user.username)
 
         password_field = driver.find_element(By.ID, "password")
-        password_field.send_keys("aaaa")
+        password_field.send_keys(random_user.password)
 
         # Find the login button and click it
         login_button = driver.find_element(By.ID, "submit")
