@@ -32,7 +32,7 @@
             {% for discussion in discussions %}
             <article class="discussion">
                 <h3><a href="{{ url_for('views.discussion_detail', discussion_id=discussion.id) }}">{{ discussion.title }}</a></h3>
-                <p>Posted by {{ discussion.author }} on {{ discussion.date_posted }}</p>
+                <p>Posted on {{ discussion.date_posted }}</p>
             </article>
             {% else %}
             <p>No discussions yet. Be the first to start a conversation!</p>
