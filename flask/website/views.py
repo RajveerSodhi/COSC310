@@ -403,7 +403,10 @@ def grade_essay(course_id, essay_id, student_id):
     essay_question = EssayQuestion.query.filter_by(essay_id=essay_id).first()
     essay_submission = EssaySubmission.query.filter_by(essay_id=essay_id, student_id=student_id).first()
 
-    # adding question text/file and max grade to the submission
+    # Initialize variables to ensure they have a default value
+    question_data_uri = None
+    answer_data_uri = None
+
     essay_submission.max_grade = essay_question.max_grade if essay_question.max_grade is not None else 100
 
     if essay_question.question_type == 'text':
@@ -413,13 +416,12 @@ def grade_essay(course_id, essay_id, student_id):
         base64_file = base64.b64encode(essay_question.file_upload).decode('utf-8')
         question_data_uri = f'data:{mime_type};base64,{base64_file}'
 
-    # adding support for displaying submission file uploads
-    if essay_submission.answer_file and essay_submission.answer_type == 'file':
+    if essay_submission.answer_type == 'file' and essay_submission.answer_file:
         mime_type = magic.from_buffer(essay_submission.answer_file, mime=True)
         base64_file = base64.b64encode(essay_submission.answer_file).decode('utf-8')
-        essay_submission.answer_data_uri = f'data:{mime_type};base64,{base64_file}'
+        answer_data_uri = f'data:{mime_type};base64,{base64_file}'
     else:
-        essay_submission.answer_text = essay_submission.answer_text
+        essay_submission.answer_text = essay_submission.answer_text if essay_submission.answer_text else ''
 
     if request.method == 'POST':
         grade_str = request.form.get('essay-grade')
@@ -433,7 +435,7 @@ def grade_essay(course_id, essay_id, student_id):
             db.session.commit()
             return redirect(url_for('views.course_page', course_id=course_id))
 
-    return render_template('gradeEssay.html', course_id=course_id, essay=essay, question=essay_question, student=student, question_data_uri=question_data_uri, submission=essay_submission)
+    return render_template('gradeEssay.html', course_id=course_id, essay=essay, question=essay_question, student=student, question_data_uri=question_data_uri, submission=essay_submission, answer_data_uri=answer_data_uri)
 
 # Instantiate a DB with dummy records whenever an instance is deleted.
 @views.route('/instantiate-db')
