@@ -103,24 +103,10 @@ def display_courses():
     enrolled_course_ids = db.session.query(Enrollment.course_id).filter_by(user_id=current_user.id).all()
     enrolled_course_ids = [e.course_id for e in enrolled_course_ids]
 
-    courses = db.session.query(
-        Course.id, 
-        Course.course_code, 
-        Course.course_name, 
-        Course.course_desc, 
-        Course.course_limit, 
-        User.first_name, 
-        User.last_name
+    courses = db.session.query(Course.id, Course.course_code, Course.course_name, Course.course_desc, Course.course_limit, User.first_name, User.last_name
     ).join(User, Course.teacher_id == User.id).filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
 
-    rejected = db.session.query(
-        Course.id, 
-        Course.course_code, 
-        Course.course_name, 
-        Course.course_desc, 
-        Course.course_limit, 
-        User.first_name, 
-        User.last_name
+    rejected = db.session.query(Course.id, Course.course_code, Course.course_name, Course.course_desc, Course.course_limit, User.first_name, User.last_name
     ).join(Request, Request.course_id == Course.id)\
     .join(User, Course.teacher_id == User.id)\
     .filter(Request.user_id == current_user.id, Request.status == "declined").all()
@@ -166,6 +152,7 @@ def course_page(course_id):
     course = Course.query.get(course_id)
     quizzes = Quiz.query.filter_by(course_id=course_id).all()
     essays = Essay.query.filter_by(course_id=course_id).all()
+    teacher = User.query.get(course.teacher_id)
     
     quiz_submissions = {}
     for quiz in quizzes:
@@ -179,7 +166,7 @@ def course_page(course_id):
         student_ids = list(set(student_ids))    # Unique Student Ids
         essay_submissions[essay.id] = student_ids
     
-    return render_template('course.html', course=course, quizzes=quizzes, essays=essays, quiz_submissions=quiz_submissions, essay_submissions=essay_submissions)
+    return render_template('course.html', course=course, teacher=teacher, quizzes=quizzes, essays=essays, quiz_submissions=quiz_submissions, essay_submissions=essay_submissions)
 
 # Page for Creating Assignment for a particular Course
 @views.route('/course/<int:course_id>/createAssignment', methods=['GET','POST'])
