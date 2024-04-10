@@ -296,7 +296,7 @@ def grade_page(course_id):
             total_grade = sum(submission.given_grade for submission in quiz_submissions if submission.given_grade is not None)
         else:
             total_grade = "N/A"
-    quiz_grades[quiz.id] = total_grade
+        quiz_grades[quiz.id] = total_grade
         
     # Retrieve essay grades for the current student
     student_id = current_user.id
