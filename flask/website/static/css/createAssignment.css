@@ -8,7 +8,7 @@ body {
 .form-container {
   background-color: #FFF;
   max-width: 800px;
-  margin: auto;
+  margin-left:350px;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -72,10 +72,13 @@ body {
 
 button[type="submit"] {
   margin-top: 30px;
-  background-color: #4CAF50;
+  background-color: #0056b3;
   color: #FFF;
 }
-
+button:hover {
+  background-color: #003d82; /* Darker on hover */
+  
+}
 .assignment-form .radio-group {
   margin-bottom: 15px;
   text-align: left;
