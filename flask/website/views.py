@@ -158,13 +158,15 @@ def course_page(course_id):
     for quiz in quizzes:
         student_ids = [submission.student_id for submission in QuizSubmission.query.filter_by(quiz_id=quiz.id)]
         student_ids = list(set(student_ids))    # Unique Student Ids
-        quiz_submissions[quiz.id] = student_ids
+        student_names = {student_id: User.query.get(student_id).first_name + " " + User.query.get(student_id).last_name for student_id in student_ids}
+        quiz_submissions[quiz.id] = student_names
         
     essay_submissions = {}
     for essay in essays:
         student_ids = [submission.student_id for submission in EssaySubmission.query.filter_by(essay_id=essay.id)]
         student_ids = list(set(student_ids))    # Unique Student Ids
-        essay_submissions[essay.id] = student_ids
+        student_names = {student_id: User.query.get(student_id).first_name + " " + User.query.get(student_id).last_name for student_id in student_ids}
+        essay_submissions[essay.id] = student_names
     
     return render_template('course.html', course=course, teacher=teacher, quizzes=quizzes, essays=essays, quiz_submissions=quiz_submissions, essay_submissions=essay_submissions)
 
