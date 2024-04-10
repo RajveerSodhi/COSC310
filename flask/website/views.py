@@ -103,8 +103,27 @@ def display_courses():
     enrolled_course_ids = db.session.query(Enrollment.course_id).filter_by(user_id=current_user.id).all()
     enrolled_course_ids = [e.course_id for e in enrolled_course_ids]
 
-    courses = Course.query.filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
-    rejected = Course.query.join(Request).filter(Request.course_id == Course.id, Request.user_id == current_user.id, Request.status == "declined").all()
+    courses = db.session.query(
+        Course.id, 
+        Course.course_code, 
+        Course.course_name, 
+        Course.course_desc, 
+        Course.course_limit, 
+        User.first_name, 
+        User.last_name
+    ).join(User, Course.teacher_id == User.id).filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
+
+    rejected = db.session.query(
+        Course.id, 
+        Course.course_code, 
+        Course.course_name, 
+        Course.course_desc, 
+        Course.course_limit, 
+        User.first_name, 
+        User.last_name
+    ).join(Request, Request.course_id == Course.id)\
+    .join(User, Course.teacher_id == User.id)\
+    .filter(Request.user_id == current_user.id, Request.status == "declined").all()
 
     return render_template('enrollCourse.html', user=current_user, courses=courses, rejected=rejected)
 
