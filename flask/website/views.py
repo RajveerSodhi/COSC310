@@ -201,7 +201,7 @@ def createAssignment(course_id):
             db.session.add(essay_question)
 
         db.session.commit()
-        return redirect(url_for('views.home', course_id=course_id))
+        return redirect(url_for('views.course_page', course_id=course_id))
 
     return render_template('createAssignment.html', user=current_user, course_id=course_id)
 
