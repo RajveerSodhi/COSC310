@@ -116,7 +116,7 @@ def display_courses():
 # Page for Accepting Student Request - Admin
 @views.route('/requests')
 def display_requests():
-    requests = db.session.query(Request.user_id, Course.course_code).join(Course, Request.course_id == Course.id).all()
+    requests = db.session.query(Request.id, Request.user_id,Request.course_id, Course.course_code,Request.status).join(Course, Request.course_id == Course.id).filter(Request.status == 'pending').all()
     return render_template('acceptCourse.html', requests=requests)
 
 # Post Requst for Accepting Enrollment Request
@@ -127,10 +127,14 @@ def acceptRequest():
         course_id = request.form.get('course_id')
         new_enrolment = Enrollment(user_id=user_id, course_id=course_id)
         db.session.add(new_enrolment)
-        db.session.commit()
+        
         request_approved = Request.query.filter_by(user_id=user_id, course_id=course_id, status='pending').first()
-        request_approved.status = "approved"
-        db.session.commit()
+        if request_approved:
+            request_approved.status = "approved"
+            db.session.commit()
+        else:
+            
+            print("No pending request found for user_id:", user_id, "and course_id:", course_id)
         
     return redirect(url_for('views.display_requests'))
 
@@ -140,9 +144,15 @@ def declineRequest():
     if request.method == 'POST':
         user_id = request.form.get('user_id')
         course_id = request.form.get('course_id')
+        all_requests = Request.query.filter_by(user_id=user_id, status='pending').all()
+        print(f"All pending requests for user_id={user_id}: {[{'course_id': r.course_id, 'status': r.status} for r in all_requests]}")
         request_declined = Request.query.filter_by(user_id=user_id, course_id=course_id, status='pending').first()
-        request_declined.status = "declined"
-        db.session.commit()
+        if request_declined:
+            request_declined.status = "declined"
+            db.session.commit()
+        else:
+            
+            print(f"No pending request found for user_id={user_id}, course_id={course_id}")
     return redirect(url_for('views.display_requests'))
 
 # Individual Course Page

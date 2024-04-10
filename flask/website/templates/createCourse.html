@@ -9,7 +9,7 @@
 </head>
 
 <body>
-
+  {% include 'sidebar.html' %}
   <div class="form-container">
     <h2>Create Course</h2>
     <form method="POST" , action="{{ url_for('views.createCourse') }}">
