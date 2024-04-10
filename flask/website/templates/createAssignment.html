@@ -9,6 +9,7 @@
 </head>
 
 <body>
+  {% include 'sidebar.html' %}
   <div class="form-container">
     <form class="assignment-form" method="POST" action="/course/{{ course_id }}/createAssignment"
       enctype="multipart/form-data" onsubmit="return validateForm()">
