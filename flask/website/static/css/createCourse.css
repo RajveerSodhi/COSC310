@@ -17,8 +17,8 @@ h2 {
 .form-container {
   background: #ffffff;
   border: 1px solid #ddd;
-  width: 300px;
-  max-width: 400px;
+  width: 600px;
+  max-width: 600px;
   margin: 50px auto;
   padding: 20px;
   border-radius: 8px;
@@ -75,8 +75,8 @@ input[type="button"] {
   border-radius: 4px;
   width: 100%;
   cursor: pointer;
-        }
+}
 
 input[type="button"]:hover {
-            background-color: #BB0000;
-        }
+  background-color: #BB0000;
+}
