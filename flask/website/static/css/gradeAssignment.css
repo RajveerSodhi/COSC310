@@ -8,7 +8,8 @@ body {
 .grading-container {
     background-color: #FFF;
     max-width: 800px;
-    margin-left: 350px;
+    margin: 0 auto;
+   
     
     
     padding: 20px;
@@ -67,4 +68,18 @@ body {
 
 .question input[type="radio"] {
     margin-right: 10px;
+}
+.grading-container img,
+.grading-container embed {
+    max-width: 60%; /* Adjusts width to be responsive */
+    height: 500%; /* Keeps aspect ratio intact */
+    display: block;
+    margin: 0 auto 20px; /* Centers the image and adds bottom margin */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Adds shadow for depth */
+    border: 1px solid #ccc; /* Optional: Adds a subtle border */
+    border-radius: 4px; /* Optional: Rounds the corners */
+}
+
+.grading-container embed {
+    height: 500px; /* Sets a fixed height, or use percentage/vh for responsiveness */
 }
