@@ -1,118 +1,102 @@
+
 /* Reset default margin and padding */
 html, body {
-    margin: 0px;
+    margin: 0;
     margin-left: 90px;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f2f5; /* Neutral background color */
+    font-family: 'Arial', sans-serif; /* Modern font */
+    background-color: #f5f7fa; /* Softer background color */
+    color: #000000; /* Consistent text color */
 }
 
 /* Main content styling */
 .main-content {
     max-width: 800px;
     margin: auto;
-    padding: 20px;
-    background-color: #FFF;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    text-align: center; /* Center content */
+    padding: 30px;
+    background-color: transparent;
+    text-align: left; /* Align text to the left for better readability */
 }
 
 /* Style header */
 header {
-    background-color: #f9f9f9; /* Neutral header color */
-    color: #333; /* Dark text for readability */
-    padding: 10px 20px;
-    border-radius: 8px;
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-bottom: 2px solid #eee; /* Subtle bottom border for definition */
 }
 
 /* Navigation links */
 nav a {
-    color: #333333; /* Dark color for text */
+    color: #555;
     text-decoration: none;
-    padding: 10px 15px;
+    padding: 8px 16px;
     display: inline-block;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #007bff; /* Interactive hover state */
 }
 
 /* Style section */
 section {
     background-color: #fff;
-    padding: 20px;
-    margin-top: 20px;
+    padding: 30px;
+    margin-top: 30px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Softer shadow */
 }
 
 /* Style form inputs */
 input[type="text"], textarea {
     width: 100%;
-    padding: 8px;
-    margin: 10px 0;
-    border: 1px solid #cccccc;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #dfe3e8;
     border-radius: 4px;
     box-sizing: border-box;
 }
 
 /* Style buttons */
 button {
-    padding: 10px 20px; /* Adequate padding on both sides */
-    background-color: #007bff; /* Neutral button color */
-    color: #fff; /* Text color changed to white */
+    padding: 12px 24px;
+    background-color: #0056b3; /* Softened button color */
+    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: auto; /* Allows the button to resize according to text length */
-    min-width: 100px; /* Minimum width, adjust as needed */
-    max-width: 300px; /* Maximum width, adjust as needed */
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 button:hover {
-    background-color: #042998; /* Slightly darker on hover */
+    background-color: #003d82; /* Darker on hover */
+    transform: translateY(-2px); /* Subtle lift effect */
 }
 
 /* Style discussion cards */
 .discussion {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e4e8;
+    padding: 20px;
+    border-radius: 12px;
     margin-bottom: 20px;
+    transition: box-shadow 0.3s;
+}
+
+.discussion:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* Hover effect for discussion cards */
 }
 
 .discussion:last-child {
     border-bottom: none;
 }
 
-/* Apply margin to headings for spacing and alignment */
-h1, h2, h3, h4 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-/* Footer styling */
-footer {
-    text-align: center;
-    padding: 0px;
-    background-color: #f1f1f1;
-    border-top: 1px solid #e4e4e4;
-}
-
-/* Adjust form and discussion list for better visual hierarchy */
-#post-discussion, #discussions article {
-    background-color: #f9f9f9;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
 /* Responsive layout adjustments */
 @media (max-width: 768px) {
     .main-content, header, section {
         padding: 15px;
-
     }
 
-    input[type="text"], textarea, button {
-        padding: 8px;
+    nav a {
+        padding: 8px 10px;
     }
 }

@@ -53,10 +53,11 @@
         <div class="discussion-container">
             <div class="discussion">
                 <h1>Discussion Title: {{ discussion.title }}</h1>
-                <p> Description: {{ discussion.content }}</p>
+                <h3 class="discussion-description">Description: {{ discussion.content }}</h3>
 
 
-                <p>Posted by {{ discussion_author }} on {{ discussion.date_posted }}</p>
+                <p class="posted-by">— Posted by {{ discussion_author }} on {{ discussion.date_posted }}</p>
+
 
             </div>
         </div>
@@ -70,7 +71,7 @@
                 <button type="submit" class="submit-reply">Post Reply</button>
             </form>
         </div>
-        <h3>Replies</h3>
+        <h1>Replies</h1>
         <div id="comments-container">
             {% for reply, username in replies %}
             <div class="reply">
