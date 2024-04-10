@@ -53,7 +53,6 @@ def edit_details():
 
             else:  user.DOB = current_user.DOB    
             db.session.commit()
-            flash("Details updated successfully!", category="success")
             return redirect(url_for('views.account_details'))
         else:
             flash("User not found!", category="error")
