@@ -115,19 +115,18 @@
         }
        
         // Function to add constraint to DOB field
-        var dobField = document.getElementById("dob");
-        dob.setAttribute("max", "2013-01-01");
-        dobField.addEventListener("input", function() {
-            var selectedDate = new Date(this.value);
-            var cutoffDate = new Date("2013-01-01"); // January 1, 2013
+        var dob = document.getElementById("dob");
+        var selectedDate = new Date(this.value);
+        var cutoffDate = new Date();
+        cutoffDate.setFullYear(cutoffDate.getFullYear() - 17); // User must be at least 17 years old
+        dob.setAttribute("max", cutoffDate.toISOString().split("T")[0]);
+        dob.addEventListener("input", function () {
             if (selectedDate >= cutoffDate) {
-                alert("Please select a date before January 1, 2013.");
-                this.value = ""; // Reset the value
+                dob.setCustomValidity("You must be at least 17 years old.");
+            } else {
+                dob.setCustomValidity("");
             }
         });
-        // Call the function to set the initial constraint
-        dobField.dispatchEvent(new Event('input'));
-        
         // Additional JavaScript for password validation if needed
         document.getElementById("editUserDetailsForm").onsubmit = function() {
             // Validate password and confirm password
