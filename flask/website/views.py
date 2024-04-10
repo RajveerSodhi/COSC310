@@ -103,8 +103,13 @@ def display_courses():
     enrolled_course_ids = db.session.query(Enrollment.course_id).filter_by(user_id=current_user.id).all()
     enrolled_course_ids = [e.course_id for e in enrolled_course_ids]
 
-    courses = Course.query.filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
-    rejected = Course.query.join(Request).filter(Request.course_id == Course.id, Request.user_id == current_user.id, Request.status == "declined").all()
+    courses = db.session.query(Course.id, Course.course_code, Course.course_name, Course.course_desc, Course.course_limit, User.first_name, User.last_name
+    ).join(User, Course.teacher_id == User.id).filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
+
+    rejected = db.session.query(Course.id, Course.course_code, Course.course_name, Course.course_desc, Course.course_limit, User.first_name, User.last_name
+    ).join(Request, Request.course_id == Course.id)\
+    .join(User, Course.teacher_id == User.id)\
+    .filter(Request.user_id == current_user.id, Request.status == "declined").all()
 
     return render_template('enrollCourse.html', user=current_user, courses=courses, rejected=rejected)
 
@@ -146,20 +151,23 @@ def course_page(course_id):
     course = Course.query.get(course_id)
     quizzes = Quiz.query.filter_by(course_id=course_id).all()
     essays = Essay.query.filter_by(course_id=course_id).all()
+    teacher = User.query.get(course.teacher_id)
     
     quiz_submissions = {}
     for quiz in quizzes:
         student_ids = [submission.student_id for submission in QuizSubmission.query.filter_by(quiz_id=quiz.id)]
         student_ids = list(set(student_ids))    # Unique Student Ids
-        quiz_submissions[quiz.id] = student_ids
+        student_names = {student_id: User.query.get(student_id).first_name + " " + User.query.get(student_id).last_name for student_id in student_ids}
+        quiz_submissions[quiz.id] = student_names
         
     essay_submissions = {}
     for essay in essays:
         student_ids = [submission.student_id for submission in EssaySubmission.query.filter_by(essay_id=essay.id)]
         student_ids = list(set(student_ids))    # Unique Student Ids
-        essay_submissions[essay.id] = student_ids
+        student_names = {student_id: User.query.get(student_id).first_name + " " + User.query.get(student_id).last_name for student_id in student_ids}
+        essay_submissions[essay.id] = student_names
     
-    return render_template('course.html', course=course, quizzes=quizzes, essays=essays, quiz_submissions=quiz_submissions, essay_submissions=essay_submissions)
+    return render_template('course.html', course=course, teacher=teacher, quizzes=quizzes, essays=essays, quiz_submissions=quiz_submissions, essay_submissions=essay_submissions)
 
 # Page for Creating Assignment for a particular Course
 @views.route('/course/<int:course_id>/createAssignment', methods=['GET','POST'])

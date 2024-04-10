@@ -108,20 +108,23 @@
             <div class="info-box">
                 <p><strong>Course Description:</strong> {{ course.course_desc }}</p>
                 <p><strong>Course Limit:</strong> {{ course.course_limit }}</p>
+                <p><strong>Teacher Name:</strong> {{ teacher.first_name }} {{ teacher.last_name }}</p>
                 <p><strong>Teacher ID:</strong> {{ course.teacher_id }}</p>
             </div>
 
             <h3>Quizzes:</h3>
             <ul>
                 {% for quiz in quizzes %}
-                <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a></li>
+                <li><a href="{{ url_for('views.quiz_page', course_id=course.id, quiz_id=quiz.id) }}">{{ quiz.quiz_name
+                        }}</a></li>
                 {% endfor %}
             </ul>
 
             <h3>Essays:</h3>
             <ul>
                 {% for essay in essays %}
-                <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{ essay.essay_name }}</a></li>
+                <li><a href="{{ url_for('views.essay_page', course_id=course.id, essay_id=essay.id) }}">{{
+                        essay.essay_name }}</a></li>
                 {% endfor %}
             </ul>
 
@@ -131,11 +134,11 @@
             {% for quiz in quizzes %}
             <h4>Quiz: {{ quiz.quiz_name }}</h4>
             <ul>
-                {% for student_id in quiz_submissions[quiz.id] %}
+                {% for student_id, student_name in quiz_submissions[quiz.id].items() %}
                 <form method="POST"
                     action="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">
                     <li>
-                        Submitted by Student Id: {{ student_id }}
+                        Submission by: {{ student_name }}
                         <button type="submit">Grade Submission</button>
                     </li>
                 </form>
@@ -146,23 +149,24 @@
             {% for essay in essays %}
             <h4>Essay: {{ essay.essay_name }}</h4>
             <ul>
-                {% for student_id in essay_submissions[essay.id] %}
+                {% for student_id, student_name in essay_submissions[essay.id].items() %}
                 <form method="POST"
                     action="{{ url_for('views.grade_essay', course_id=course.id, essay_id=essay.id, student_id=student_id) }}">
                     <li>
-                        Submission of Student Id: {{ student_id }}
+                        Submission by: {{ student_name }}
                         <button type="submit">Grade Submission</button>
                     </li>
                 </form>
                 {% endfor %}
-    </ul>
-    {% endfor %}
-    {% endif %}
+            </ul>
+            {% endfor %}
+            {% endif %}
 
             <div class="discussion-grades">
                 <div class="card">
                     <h3>Discussions:</h3>
-                    <a href="{{ url_for('views.course_discussions', course_id=course.id) }}"><button>Open Discussions</button></a>
+                    <a href="{{ url_for('views.course_discussions', course_id=course.id) }}"><button>Open
+                            Discussions</button></a>
                 </div>
                 {% if current_user.user_type in ['student'] %}
                 <div class="card">
@@ -173,7 +177,8 @@
                 {% if current_user.user_type in ['teacher'] %}
                 <div class="card">
                     <h3>Create Assignment:</h3>
-                    <a href="{{ url_for('views.createAssignment', course_id=course.id) }}"><button>Create Assignment</button></a>
+                    <a href="{{ url_for('views.createAssignment', course_id=course.id) }}"><button>Create
+                            Assignment</button></a>
                 </div>
                 {% endif %}
             </div>

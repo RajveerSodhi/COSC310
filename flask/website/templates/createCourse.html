@@ -4,19 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width = device-width, initial-scale = 1.0">
-  <title>EduPool</title>
+  <title>Create Course</title>
   <link rel="stylesheet" href="../static/css/createCourse.css">
 </head>
 
 <body>
 
   <div class="form-container">
-    <h2>Create a Course</h2>
+    <h2>Create Course</h2>
     <form method="POST" , action="{{ url_for('views.createCourse') }}">
 
       <div class="form-group">
         <label for="course_code">Course Code</label>
-        <input type="text" id="course_code" name="course_code" min="100" required>
+        <input type="text" id="course_code" name="course_code" pattern="[A-Z]{4}\d{3}" required>
       </div>
 
       <div class="form-group">
@@ -35,11 +35,11 @@
       </div>
 
       <div class="form-group">
-        <label for="teacher_id">Teacher ID</label>
+        <label for="teacher_id">Teacher</label>
         <select id="teacher_id" name="teacher_id">
-            {% for teacher in teachers %}
-                <option value="{{ teacher.id }}">{{ teacher.id }}</option>
-            {% endfor %}
+          {% for teacher in teachers %}
+          <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+          {% endfor %}
         </select>
       </div>
 
