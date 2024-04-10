@@ -178,7 +178,12 @@
             <!-- Enrolled Courses Section -->
             {% if current_user.user_type not in ['admin'] %}
             <div class="section">
+                {% if current_user.user_type in ['student'] %}
                 <h2 class="section-title">Enrolled Courses:</h2>
+                {% endif %}
+                {% if current_user.user_type in ['teacher'] %}
+                <h2 class="section-title">Teaching Courses:</h2>
+                {% endif %}
                 <div class="section-content">
                     {% for course in enrolled_courses %}
                     <a href="{{ url_for('views.course_page', course_id=course.id) }}">
@@ -191,6 +196,23 @@
                 </div>
                 {% endif %}
             </div>
+
+            {% if current_user.user_type in ['admin'] %}
+            <!-- All Courses Section -->
+            <div class="section">
+                <h2 class="section-title">All Created Courses:</h2>
+                <div class="section-content">
+                    {% for course in all_courses %}
+                    <a href="{{ url_for('views.course_page', course_id=course.id) }}">
+                        <div class="card">
+                            <h3>{{ course.course_code }} : {{ course.course_name }}</h3>
+                            <p>{{ course.course_desc }}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
 
             <!-- Other Cards Section -->
             <div class="section">
