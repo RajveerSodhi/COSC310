@@ -164,22 +164,24 @@
     </div>
 
     <div class="requestContainer">
-      {% for request in requests %}
+      {% for req in requests %}
+      {% if req.status == 'pending' %}
       <div class="request">
-        <h3>Course Code : {{ request.course_code}}</h3>
-        <p>Student <strong>{{ request.first_name }} {{ request.last_name }}</strong> (ID: {{ request.user_id }}) has
+        <h3>Course Code : {{ req.course_code}}</h3>
+        <p>Student <strong>{{ req.first_name }} {{ req.last_name }}</strong> (ID: {{ req.user_id }}) has
           requested to enroll in this course</p>
         <form method="POST" action="{{ url_for('views.acceptRequest') }}" class="req-action-form">
-          <input type="hidden" name="course_id" value="{{ request.course_id }}">
-          <input type="hidden" name="user_id" value="{{ request.user_id }}">
+          <input type="hidden" name="course_id" value="{{ req.course_id }}">
+          <input type="hidden" name="user_id" value="{{ req.user_id }}">
           <input type="submit" class="acceptButton" value="Accept">
         </form>
         <form method="POST" action="{{ url_for('views.declineRequest') }}" class="req-action-form">
-          <input type="hidden" name="course_id" value="{{ request.course_id }}">
-          <input type="hidden" name="user_id" value="{{ request.user_id }}">
+          <input type="hidden" name="course_id" value="{{ req.course_id }}">
+          <input type="hidden" name="user_id" value="{{ req.user_id }}">
           <input type="submit" class="declineButton" value="Decline">
         </form>
       </div>
+      {% endif %}
       {% endfor %}
     </div>
   </div>
