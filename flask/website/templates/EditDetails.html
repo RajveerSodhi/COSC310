@@ -84,14 +84,21 @@
          <input type="date" id="dob" name="dob" placeholder="{{ current_user.dob }}"  >
          <br><br>
 
-        <!-- Password Field -->
-        <label for="password">New Password:</label>
-        <input type="password" id="password" name="password"  >
+         <!-- Password Field -->
+         <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}"
+                title="Password must contain at least one number, one uppercase letter, one lowercase letter, one special character, and at least 8 or more characters">
+          
+        </div>
 
         <!-- Confirm Password Field -->
-        <label for="confirmPassword">Confirm New Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" >
-
+        <div>
+            <label for="confirmPassword">Confirm New Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required
+                title="Must match the password entered above.">
+        </div>
         <!-- Submit Button -->
         <input type="submit" value="Save Changes" >
         <!-- Cancel Button -->
@@ -108,19 +115,18 @@
         }
        
         // Function to add constraint to DOB field
-        var dobField = document.getElementById("dob");
-        dob.setAttribute("max", "2013-01-01");
-        dobField.addEventListener("input", function() {
-            var selectedDate = new Date(this.value);
-            var cutoffDate = new Date("2013-01-01"); // January 1, 2013
+        var dob = document.getElementById("dob");
+        var selectedDate = new Date(this.value);
+        var cutoffDate = new Date();
+        cutoffDate.setFullYear(cutoffDate.getFullYear() - 17); // User must be at least 17 years old
+        dob.setAttribute("max", cutoffDate.toISOString().split("T")[0]);
+        dob.addEventListener("input", function () {
             if (selectedDate >= cutoffDate) {
-                alert("Please select a date before January 1, 2013.");
-                this.value = ""; // Reset the value
+                dob.setCustomValidity("You must be at least 17 years old.");
+            } else {
+                dob.setCustomValidity("");
             }
         });
-        // Call the function to set the initial constraint
-        dobField.dispatchEvent(new Event('input'));
-        
         // Additional JavaScript for password validation if needed
         document.getElementById("editUserDetailsForm").onsubmit = function() {
             // Validate password and confirm password

@@ -1,114 +1,114 @@
 /* Reset default margin and padding */
-html,
-body {
+html, body {
     margin: 0;
+    margin-left: 90px;
     padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5; /* Neutral background color */
 }
 
-/* Apply background color */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+/* Main content styling */
+.main-content {
+    max-width: 800px;
+    margin: auto;
     padding: 20px;
+    background-color: #FFF;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex; /* Using flex to center child elements vertically and horizontally */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    text-align: center; /* Center text */
 }
 
 /* Style header */
 header {
-    background-color: #007bff;
-    color: #ffffff;
+    width: 100%; /* Full width */
+    background-color: #f9f9f9; /* Neutral header color */
+    color: #333; /* Dark text for readability */
     padding: 10px 20px;
-    text-align: left;
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 8px;
 }
 
-/* Apply margin to headings */
-h1, h2, h3, h4 {
-    margin-top: 20px;
+/* Navigation links */
+nav a {
+    color: #333333; /* Dark color for text */
+    text-decoration: none;
+    padding: 10px 15px;
 }
 
-/* Style main content */
-main {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px;
-}
-
-/* Style add comment button */
-#add-comment-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    transition: background-color 0.3s;
-    border-radius: 8px; /* Rounded corners */
-}
-
-#add-comment-button:hover {
-    background-color: #0056b3;
-}
-
-/* Style comment box */
-#comment-box {
-    display: none;
-    margin-bottom: 20px;
-    border-radius: 8px; /* Rounded corners */
-}
-
-/* Style form */
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Style textarea */
-textarea {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px; /* Rounded corners */
-}
-
-/* Style submit button */
-button[type="submit"] {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    border-radius: 8px; /* Rounded corners */
-}
-
-button[type="submit"]:hover {
-    background-color: #218838;
-}
-
-/* Style comment container */
-.comment-container {
+/* Style section */
+section {
+    width: 100%; /* Full width */
     background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
     padding: 20px;
-    width: 100%;
-    max-width: 600px;
-    margin-bottom: 20px;
-}
-
-/* Style individual comment */
-.comment {
-    margin-bottom: 20px;
-}
-
-/* Style reply container */
-.reply {
-    padding: 10px;
-    border: 1px solid #ccc;
+    margin-top: 20px;
     border-radius: 8px;
-    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style form inputs */
+input[type="text"], textarea {
+    width: 80%; /* Adjust width as needed for alignment */
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+/* Style buttons */
+button {
+    padding: 10px 20px;
+    background-color:#007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #042998;
+}
+
+/* Style discussion cards */
+.discussion {
+    width: 100%; /* Full width */
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+/* Apply margin to headings for spacing and alignment */
+h1, h2, h3, h4 {
+    margin: 20px 0;
+}
+
+/* Footer styling */
+footer {
+    width: 100%; /* Full width */
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-top: 1px solid #e4e4e4;
+}
+
+/* Adjust form and discussion list for better visual hierarchy */
+#post-discussion, #discussions article {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 768px) {
+    .main-content, header, section {
+        padding: 15px;
+    }
+
+    input[type="text"], textarea, button {
+        padding: 8px;
+    }
 }

@@ -26,7 +26,7 @@ def account_details():
 @views.route('/editDetails', methods=['GET', 'POST'])
 @login_required
 def edit_details():
-     if request.method == 'POST':
+    if request.method == 'POST':
         # Retrieve the updated details from the form
         user = User.query.filter_by(username=current_user.username).first()      
         if user:
@@ -45,7 +45,7 @@ def edit_details():
             if new_last_name is not None and new_last_name != "":
                 user.last_name = new_last_name
             else:
-               user.last_name = current_user.last_name
+                user.last_name = current_user.last_name
 
             new_dob = request.form.get('dob')
             if new_dob is not None and new_dob != "":
@@ -59,7 +59,7 @@ def edit_details():
             flash("User not found!", category="error")
             return redirect(url_for('views.edit_details'))
     
-     return render_template("EditDetails.html", user=current_user)
+    return render_template("EditDetails.html", user=current_user)
 
 # Page for Creating a New Course - Admin
 @views.route('/create-course', methods=['GET','POST'])
@@ -89,7 +89,7 @@ def createRequest():
     if request.method == 'POST':
         user_id = request.form.get('user_id')
         course_id = request.form.get('course_id')
-        new_request = Request(user_id=user_id, course_id=course_id)
+        new_request = Request(user_id=user_id, course_id=course_id, status='pending')
         db.session.add(new_request)
         db.session.commit()
     return redirect(url_for('views.display_courses'))
@@ -104,7 +104,9 @@ def display_courses():
     enrolled_course_ids = [e.course_id for e in enrolled_course_ids]
 
     courses = Course.query.filter(Course.id.notin_(requested_course_ids + enrolled_course_ids)).all()
-    return render_template('enrollCourse.html', user=current_user, courses=courses)
+    rejected = Course.query.join(Request).filter(Request.course_id == Course.id, Request.user_id == current_user.id, Request.status == "declined").all()
+
+    return render_template('enrollCourse.html', user=current_user, courses=courses, rejected=rejected)
 
 # Page for Accepting Student Request - Admin
 @views.route('/requests')
@@ -119,12 +121,11 @@ def acceptRequest():
         user_id = request.form.get('user_id')
         course_id = request.form.get('course_id')
         new_enrolment = Enrollment(user_id=user_id, course_id=course_id)
-        if new_enrolment:
-            db.session.add(new_enrolment)
-            db.session.commit()
-            request_to_delete = Request.query.filter_by(user_id=user_id, course_id=course_id).first()
-            db.session.delete(request_to_delete)
-            db.session.commit()
+        db.session.add(new_enrolment)
+        db.session.commit()
+        request_approved = Request.query.filter_by(user_id=user_id, course_id=course_id, status='pending').first()
+        request_approved.status = "approved"
+        db.session.commit()
         
     return redirect(url_for('views.display_requests'))
 
@@ -134,10 +135,9 @@ def declineRequest():
     if request.method == 'POST':
         user_id = request.form.get('user_id')
         course_id = request.form.get('course_id')
-        request_to_delete = Request.query.filter_by(user_id=user_id, course_id=course_id).first()
-        if request_to_delete:
-            db.session.delete(request_to_delete)
-            db.session.commit()
+        request_declined = Request.query.filter_by(user_id=user_id, course_id=course_id, status='pending').first()
+        request_declined.status = "declined"
+        db.session.commit()
     return redirect(url_for('views.display_requests'))
 
 # Individual Course Page
@@ -295,7 +295,7 @@ def grade_page(course_id):
             total_grade = sum(submission.given_grade for submission in quiz_submissions if submission.given_grade is not None)
         else:
             total_grade = "N/A"
-    quiz_grades[quiz.id] = total_grade
+        quiz_grades[quiz.id] = total_grade
         
     # Retrieve essay grades for the current student
     student_id = current_user.id
@@ -324,8 +324,9 @@ def course_discussions(course_id):
 @login_required
 def discussion_detail(discussion_id):
     discussion = Discussion.query.get_or_404(discussion_id)
+    discussion_author = User.query.get(discussion.user_id).username
     replies = db.session.query(Reply, User.username).join(User, User.id == Reply.user_id).filter(Reply.discussion_id == discussion_id).all()
-    return render_template('discussion_detail.html', discussion=discussion, replies=replies)
+    return render_template('discussion_detail.html', discussion=discussion, discussion_author=discussion_author, replies=replies)
 
 #add a new discussion
 @views.route('/course/<int:course_id>/discussions/add', methods=['GET', 'POST'])
@@ -402,7 +403,10 @@ def grade_essay(course_id, essay_id, student_id):
     essay_question = EssayQuestion.query.filter_by(essay_id=essay_id).first()
     essay_submission = EssaySubmission.query.filter_by(essay_id=essay_id, student_id=student_id).first()
 
-    # adding question text/file and max grade to the submission
+    # Initialize variables to ensure they have a default value
+    question_data_uri = None
+    answer_data_uri = None
+
     essay_submission.max_grade = essay_question.max_grade if essay_question.max_grade is not None else 100
 
     if essay_question.question_type == 'text':
@@ -412,13 +416,12 @@ def grade_essay(course_id, essay_id, student_id):
         base64_file = base64.b64encode(essay_question.file_upload).decode('utf-8')
         question_data_uri = f'data:{mime_type};base64,{base64_file}'
 
-    # adding support for displaying submission file uploads
-    if essay_submission.answer_file and essay_submission.answer_type == 'file':
+    if essay_submission.answer_type == 'file' and essay_submission.answer_file:
         mime_type = magic.from_buffer(essay_submission.answer_file, mime=True)
         base64_file = base64.b64encode(essay_submission.answer_file).decode('utf-8')
-        essay_submission.answer_data_uri = f'data:{mime_type};base64,{base64_file}'
+        answer_data_uri = f'data:{mime_type};base64,{base64_file}'
     else:
-        essay_submission.answer_text = essay_submission.answer_text
+        essay_submission.answer_text = essay_submission.answer_text if essay_submission.answer_text else ''
 
     if request.method == 'POST':
         grade_str = request.form.get('essay-grade')
@@ -432,7 +435,7 @@ def grade_essay(course_id, essay_id, student_id):
             db.session.commit()
             return redirect(url_for('views.course_page', course_id=course_id))
 
-    return render_template('gradeEssay.html', course_id=course_id, essay=essay, question=essay_question, student=student, question_data_uri=question_data_uri, submission=essay_submission)
+    return render_template('gradeEssay.html', course_id=course_id, essay=essay, question=essay_question, student=student, question_data_uri=question_data_uri, submission=essay_submission, answer_data_uri=answer_data_uri)
 
 # Instantiate a DB with dummy records whenever an instance is deleted.
 @views.route('/instantiate-db')
