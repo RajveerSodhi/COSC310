@@ -18,9 +18,9 @@ def login():
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
             else:
-                print("Incorrect password, please try again.")
+                flash("Incorrect password, please try again.", category="pass_error")
         else:
-            print("Username does not exist!")
+            flash("Username does not exist!", category="username_error")
 
     return render_template("login.html", user=current_user)
 
