@@ -190,7 +190,7 @@ class AdminTestCase(unittest.TestCase):
 
         # Query the database to check if the assignment has been posted under quizzes section
         # Assuming you have a model named Assignment and the assignment appears under quizzes section
-        posted_assignment = Assignment.query.filter_by(assignment_type='quiz', title='Sample Assignment Title').first()
+        posted_assignment = Quiz.query.filter_by(assignment_type='quiz', title='Sample Assignment Title').first()
         self.assertIsNotNone(posted_assignment, "Assignment should be posted under quizzes section")
 
     def test_create_assignment_essay(self):
