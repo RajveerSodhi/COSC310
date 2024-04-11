@@ -1,3 +1,4 @@
+import math
 from flask_login import login_required, current_user
 from flask import Blueprint, flash, jsonify, render_template, request, redirect, url_for
 import magic
@@ -308,9 +309,13 @@ def grade_page(course_id):
     student_id = current_user.id
     quiz_grades = {}
     for quiz in quizzes:
+        quiz_questions = QuizQuestion.query.filter_by(quiz_id=quiz.id).all()
+        quiz_max_grade = sum(question.max_grade if question.max_grade is not None else 1 for question in quiz_questions)
+
         quiz_submissions = QuizSubmission.query.filter_by(quiz_id=quiz.id, student_id=student_id).all()
         if quiz_submissions and any(submission.given_grade is not None for submission in quiz_submissions):
             total_grade = sum(submission.given_grade for submission in quiz_submissions if submission.given_grade is not None)
+            total_grade =str(round((total_grade / quiz_max_grade * 100), 2))+"%"
         else:
             total_grade = "N/A"
         quiz_grades[quiz.id] = total_grade
@@ -319,9 +324,12 @@ def grade_page(course_id):
     student_id = current_user.id
     essay_grades = {}
     for essay in essays:
+        essay_question = EssayQuestion.query.filter_by(essay_id=essay.id).first()
+        essay_max_grade = essay_question.max_grade if essay_question.max_grade is not None else 100
         essay_submissions = EssaySubmission.query.filter_by(essay_id=essay.id, student_id=student_id).all()
         if essay_submissions and any(submission.given_grade is not None for submission in essay_submissions):
             total_grade = sum(submission.given_grade for submission in essay_submissions if submission.given_grade is not None)
+            total_grade =str(round((total_grade / essay_max_grade * 100), 2))+"%"
         else:
             total_grade = "N/A"
         essay_grades[essay.id] = total_grade

@@ -26,13 +26,13 @@
           <p class="question-text">{{ loop.index }}. {{ question.question_text }}</p>
           <div class="options">
             <label class="option">
-              <input type="radio" name="{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}
+              <input type="radio" required name="{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}
             </label>
             <label class="option">
-              <input type="radio" name="{{ question.id }}" value="{{ question.option2 }}">{{ question.option2 }}
+              <input type="radio" required name="{{ question.id }}" value="{{ question.option2 }}">{{ question.option2 }}
             </label>
             <label class="option">
-              <input type="radio" name="{{ question.id }}" value="{{ question.option3 }}">{{ question.option3 }}
+              <input type="radio" required name="{{ question.id }}" value="{{ question.option3 }}">{{ question.option3 }}
             </label>
           </div>
         </div>
