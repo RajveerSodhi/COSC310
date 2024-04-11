@@ -144,6 +144,7 @@
                 {% for quiz in quizzes %}
                 <h4>Quiz: {{ quiz.quiz_name }}</h4>
                 <ul>
+                    {% if quiz_submissions[quiz.id] %}
                     {% for student_id, student_name in quiz_submissions[quiz.id].items() %}
                     <form method="POST"
                         action="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">
@@ -153,6 +154,9 @@
                         </li>
                     </form>
                     {% endfor %}
+                    {% else %}
+                    <li>No submissions to grade</li>
+                    {% endif %}
                 </ul>
                 {% endfor %}
             </div>
@@ -172,7 +176,7 @@
                     </form>
                     {% endfor %}
                     {% else %}
-                    <li>No students have submitted yet</li>
+                    <li>No submissions to grade</li>
                     {% endif %}
                 </ul>
                 {% endfor %}
