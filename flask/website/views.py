@@ -257,16 +257,28 @@ def submit_quiz():
     quiz_id = request.form.get('quiz_id')
     student_id = current_user.id
     course_id = request.form.get('course_id')
-    answers = {}
-    for question_id in request.form:
-        if question_id != 'quiz_id':
-            answers[question_id] = request.form[question_id]
-    for question_id, selected_option in answers.items():
-        submission = QuizSubmission(selected_option=selected_option, quiz_id=quiz_id, quizQuestion_id=question_id, student_id=student_id)
-        db.session.add(submission)
+    # Retrieve all question ids for the quiz to validate incoming data
+    question_ids = [question.id for question in QuizQuestion.query.filter_by(quiz_id=quiz_id).all()]
+    
+    for key in request.form:
+        if key not in ['quiz_id', 'course_id'] and key.isdigit() and int(key) in question_ids:
+            selected_option = request.form[key]
+            # Check if a submission already exists to avoid duplicates
+            existing_submission = QuizSubmission.query.filter_by(
+                quiz_id=quiz_id,
+                student_id=student_id,
+                quizQuestion_id=key
+            ).first()
+            if not existing_submission:
+                submission = QuizSubmission(
+                    selected_option=selected_option,
+                    quiz_id=quiz_id,
+                    quizQuestion_id=key,
+                    student_id=student_id
+                )
+                db.session.add(submission)
 
     db.session.commit()
-
     return redirect(url_for('views.course_page', course_id=course_id))
 
 # Individual Essay Page
@@ -421,7 +433,8 @@ def grade_quiz(course_id, quiz_id, student_id):
                 grade = None
             if grade is None or not (0 <= grade <= submission.max_grade):
                 all_grades_valid = False
-            if all_grades_valid:
+                break
+            else:
                 submission.given_grade = grade
         if all_grades_valid:
             db.session.commit()
