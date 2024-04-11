@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Course</title>
   <link rel="stylesheet" href="../static/css/createCourse.css">
 </head>
-
 <body>
   {% include 'sidebar.html' %}
   <div class="form-container">
     <h2>Create Course</h2>
-    <form method="POST" , action="{{ url_for('views.createCourse') }}">
+    <form method="POST" action="{{ url_for('views.createCourse') }}" onsubmit="return validateCourseCode();">
 
       <div class="form-group">
         <label for="course_code">Course Code</label>
-        <input type="text" id="course_code" name="course_code" pattern="[A-Z]{4}\d{3}" required>
+        <input type="text" id="course_code" name="course_code" required>
       </div>
 
       <div class="form-group">
@@ -51,24 +49,16 @@
     </form>
   </div>
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-  {% for category, message in messages %}
-  {% if category == 'error' %}
   <script>
-    alert("{{ message }}");
-  </script>
-  {% endif %}
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
-
-  <script>
-    function cancelCourseCreation() {
-      window.location.href = "/home";
+    function validateCourseCode() {
+      var courseCode = document.getElementById('course_code').value;
+      var regex = /^[A-Z]{4}\d{3}$/;
+      if (!regex.test(courseCode)) {
+        alert('Invalid Course Code. The correct format is four uppercase letters followed by three digits (e.g., ABCD123).');
+        return false;
+      }
+      return true;
     }
   </script>
-
 </body>
-
 </html>
