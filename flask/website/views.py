@@ -65,19 +65,27 @@ def edit_details():
 @views.route('/create-course', methods=['GET','POST'])
 def createCourse():
     if request.method == 'POST':
+
         course_name = request.form.get('course_name')
         course_desc = request.form.get('course_desc')
         course_limit = request.form.get('course_limit')
         course_code = request.form.get('course_code')
         teacher_id = request.form.get('teacher_id')
-        new_course = Course(course_code=course_code, course_name=course_name, course_desc=course_desc, course_limit=course_limit, teacher_id=teacher_id)
-        db.session.add(new_course)
-        db.session.commit()
-        # Creating the new enrollment for the teacher with the given course id
-        teacher_enrollment = Enrollment(user_id=teacher_id,course_id=new_course.id)
-        db.session.add(teacher_enrollment)
-        db.session.commit()
-        return redirect(url_for('views.home'))
+
+        # Check if a course with this code already exists
+        existing_course = Course.query.filter_by(course_code=course_code).first()
+        if existing_course:
+            flash('A course with this code already exists.', category='error')
+            return redirect(url_for('views.createCourse'))
+        else:
+            new_course = Course(course_code=course_code, course_name=course_name, course_desc=course_desc, course_limit=course_limit, teacher_id=teacher_id)
+            db.session.add(new_course)
+            db.session.commit()
+            # Creating the new enrollment for the teacher with the given course id
+            teacher_enrollment = Enrollment(user_id=teacher_id,course_id=new_course.id)
+            db.session.add(teacher_enrollment)
+            db.session.commit()
+            return redirect(url_for('views.home'))
     
     teachers = User.query.filter_by(user_type='teacher').all()
         
@@ -243,11 +251,6 @@ def submit_quiz():
     for question_id in request.form:
         if question_id != 'quiz_id':
             answers[question_id] = request.form[question_id]
-        
-    # print(quiz_id)
-    # print(student_id)
-    # print(answers)
-    
     for question_id, selected_option in answers.items():
         submission = QuizSubmission(selected_option=selected_option, quiz_id=quiz_id, quizQuestion_id=question_id, student_id=student_id)
         db.session.add(submission)
