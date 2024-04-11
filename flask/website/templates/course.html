@@ -60,7 +60,7 @@
         }
 
         button:active {
-            background-color: #004f9b;
+            background-color: #003c9b;
         }
 
         .container {
@@ -106,6 +106,26 @@
         .sub-assignments {
             margin-left: 20px;
         }
+
+        .sub-assignments a {
+            color: #FFF;
+            background-color: #007bff;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .sub-assignments a:hover {
+            background-color: #0056b3;
+        }
+
+        .sub-assignments a:active {
+            background-color: #003c9b;
+        }
     </style>
 </head>
 
@@ -142,20 +162,22 @@
 
             <div class="sub-assignments">
                 {% for quiz in quizzes %}
-    <h4>Quiz: {{ quiz.quiz_name }}</h4>
-    <ul>
-        {% for student_id, info in quiz_submissions[quiz.id].items() %}
-            <li>
-                Submission by: {{ info.student_name }}
-                {% if not info.graded %}
-                    <a href="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">Grade Submission</a>
-                {% else %}
-                    <span>Already Graded</span>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-{% endfor %}
+                <h4>Quiz: {{ quiz.quiz_name }}</h4>
+                <ul>
+                    {% for student_id, info in quiz_submissions[quiz.id].items() %}
+                    <li>
+                        Submission by: {{ info.student_name }}
+                        {% if not info.graded %}
+                        <a
+                            href="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">Grade
+                            Quiz</a>
+                        {% else %}
+                        <span>Already Graded</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
             </div>
 
             <div class="sub-assignments">
@@ -166,15 +188,17 @@
                     <li>
                         Submission by: {{ info.student_name }}
                         {% if not info.graded %}
-                            <a href="{{ url_for('views.grade_essay', course_id=course.id, essay_id=essay.id, student_id=student_id) }}">Grade Submission</a>
+                        <a
+                            href="{{ url_for('views.grade_essay', course_id=course.id, essay_id=essay.id, student_id=student_id) }}">Grade
+                            Essay</a>
                         {% else %}
-                            <span>Already Graded</span>
+                        <span>Already Graded</span>
                         {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
                 {% endfor %}
-            </div>            
+            </div>
             {% endif %}
 
             <div class="discussion-grades">
