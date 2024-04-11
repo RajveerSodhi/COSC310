@@ -51,11 +51,22 @@
     </form>
   </div>
 
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  {% if category == 'error' %}
+  <script>
+    alert("{{ message }}");
+  </script>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
   <script>
     function cancelCourseCreation() {
       window.location.href = "/home";
     }
-
   </script>
 
 </body>
