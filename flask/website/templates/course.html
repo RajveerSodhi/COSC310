@@ -48,14 +48,19 @@
             background-color: #007bff;
             color: #fff;
             border: none;
-            padding: 5px 10px;
+            padding: 12px 15px;
             border-radius: 5px;
+            font-size: 1.1em;
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
         button:hover {
             background-color: #0056b3;
+        }
+
+        button:active {
+            background-color: #004f9b;
         }
 
         .container {
@@ -137,41 +142,39 @@
 
             <div class="sub-assignments">
                 {% for quiz in quizzes %}
-                <h4>Quiz: {{ quiz.quiz_name }}</h4>
-                <ul>
-                    {% for student_id in quiz_submissions[quiz.id] %}
-                    <form method="POST"
-                        action="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">
-                        <li>
-                            Submitted by Student Id: {{ student_id }}
-                            <button type="submit">Grade Submission</button>
-                        </li>
-                    </form>
-                    {% endfor %}
-                </ul>
-                {% endfor %}
+    <h4>Quiz: {{ quiz.quiz_name }}</h4>
+    <ul>
+        {% for student_id, info in quiz_submissions[quiz.id].items() %}
+            <li>
+                Submission by: {{ info.student_name }}
+                {% if not info.graded %}
+                    <a href="{{ url_for('views.grade_quiz', course_id=course.id, quiz_id=quiz.id, student_id=student_id) }}">Grade Submission</a>
+                {% else %}
+                    <span>Already Graded</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
             </div>
 
             <div class="sub-assignments">
                 {% for essay in essays %}
                 <h4>Essay: {{ essay.essay_name }}</h4>
                 <ul>
-                    {% if essay_submissions[essay.id] %}
-                        {% for student_id in essay_submissions[essay.id] %}
-                        <form method="POST"
-                            action="{{ url_for('views.grade_essay', course_id=course.id, essay_id=essay.id, student_id=student_id) }}">
-                            <li>
-                                Submission of Student Id: {{ student_id }}
-                                <button type="submit">Grade Submission</button>
-                            </li>
-                        </form>
-                        {% endfor %}
+                    {% for student_id, info in essay_submissions[essay.id].items() %}
+                    <li>
+                        Submission by: {{ info.student_name }}
+                        {% if not info.graded %}
+                            <a href="{{ url_for('views.grade_essay', course_id=course.id, essay_id=essay.id, student_id=student_id) }}">Grade Submission</a>
                         {% else %}
-                        <li>No students have submitted yet</li>
-                    {% endif %}
+                            <span>Already Graded</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
                 </ul>
                 {% endfor %}
-            </div>
+            </div>            
             {% endif %}
 
             <div class="discussion-grades">
