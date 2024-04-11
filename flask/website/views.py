@@ -233,12 +233,12 @@ def createAssignment(course_id):
 
 # Individual Quiz Page
 @views.route('/course/<int:course_id>/quiz/<int:quiz_id>',methods=['GET'])
-def quiz_page(course_id, quiz_id):      
+def quiz_page(course_id, quiz_id):
     quiz = Quiz.query.filter_by(id=quiz_id, course_id=course_id).first()
     questions = QuizQuestion.query.filter_by(quiz_id=quiz_id).all()
     
     # Check if the current user has already submitted the quiz
-    already_submitted = QuizSubmission.query.filter_by(quiz_id=quiz_id, student_id=current_user.id).first()  
+    already_submitted = QuizSubmission.query.filter_by(quiz_id=quiz_id, student_id=current_user.id).first()
     
     return render_template('quiz.html', course_id=course_id, questions=questions, quiz=quiz, already_submitted=already_submitted)
 
@@ -247,6 +247,7 @@ def quiz_page(course_id, quiz_id):
 def submit_quiz():
     quiz_id = request.form.get('quiz_id')
     student_id = current_user.id
+    course_id = request.form.get('course_id')
     answers = {}
     for question_id in request.form:
         if question_id != 'quiz_id':
@@ -256,8 +257,8 @@ def submit_quiz():
         db.session.add(submission)
 
     db.session.commit()
-    
-    return redirect(url_for('views.home'))
+
+    return redirect(url_for('views.course_page', course_id=course_id))
 
 # Individual Essay Page
 @views.route('/course/<int:course_id>/essay/<int:essay_id>', methods=['GET'])
@@ -279,6 +280,7 @@ def essay_page(course_id, essay_id):
 def submit_essay():
     essay_id = request.form.get('essay_id')
     student_id = request.form.get('student_id')
+    course_id = request.form.get('course_id')
 
     # Text Answer
     for key, value in request.form.items():
@@ -299,7 +301,7 @@ def submit_essay():
                 db.session.add(new_submission) 
 
     db.session.commit()
-    return redirect(url_for('views.home'))
+    return redirect(url_for('views.course_page', course_id=course_id))
 
 # View Grade Page - Student View
 @views.route('/course/<int:course_id>/view-grade',methods=['GET'])
