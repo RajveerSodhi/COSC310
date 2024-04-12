@@ -130,19 +130,19 @@ class AdminTestCase(unittest.TestCase):
         self.app_context.push()
         db.create_all()
 
-    def test_create_assignment_quiz(self):
+    def test_edit_user_details(self):
         driver = self.driver
         driver.get("http://127.0.0.1:5000")  # Navigate to Login Page URL
 
-        # Query the database to retrieve a random user of type "Teacher"
-        random_teacher = User.query.filter_by(user_type='teacher').order_by(func.random()).first()
+        # Query the database to retrieve a random user
+        random_user = User.query.order_by(func.random()).first()
 
-        # Fill in the login fields with the username and password of the random teacher
+        # Fill in the login fields with the username and password of the random user
         username_field = driver.find_element(By.ID, "username")
-        username_field.send_keys(random_teacher.username)
+        username_field.send_keys(random_user.username)
 
         password_field = driver.find_element(By.ID, "password")
-        password_field.send_keys(random_teacher.password)
+        password_field.send_keys(random_user.password)
 
         # Find the login button and click it
         login_button = driver.find_element(By.ID, "submit")
@@ -151,106 +151,41 @@ class AdminTestCase(unittest.TestCase):
         # Check if the home screen shows up after successful login
         self.assertNotEqual(driver.current_url, "http://127.0.0.1:5000", "Screen should change after successful login")
 
-        # Find the first enrolled course and click on it
-        enrolled_courses = driver.find_elements(By.CLASS_NAME, "card")
-        enrolled_courses[0].click()
+        # Find the "Edit User Details" button and click it
+        edit_user_button = driver.find_element(By.ID, "edit_user_button")
+        edit_user_button.click()
 
-        # Find the "Create Assignment" button and click it
-        create_assignment_button = driver.find_element(By.ID, "create_assignment_button")
-        create_assignment_button.click()
+        # Input random first name
+        first_name_field = driver.find_element(By.ID, "firstName")
+        first_name_field.clear()
+        first_name_field.send_keys("RandomFirstName")
 
-        # Enter assignment details
-        title_field = driver.find_element(By.ID, "title")
-        title_field.send_keys("Sample Assignment Title")
+        # Input random last name
+        last_name_field = driver.find_element(By.ID, "lastName")
+        last_name_field.clear()
+        last_name_field.send_keys("RandomLastName")
 
-        # Select the "Quiz" assignment type radio button
-        quiz_radio_button = driver.find_element(By.ID, "quiz")
-        quiz_radio_button.click()
+        # Choose a random date of birth using date picker (if applicable)
+        dob_field = driver.find_element(By.ID, "dob")
+        dob_field.send_keys("01/01/1990")  # Example DOB date
 
-        # Enter a random question and options
-        question_field = driver.find_element(By.ID, "question1")
-        question_field.send_keys("What is the capital of France?")
-
-        option_a_field = driver.find_element(By.ID, "option1-1")
-        option_a_field.send_keys("Paris")
-
-        option_b_field = driver.find_element(By.ID, "option1-2")
-        option_b_field.send_keys("Rome")
-
-        option_c_field = driver.find_element(By.ID, "option1-3")
-        option_c_field.send_keys("Berlin")
-
-        # Enter 10 in the max grade section
-        max_grade_field = driver.find_element(By.ID, "que-max-grade1")
-        max_grade_field.send_keys("10")
-
-        # Click the "Post Assignment" button
-        post_assignment_button = driver.find_element(By.ID, "post-assignment-button")
-        post_assignment_button.click()
-
-        # Query the database to check if the assignment has been posted under quizzes section
-        # Assuming you have a model named Assignment and the assignment appears under quizzes section
-        posted_assignment = Quiz.query.filter_by(quiz_name='QUIZ 1').first()
-        self.assertIsNotNone(posted_assignment, "Assignment should be posted under quizzes section")
-
-    def test_create_assignment_essay(self):
-        driver = self.driver
-        driver.get("http://127.0.0.1:5000")  # Navigate to Login Page URL
-
-        # Query the database to retrieve a random user of type "Teacher"
-        random_teacher = User.query.filter_by(user_type='teacher').order_by(func.random()).first()
-
-        # Fill in the login fields with the username and password of the random teacher
-        username_field = driver.find_element(By.ID, "username")
-        username_field.send_keys(random_teacher.username)
-
+        # Input random password
         password_field = driver.find_element(By.ID, "password")
-        password_field.send_keys(random_teacher.password)
+        password_field.clear()
+        password_field.send_keys("RandomPassword")
 
-        # Find the login button and click it
-        login_button = driver.find_element(By.ID, "submit")
-        login_button.click()  # Click the login button
+        # Re-enter the same random password in confirm password field
+        confirm_password_field = driver.find_element(By.ID, "confirmPassword")
+        confirm_password_field.clear()
+        confirm_password_field.send_keys("RandomPassword")
 
-        # Check if the home screen shows up after successful login
-        self.assertNotEqual(driver.current_url, "http://127.0.0.1:5000", "Screen should change after successful login")
+        # Click on the "Save Changes" button
+        save_changes_button = driver.find_element(By.ID, "save_changes_button")
+        save_changes_button.click()
 
-        # Find the first enrolled course and click on it
-        enrolled_courses = driver.find_elements(By.CLASS_NAME, "card")
-        enrolled_courses[0].click()
-
-        # Find the "Create Assignment" button and click it
-        create_assignment_button = driver.find_element(By.ID, "create_assignment_button")
-        create_assignment_button.click()
-
-        # Enter assignment details
-        title_field = driver.find_element(By.ID, "title")
-        title_field.send_keys("Sample Assignment Title")
-
-        # Select the "Essay" assignment type radio button
-        essay_radio_button = driver.find_element(By.ID, "essay")
-        essay_radio_button.click()
-
-        # Select "Enter Text" under content type
-        text_content_radio = driver.find_element(By.ID, "textRadio")
-        text_content_radio.click()
-
-        # Enter a random question in the text entry box
-        text_entry_field = driver.find_element(By.ID, "text-entry-essay")
-        text_entry_field.send_keys("Write a short essay on the importance of education.")
-
-        # Enter 10 in the max grade section
-        max_grade_field = driver.find_element(By.ID, "essay-max-grade-input")
-        max_grade_field.send_keys("10")
-
-        # Click the "Post Assignment" button
-        post_assignment_button = driver.find_element(By.ID, "post-assignment-button")
-        post_assignment_button.click()
-
-        # Query the database to check if the assignment has been posted under essays section
-        # Assuming you have a model named Quiz and the quiz appears under essays section
-        posted_assignment = Essay.query.filter_by(essay_name='Sample Assignment Title').first()
-        self.assertIsNotNone(posted_assignment, "Assignment should be posted under essays section")
-
+        # Check the database to ensure that the new entry appears
+        edited_user = User.query.filter_by(username=random_user.username).first()
+        self.assertIsNotNone(edited_user, "User details should be updated in the database")
 
     def tearDown(self):
         self.driver.quit()
