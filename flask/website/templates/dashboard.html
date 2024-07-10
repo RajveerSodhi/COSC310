@@ -58,37 +58,27 @@
                 <h2>Other Options</h2>
                 <div class="section-content">
                     <a href="{{ url_for('views.account_details') }}">
-                        <div class="card">
-                            <h3>Your Account Details</h3>
-                        </div>
+                        <h3 class="card options">Your Account Details</h3>
                     </a>
                     {% if current_user.user_type in ['student'] %}
                     <a href="{{ url_for('views.display_courses') }}">
-                        <div class="card">
-                            <h3 id="enroll_course_link">Enroll in a New Course</h3>
-                        </div>
+                        <h3 id="enroll_course_link" class="card options">Enroll in a New Course</h3>
                     </a>
                     {% endif %}
                     {% if current_user.user_type in ['admin'] %}
                     <a href="{{ url_for('views.createCourse') }}">
-                        <div class="card">
-                            <h3 id="create_course_link">Create a New Course</h3>
-                        </div>
+                        <h3 id="create_course_link" class="card options">Create a New Course</h3>
                     </a>
                     {% endif %}
 
                     {% if current_user.user_type in ['admin'] %}
                     <a href="{{ url_for('views.display_requests') }}">
-                        <div class="card">
-                            <h3>Accept and Decline Student Enrollment Requests For Courses</h3>
-                        </div>
+                        <h3 class="card options">Manage Student Enrollment Requests</h3>
                     </a>
                     {% endif %}
 
                     <a href="{{ url_for('views.edit_details') }}">
-                        <div class="card">
-                            <h3>Edit User Details</h3>
-                        </div>
+                        <h3 class="card options">Account Settings</h3>
                     </a>
                 </div>
             </section>

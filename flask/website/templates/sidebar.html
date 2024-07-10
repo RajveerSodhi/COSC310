@@ -13,10 +13,10 @@
             <img src="../static/blacklogo.svg" alt="logo">
         </a>
         <ul>
-            <li><a href="{{ url_for('views.home') }}">Dashboard</a></li>
-            <li><a href="{{ url_for('views.account_details') }}">My Profile</a></li>
-            <li><a href="{{ url_for('views.edit_details') }}">Settings</a></li>
-            <li><a href="{{ url_for('auth.logout') }}" id="logout">Logout</a></li>
+            <a href="{{ url_for('views.home') }}"><li>Dashboard</li></a>
+            <a href="{{ url_for('views.account_details') }}"><li>My Profile</li></a>
+            <a href="{{ url_for('views.edit_details') }}"><li>Settings</li></a>
+            <a href="{{ url_for('auth.logout') }}" id="logout"><li>Logout</li></a>
         </ul>
     </div>
 </body>

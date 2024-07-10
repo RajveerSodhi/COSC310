@@ -1,5 +1,5 @@
 .card {
-    width: 34rem;
+    width: 46rem;
 }
 
 form {
@@ -13,6 +13,7 @@ form {
 label {
     display: block;
     margin: 0.5rem 0;
+    margin-top: 1rem;
     color: #333;
 }
 
@@ -22,25 +23,39 @@ input {
     width: 100%;
     border-radius: 2rem;
     margin: 0.5rem 0;
-    font-size: 1rem;
 }
 
 input[type="submit"] {
     background-color: #4CAF50;
     color: white;
     cursor: pointer;
+    margin-top: 3rem;
+    width: 80%;
+    font-size: 1.15rem;
+    transition: background 0.5s;
 }
 
 input[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #2e7932;
 }
 
 input[type="button"] {
-    background-color: #FF0000; /* Red cancel button color */
+    background-color: #be1717;
     color: white;
     cursor: pointer;
+    width: 80%;
+    font-size: 1.15rem;
+    transition: background 0.5s;
+}
+
+input[type="button"]:hover {
+    background-color: #a30f0f;
 }
 
 hr {
     margin: 1rem 0;
+}
+
+.card:hover {
+    transform: translateY(0px);
 }

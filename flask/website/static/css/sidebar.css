@@ -37,11 +37,11 @@
     transition: color 0.5s;
 }
 
-.sidebar li:hover {
+.sidebar a:hover li {
     background: white;
 }
 
-.sidebar li:hover a {
+.sidebar a:hover {
     color: black;
 }
 
