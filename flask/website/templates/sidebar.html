@@ -1,65 +1,23 @@
-<style>
-    /* Sidebar Styles */
-    .sidebar {
-        height: 100%;
-        width: 175px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color: rgba(13, 29, 71, 0.8);
-        padding-top: 40px;
-        color: #333;
-        font-family: Arial, sans-serif;
-    }
-    .sidebar-header {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    
-    .sidebar-header h2 {
-        margin: 0;
-        font-size: 24px;
-        color: white;
-    }
-    .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
+<!DOCTYPE html>
+<html lang="en">
 
-    .sidebar li {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        margin-bottom: 8px;
-    }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/sidebar.css">
+</head>
 
-    .sidebar li:last-child {
-        border-bottom: none;
-    }
-
-    .sidebar li a {
-        text-decoration: none;
-        color: white;
-        transition: color 0.3s;
-        font-weight: normal;
-    }
-    .sidebar li a:hover {
-        color: #0056b3;
-    }
-    .main-content {
-        margin-left: 200px; /* Adjusted margin to accommodate sidebar width */
-        padding: 20px;
-    }
-</style>
-
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2>Edupool</h2>
+<body>
+    <div class="sidebar">
+        <a href="{{ url_for('views.home') }}">
+            <img src="../static/blacklogo.svg" alt="logo">
+        </a>
+        <ul>
+            <li><a href="{{ url_for('views.home') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('views.account_details') }}">My Profile</a></li>
+            <li><a href="{{ url_for('views.edit_details') }}">Settings</a></li>
+            <li><a href="{{ url_for('auth.logout') }}" id="logout">Logout</a></li>
+        </ul>
     </div>
-    <ul>
-        <li><a href="{{ url_for('views.home') }}"> &nbsp;Dashboard</a></li>
-        <li><a href="{{ url_for('views.account_details') }}"> &nbsp;Profile</a></li>
-        <li><a href="{{ url_for('views.edit_details') }}"> &nbsp;Settings</a></li>
-        <li><a href="{{ url_for('auth.logout') }}" id="logout"> &nbsp;Logout</a></li>
-    </ul>
-</div>
+</body>
+</html>

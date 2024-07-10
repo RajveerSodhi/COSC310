@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPool</title>
+    <link rel="stylesheet" href="../static/css/base.css">
+</head>
+
+<body>
+    {% include 'sidebar.html' %}
+
+    <main>
+        <h1>Your Dashboard</h1>
+            {% if current_user.user_type not in ['admin'] %}
+            <section>
+                {% if current_user.user_type in ['student'] %}
+                <h2>Enrolled Courses</h2>
+                {% endif %}
+                {% if current_user.user_type in ['teacher'] %}
+                <h2>Instructor for Courses</h2>
+                {% endif %}
+                <div class="section-content">
+                    {% for course in enrolled_courses %}
+                    <a href="{{ url_for('views.course_page', course_id=course.id) }}">
+                        <div class="card">
+                            <h3>{{ course.course_code }} : {{ course.course_name }}</h3>
+                            <p>{{ course.course_desc }}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </section>
+
+            {% if current_user.user_type in ['admin'] %}
+            <!-- All Courses Section -->
+            <section>
+                <h2>All Created Courses</h2>
+                <div class="section-content">
+                    {% for course in all_courses %}
+                    <a href="{{ url_for('views.course_page', course_id=course.id) }}">
+                        <div class="card">
+                            <h3>{{ course.course_code }} : {{ course.course_name }}</h3>
+                            <p>{{ course.course_desc }}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Other Cards Section -->
+            <section>
+                <h2>Other Options</h2>
+                <div class="section-content">
+                    <a href="{{ url_for('views.account_details') }}">
+                        <div class="card">
+                            <h3>Your Account Details</h3>
+                        </div>
+                    </a>
+                    {% if current_user.user_type in ['student'] %}
+                    <a href="{{ url_for('views.display_courses') }}">
+                        <div class="card">
+                            <h3 id="enroll_course_link">Enroll in a New Course</h3>
+                        </div>
+                    </a>
+                    {% endif %}
+                    {% if current_user.user_type in ['admin'] %}
+                    <a href="{{ url_for('views.createCourse') }}">
+                        <div class="card">
+                            <h3 id="create_course_link">Create a New Course</h3>
+                        </div>
+                    </a>
+                    {% endif %}
+
+                    {% if current_user.user_type in ['admin'] %}
+                    <a href="{{ url_for('views.display_requests') }}">
+                        <div class="card">
+                            <h3>Accept and Decline Student Enrollment Requests For Courses</h3>
+                        </div>
+                    </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('views.edit_details') }}">
+                        <div class="card">
+                            <h3>Edit User Details</h3>
+                        </div>
+                    </a>
+                </div>
+            </section>
+    </main>
+</body>
+
+</html>
