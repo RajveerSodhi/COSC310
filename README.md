@@ -1,5 +1,7 @@
 # EduPool😎
 
+## Created for COSC 310 course as a team project, but this branch has been modified as per personal direction by Rajveer Sodhi
+
 The below text outlines the requirements for a canvas quiz like platform designed to facilitate interaction among administrators, students, and professors. The system aims to provide a seamless experience in course management, assignment distribution, and grading, alongside fostering an engaging community through a discussion portal.
 
 ## User Requirements
