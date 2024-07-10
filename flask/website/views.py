@@ -24,7 +24,7 @@ def account_details():
     return render_template("accountDetails.html", user=current_user)
 
 # Edit User Details Page
-@views.route('/editDetails', methods=['GET', 'POST'])
+@views.route('/settings', methods=['GET', 'POST'])
 @login_required
 def edit_details():
     if request.method == 'POST':
@@ -60,7 +60,7 @@ def edit_details():
             
             return redirect(url_for('views.edit_details'))
     
-    return render_template("EditDetails.html", user=current_user)
+    return render_template("settings.html", user=current_user)
 
 # Page for Creating a New Course - Admin
 @views.route('/create-course', methods=['GET','POST'])

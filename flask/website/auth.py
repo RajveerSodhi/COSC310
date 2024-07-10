@@ -48,7 +48,7 @@ def signup():
         
     return render_template("signup.html", user=current_user)
 
-@auth.route('/editDetails', methods=['GET', 'POST'])
+@auth.route('/settings', methods=['GET', 'POST'])
 @login_required
 def edit_details():
     if request.method == 'POST':
@@ -68,7 +68,7 @@ def edit_details():
            
 
 
-    return render_template("EditDetails.html", user=current_user)
+    return render_template("settings.html", user=current_user)
 
 @auth.route('/logout')
 @login_required
