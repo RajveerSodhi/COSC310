@@ -69,10 +69,3 @@ p {
 .card a:hover {
     text-decoration: underline;
 }
-
-.section-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}

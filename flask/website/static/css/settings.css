@@ -30,6 +30,7 @@ input[type="submit"] {
     color: white;
     cursor: pointer;
 }
+
 input[type="submit"]:hover {
     background-color: #45a049;
 }

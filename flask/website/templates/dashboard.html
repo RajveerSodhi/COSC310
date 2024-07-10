@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduPool</title>
     <link rel="stylesheet" href="../static/css/base.css">
+    <link rel="stylesheet" href="../static/css/dashboard.css">
 </head>
 
 <body>
@@ -25,7 +26,8 @@
                     {% for course in enrolled_courses %}
                     <a href="{{ url_for('views.course_page', course_id=course.id) }}">
                         <div class="card">
-                            <h3>{{ course.course_code }} : {{ course.course_name }}</h3>
+                            <h3 class="course-code">{{ course.course_code }}</h3>
+                            <h3>{{ course.course_name }}</h3>
                             <p>{{ course.course_desc }}</p>
                         </div>
                     </a>
@@ -91,6 +93,34 @@
                 </div>
             </section>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const courseCodes = document.querySelectorAll(".course-code");
+
+            for (let i = 0; i < courseCodes.length; i++) {
+                switch (i) {
+                    case 0:
+                        courseCodes[i].style.backgroundColor = "#dc3545";
+                        break;
+                    case 1:
+                        courseCodes[i].style.backgroundColor = "#28a745";
+                        break;
+                    case 2:
+                        courseCodes[i].style.backgroundColor = "#007bff";
+                        break;
+                    case 3:
+                        courseCodes[i].style.backgroundColor = "#ffc107";
+                        break;
+                    case 4:
+                        courseCodes[i].style.backgroundColor = "#17a2b8";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
