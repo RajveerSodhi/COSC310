@@ -39,12 +39,13 @@
             {% if current_user.user_type in ['admin'] %}
             <!-- All Courses Section -->
             <section>
-                <h2>All Created Courses</h2>
+                <h2>Created Courses</h2>
                 <div class="section-content">
                     {% for course in all_courses %}
                     <a href="{{ url_for('views.course_page', course_id=course.id) }}">
                         <div class="card">
-                            <h3>{{ course.course_code }} : {{ course.course_name }}</h3>
+                            <h3 class="course-code">{{ course.course_code }}</h3>
+                            <h3>{{ course.course_name }}</h3>
                             <p>{{ course.course_desc }}</p>
                         </div>
                     </a>
@@ -79,6 +80,10 @@
 
                     <a href="{{ url_for('views.edit_details') }}">
                         <h3 class="card options">Account Settings</h3>
+                    </a>
+
+                    <a href="{{ url_for('auth.logout') }}" id="logout">
+                        <h3 class="card options">Logout</h3>
                     </a>
                 </div>
             </section>

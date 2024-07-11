@@ -11,6 +11,8 @@
 
 <body>
     {% include 'sidebar.html' %}
+    <a href="{{ url_for('views.course_page', course_id=course_id) }}" class="back-button">Back</a>
+    
     <div class="main-content">
     <div class="grading-container">
         <div class="assignment-details">

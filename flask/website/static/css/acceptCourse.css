@@ -1,22 +1,33 @@
+.requestContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
 .card h3 {
     color: #333;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.card p {
     margin-bottom: 10px;
+    text-align: center;
 }
 
-.card p strong {
-    color: #000;
-}
-
-.rejected:hover {
+.card:hover {
     transform: translateY(0px);
 }
 
-.enrollButton {
+.card p {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.req-action-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.acceptButton,
+.declineButton {
     background-color: #4CAF50;
     color: #FFF;
     width: 100%;
@@ -28,23 +39,23 @@
     cursor: pointer;
     display: block;
     margin-top: 20px;
+    transition: background 0.5s ease-in-out
 }
 
-.enrollButton:hover {
+.acceptButton:hover {
     background: #45a049;
 }
 
-label {
-    color: #FFF;
+.declineButton {
+    background-color: #cc0a0a;
 }
 
-select {
-    appearance: none;
+.declineButton:hover {
+    background: #7b110b;
 }
 
 h2 {
-    margin-bottom: 20px;
-    text-align: center;
+    margin-bottom: 30px;
 }
 
 #toastBox {
@@ -96,4 +107,8 @@ h2 {
     100% {
         width: 0;
     }
+}
+
+.decline::after {
+    background-color: #B00;
 }

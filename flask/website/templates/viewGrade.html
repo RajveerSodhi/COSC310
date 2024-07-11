@@ -1,105 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Course Grades</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/viewGrades.css') }}">
+    </head>
+    <body>
+        {% include 'sidebar.html' %}
+        <a href="{{ url_for('views.course_page', course_id=course_id) }}" class="back-button">Back</a>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Grades</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/viewGrade.css') }}">
-    <style>
-        /* Main Content Styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
+        <main>
+            <h1>Your Grades</h1>
+            <section class="card">
+                <h3>Quizzes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Quiz</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for quiz in quizzes %}
+                        <tr>
+                            <td>{{ quiz.quiz_name }}</td>
+                            <td>{{ quiz_grades[quiz.id] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-        }
-
-        h2 {
-            font-size: 32px;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .container {
-            margin-top: 20px;
-        }
-
-        h3 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f3f3f3;
-        }
-    </style>
-</head>
-
-<body>
-    {% include 'sidebar.html' %}
-    <div class="main-content">
-        <h2>Your Grades</h2>
-
-        <div class="container">
-            <h3>Quizzes</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Quiz</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for quiz in quizzes %}
-                    <tr>
-                        <td>{{ quiz.quiz_name }}</td>
-                        <td>{{ quiz_grades[quiz.id] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <h3>Essays</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Essay</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for essay in essays %}
-                    <tr>
-                        <td>{{ essay.essay_name }}</td>
-                        <td>{{ essay_grades[essay.id] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
-
+                <h3>Essays</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Essay</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for essay in essays %}
+                        <tr>
+                            <td>{{ essay.essay_name }}</td>
+                            <td>{{ essay_grades[essay.id] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </body>
 </html>

@@ -1,166 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Assignment</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/createAssignment.css') }}">
+    </head>
+    <body>
+        {% include 'sidebar.html' %}
+        <span class="back-button">
+        <a href="{{ url_for('views.course_page', course_id=course_id) }}">Back</a>
+        </span>
+    
+    <main>
+        <h1>Create Assignment</h1>
+        <div class="card">
+            <form class="assignment-form" method="POST" action="/course/{{ course_id }}/createAssignment"
+            enctype="multipart/form-data" onsubmit="return validateForm()">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Assignment</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/createAssignment.css') }}">
-</head>
+            <label for="title" class="items">Title</label>
+            <input type="text" id="title" name="title" required>
 
-<body>
-  {% include 'sidebar.html' %}
-  <div class="form-container">
-    <form class="assignment-form" method="POST" action="/course/{{ course_id }}/createAssignment"
-      enctype="multipart/form-data" onsubmit="return validateForm()">
-      <h2>Create Assignment</h2>
-
-      <label for="title" class="items">Title</label>
-      <input type="text" id="title" name="title" required>
-
-      <div class="assignment-type radio-group">
-        <label class="items">Assignment Type</label>
-        <label><input type="radio" name="assignmentType" value="quiz" onclick="toggleAssignmentType()">
-          Quiz</label>
-        <label><input type="radio" name="assignmentType" value="essay" onclick="toggleAssignmentType()" required>
-          Essay</label>
-      </div>
-
-      <div class="quiz-content">
-        <div id="quiz-questions">
-          <label for="question1" class="items">Question #1</label>
-          <input type="text" id="question1" name="question1" class="question-input">
-          <div class="mcq-options" id="mcq-options-1">
-            <div class="mcq-option" id="mcq-option-1">
-              <label for="option1-1">A:</label>
-              <input type="text" id="option1-1" name="option1-1">
+            <div class="assignment-type radio-group">
+                <label class="items">Assignment Type</label>
+                <label><input type="radio" name="assignmentType" value="quiz" onclick="toggleAssignmentType()">
+                Quiz</label>
+                <label><input type="radio" name="assignmentType" value="essay" onclick="toggleAssignmentType()" required>
+                Essay</label>
             </div>
-            <div class="mcq-option" id="mcq-option-2">
-              <label for="option1-2">B:</label>
-              <input type="text" id="option1-2" name="option1-2">
+
+            <div class="quiz-content">
+                <div id="quiz-questions">
+                <label for="question1" class="items">Question 1</label>
+                <input type="text" id="question1" name="question1" class="question-input">
+                <div class="mcq-options" id="mcq-options-1">
+                    <div class="mcq-option" id="mcq-option-1">
+                    <label for="option1-1">A:</label>
+                    <input type="text" id="option1-1" name="option1-1">
+                    </div>
+                    <div class="mcq-option" id="mcq-option-2">
+                    <label for="option1-2">B:</label>
+                    <input type="text" id="option1-2" name="option1-2">
+                    </div>
+                    <div class="mcq-option" id="mcq-option-3">
+                    <label for="option1-3">C:</label>
+                    <input type="text" id="option1-3" name="option1-3">
+                    </div>
+                </div>
+                
+                <button type="button" id="add-question-button" onclick="addQuestion()">Add Question</button>
+                </div>
             </div>
-            <div class="mcq-option" id="mcq-option-3">
-              <label for="option1-3">C:</label>
-              <input type="text" id="option1-3" name="option1-3">
+
+            <div class="essay-content" style="display: none;">
+                <div class="content-type">
+                <label class="items">Content Type</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="contentMethodEssay" id="fileRadio" value="file"
+                        onclick="toggleContentMethod('essay')" checked> Upload File</label>
+                    <label><input type="radio" name="contentMethodEssay" id="textRadio" value="text"
+                        onclick="toggleContentMethod('essay')"> Enter Text</label>
+                </div>
+                </div>
+
+                <div class="file-upload-essay visible">
+                <label for="file-upload-essay" class="items">Upload File</label>
+                <input type="file" id="file-upload-essay" name="file-upload-essay">
+                </div>
+
+                <div class="text-entry-essay">
+                <label for="text-entry-essay">Text Entry</label>
+                <textarea id="text-entry-essay" name="text-entry-essay"></textarea>
+                </div>
+
             </div>
-          </div>
-          
-          <button type="button" id="add-question-button" onclick="addQuestion()">Add Question</button>
+
+            <button type="submit">Post Assignment</button>
+            </form>
         </div>
-      </div>
+    </main>
 
-      <div class="essay-content" style="display: none;">
-        <div class="content-type">
-          <label class="items">Content Type</label>
-          <div class="radio-group">
-            <label><input type="radio" name="contentMethodEssay" id="fileRadio" value="file"
-                onclick="toggleContentMethod('essay')" checked> Upload File</label>
-            <label><input type="radio" name="contentMethodEssay" id="textRadio" value="text"
-                onclick="toggleContentMethod('essay')"> Enter Text</label>
-          </div>
-        </div>
+    <script>
+        function toggleAssignmentType() {
+        var assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
+        var quizContent = document.querySelector('.quiz-content');
+        var essayContent = document.querySelector('.essay-content');
+        quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
+        essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
 
-        <div class="file-upload-essay visible">
-          <label for="file-upload-essay" class="items">Upload File</label>
-          <input type="file" id="file-upload-essay" name="file-upload-essay">
-        </div>
+        }
 
-        <div class="text-entry-essay">
-          <label for="text-entry-essay">Text Entry</label>
-          <textarea id="text-entry-essay" name="text-entry-essay"></textarea>
-        </div>
+        function toggleContentMethod(assignmentType) {
+        var fileUpload = document.querySelector(`.file-upload-${assignmentType}`);
+        var textEntry = document.querySelector(`.text-entry-${assignmentType}`);
+        fileUpload.style.display = assignmentType === 'essay' && fileRadio.checked ? 'block' : 'none';
+        textEntry.style.display = assignmentType === 'essay' && textRadio.checked ? 'block' : 'none';
+        }
 
-      </div>
+        function addQuestion() {
+        var quizQuestions = document.getElementById('quiz-questions');
+        var questionCount = quizQuestions.querySelectorAll('.question-input').length + 1;
+        var newLabel = document.createElement('label');
+        newLabel.setAttribute('for', 'question' + questionCount);
+        newLabel.setAttribute('class', 'items');
+        newLabel.textContent = 'Question ' + questionCount;
 
-      <button type="submit">Post Assignment</button>
-    </form>
-  </div>
+        var newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.id = 'question' + questionCount;
+        newInput.name = 'question' + questionCount;
+        newInput.classList.add('question-input');
 
-  <script>
-    function toggleAssignmentType() {
-      var assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
-      var quizContent = document.querySelector('.quiz-content');
-      var essayContent = document.querySelector('.essay-content');
-      quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
-      essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
+        var mcqOptionsDiv = document.createElement('div');
+        mcqOptionsDiv.classList.add('mcq-options');
+        mcqOptionsDiv.id = 'mcq-options-' + questionCount;
 
-    }
+        for (let i = 1; i <= 3; i++) {
+            let mcqOptionDiv = document.createElement('div');
+            mcqOptionDiv.classList.add('mcq-option');
 
-    function toggleContentMethod(assignmentType) {
-      var fileUpload = document.querySelector(`.file-upload-${assignmentType}`);
-      var textEntry = document.querySelector(`.text-entry-${assignmentType}`);
-      fileUpload.style.display = assignmentType === 'essay' && fileRadio.checked ? 'block' : 'none';
-      textEntry.style.display = assignmentType === 'essay' && textRadio.checked ? 'block' : 'none';
-    }
+            let optionLabel = document.createElement('label');
+            optionLabel.htmlFor = `option${questionCount}-${i}`;
+            optionLabel.textContent = `${String.fromCharCode(64 + i)}:`;
 
-    function addQuestion() {
-      var quizQuestions = document.getElementById('quiz-questions');
-      var questionCount = quizQuestions.querySelectorAll('.question-input').length + 1;
-      var newLabel = document.createElement('label');
-      newLabel.setAttribute('for', 'question' + questionCount);
-      newLabel.setAttribute('class', 'items');
-      newLabel.textContent = 'Question #' + questionCount;
+            let optionInput = document.createElement('input');
+            optionInput.type = 'text';
+            optionInput.placeholder = 'Option';
+            optionInput.id = `option${questionCount}-${i}`;
+            optionInput.name = `option${questionCount}-${i}`;
 
-      var newInput = document.createElement('input');
-      newInput.type = 'text';
-      newInput.id = 'question' + questionCount;
-      newInput.name = 'question' + questionCount;
-      newInput.classList.add('question-input');
+            mcqOptionDiv.appendChild(optionLabel);
+            mcqOptionDiv.appendChild(optionInput);
+            mcqOptionsDiv.appendChild(mcqOptionDiv);
+        }
 
-      var mcqOptionsDiv = document.createElement('div');
-      mcqOptionsDiv.classList.add('mcq-options');
-      mcqOptionsDiv.id = 'mcq-options-' + questionCount;
+        var addButton = quizQuestions.querySelector('button');
+        quizQuestions.insertBefore(newLabel, addButton);
+        quizQuestions.insertBefore(newInput, addButton);
+        quizQuestions.insertBefore(mcqOptionsDiv, addButton);
+        quizQuestions.insertBefore(gradeInputLabel, addButton);
+        quizQuestions.insertBefore(gradeInput, addButton);
+        }
 
-      for (let i = 1; i <= 3; i++) {
-        let mcqOptionDiv = document.createElement('div');
-        mcqOptionDiv.classList.add('mcq-option');
-
-        let optionLabel = document.createElement('label');
-        optionLabel.htmlFor = `option${questionCount}-${i}`;
-        optionLabel.textContent = `${String.fromCharCode(64 + i)}:`;
-
-        let optionInput = document.createElement('input');
-        optionInput.type = 'text';
-        optionInput.placeholder = 'Option';
-        optionInput.id = `option${questionCount}-${i}`;
-        optionInput.name = `option${questionCount}-${i}`;
-
-        mcqOptionDiv.appendChild(optionLabel);
-        mcqOptionDiv.appendChild(optionInput);
-        mcqOptionsDiv.appendChild(mcqOptionDiv);
-      }
-
-      var addButton = quizQuestions.querySelector('button');
-      quizQuestions.insertBefore(newLabel, addButton);
-      quizQuestions.insertBefore(newInput, addButton);
-      quizQuestions.insertBefore(mcqOptionsDiv, addButton);
-      quizQuestions.insertBefore(gradeInputLabel, addButton);
-      quizQuestions.insertBefore(gradeInput, addButton);
-    }
-
-    function validateForm() {
-      const assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
-      if (assignmentType === 'quiz') {
-        const questionInputs = document.querySelectorAll('.question-input');
-        for (let input of questionInputs) {
-          if (input.value.trim() === '') {
-            alert('Please fill in all the quiz questions.');
+        function validateForm() {
+        const assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
+        if (assignmentType === 'quiz') {
+            const questionInputs = document.querySelectorAll('.question-input');
+            for (let input of questionInputs) {
+            if (input.value.trim() === '') {
+                alert('Please fill in all the quiz questions.');
+                return false;
+            }
+            }
+        } else if (assignmentType === 'essay') {
+            const fileRadio = document.getElementById('fileRadio');
+            const fileUpload = document.getElementById('file-upload-essay');
+            if (fileRadio.checked && !fileUpload.files.length) {
+            alert('Please upload a file for the essay.');
             return false;
-          }
+            }
         }
-      } else if (assignmentType === 'essay') {
-        const fileRadio = document.getElementById('fileRadio');
-        const fileUpload = document.getElementById('file-upload-essay');
-        if (fileRadio.checked && !fileUpload.files.length) {
-          alert('Please upload a file for the essay.');
-          return false;
+        return true;
         }
-      }
-      return true;
-    }
-  </script>
-
-</body>
-
+    </script>
+    </body>
 </html>

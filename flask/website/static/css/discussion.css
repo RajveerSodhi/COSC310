@@ -1,63 +1,19 @@
-
-/* Reset default margin and padding */
-html, body {
-    margin: 0;
-    margin-left: 90px;
-    padding: 0;
-    font-family: 'Arial', sans-serif; /* Modern font */
-    background-color: #f5f7fa; /* Softer background color */
-    color: #000000; /* Consistent text color */
-}
-
-/* Main content styling */
-.main-content {
-    max-width: 800px;
-    margin: auto;
-    padding: 30px;
-    background-color: transparent;
-    text-align: left; /* Align text to the left for better readability */
-}
-
-/* Style header */
-header {
-    background-color: #ffffff;
-    padding: 20px 30px;
-    border-bottom: 2px solid #eee; /* Subtle bottom border for definition */
-}
-
-/* Navigation links */
-nav a {
-    color: #555;
-    text-decoration: none;
-    padding: 8px 16px;
-    display: inline-block;
-    transition: color 0.3s;
-}
-
-nav a:hover {
-    color: #007bff; /* Interactive hover state */
-}
-
-/* Style section */
-section {
-    background-color: #fff;
-    padding: 30px;
-    margin-top: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Softer shadow */
-}
-
-/* Style form inputs */
 input[type="text"], textarea {
     width: 100%;
-    padding: 15px;
-    margin: 15px 0;
+    max-width: 100%;
+    min-width: 100%;
+    padding: 1rem;
+    margin: 1rem 0;
     border: 1px solid #dfe3e8;
-    border-radius: 4px;
+    border-radius: 2rem;
     box-sizing: border-box;
+    font-size: 1rem;
 }
 
-/* Style buttons */
+textarea {
+    min-height: 8rem;
+}
+
 button {
     padding: 12px 24px;
     background-color: #0056b3; /* Softened button color */
@@ -68,35 +24,57 @@ button {
     transition: background-color 0.3s, transform 0.2s;
 }
 
+.card {
+    min-width: 42rem;
+}
+
+#post-discussion:hover,
+#discussion-card:hover,
+.reply-div:hover {
+    transform: translateY(0px);
+}
+
+button {
+    border-radius: 2rem;
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem 2rem;
+    transition: background 0.5s;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 1.15rem;
+    border: 1px solid #ccc;
+}
+
 button:hover {
-    background-color: #003d82; /* Darker on hover */
-    transform: translateY(-2px); /* Subtle lift effect */
+    background-color: #2e7932;
 }
 
-/* Style discussion cards */
-.discussion {
-    border-bottom: 1px solid #e2e4e8;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    transition: box-shadow 0.3s;
+p {
+    margin-bottom: 0.5rem;
 }
 
-.discussion:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* Hover effect for discussion cards */
+a {
+    color: black;
 }
 
-.discussion:last-child {
-    border-bottom: none;
+#discussion-card {
+    width: 65%;
 }
 
-/* Responsive layout adjustments */
-@media (max-width: 768px) {
-    .main-content, header, section {
-        padding: 15px;
-    }
+section {
+    width: 65%;
+}
 
-    nav a {
-        padding: 8px 10px;
-    }
+.reply-div {
+    min-width: 60rem;
+}
+
+.reply {
+    color: black;
+}
+
+.reply-form {
+    width: 60rem;
 }

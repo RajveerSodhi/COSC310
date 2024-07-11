@@ -11,6 +11,8 @@
 
 <body>
     {% include 'sidebar.html' %}
+    <a href="{{ url_for('views.home') }}" class="back-button">Back</a>
+
     <main>
             <h1>{{ course.course_code }}: {{ course.course_name}}</h1>
             <div class="card info-box">
@@ -30,7 +32,11 @@
                     {% endfor %}
                 </div>
             {% else %}
+            {% if current_user.user_type in ['teacher'] %}
                 <p>There are no quizzes created yet in this course. Create one by clicking the Create assignment button below.</p>
+            {% else %}
+                <p>There are no quizzes created yet in this course.</p>
+            {% endif %}
             {% endif %}
 
             <h2>Essays</h2>
@@ -43,9 +49,14 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p>There are no essays created yet in this course. Create one by clicking the Create assignment button below.</p>
+                {% if current_user.user_type in ['teacher'] %}
+                    <p>There are no essays created yet in this course. Create one by clicking the Create assignment button below.</p>
+                {% else %}
+                    <p>There are no essays created yet in this course.</p>
+                {% endif %}
             {% endif %}
-
+            
+            <h2>Other Options</h2>
             {% if current_user.user_type in ['teacher'] %}
                 <h2>Grade Assignments</h2>
                 {% if essays or quizzes %}
@@ -55,7 +66,7 @@
                             {% for quiz in quizzes %}
                                 <h4>{{ quiz.quiz_name }}</h4>
                                 {% if not quiz_submissions[quiz.id] %}
-                                    <p>No submissions yet</p>
+                                    <p>No submissions to grade</p>
                                 {% endif %}
                                 <div>
                                     {% for student_id, info in quiz_submissions[quiz.id].items() %}
@@ -82,7 +93,7 @@
                                 <h4>{{ essay.essay_name }}</h4>
                                 <div>
                                     {% if not essay_submissions[essay.id] %}
-                                        <p>No submissions yet</p>
+                                        <p>No submissions to grade</p>
                                     {% endif %}
                                     {% for student_id, info in essay_submissions[essay.id].items() %}
                                         {% if not info.graded %}

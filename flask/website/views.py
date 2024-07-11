@@ -368,16 +368,16 @@ def course_discussions(course_id):
     course = Course.query.get_or_404(course_id)
     discussions = Discussion.query.filter_by(course_id=course_id).all()
     course_full_name = f"{course.course_code} {course.course_name}" 
-    return render_template('discussion.html', course_name=course_full_name, course=course, discussions=discussions)
+    return render_template('discussion.html', course_name=course_full_name, course=course, discussions=discussions, course_id=course_id)
 
 #view a specific discussion 
-@views.route('/discussion/<int:discussion_id>')
+@views.route('/course/<int:course_id>/discussion/<int:discussion_id>')
 @login_required
-def discussion_detail(discussion_id):
+def discussion_detail(discussion_id, course_id):
     discussion = Discussion.query.get_or_404(discussion_id)
     discussion_author = User.query.get(discussion.user_id).username
     replies = db.session.query(Reply, User.username).join(User, User.id == Reply.user_id).filter(Reply.discussion_id == discussion_id).all()
-    return render_template('discussion_detail.html', discussion=discussion, discussion_author=discussion_author, replies=replies)
+    return render_template('discussion_detail.html', discussion=discussion, discussion_author=discussion_author, replies=replies, course_id=course_id)
 
 #add a new discussion
 @views.route('/course/<int:course_id>/discussions/add', methods=['GET', 'POST'])
@@ -392,14 +392,14 @@ def add_discussion(course_id):
         return redirect(url_for('views.course_discussions', course_id=course_id))
     return render_template('add_discussion.html', course_id=course_id)
 
-@views.route('/discussion/<int:discussion_id>/submit_reply', methods=['POST'])
+@views.route('/course/<int:course_id>/discussion/<int:discussion_id>/submit_reply', methods=['POST'])
 @login_required
-def submit_reply(discussion_id):
+def submit_reply(discussion_id, course_id):
     content = request.form.get('reply_content')
     new_reply = Reply(content=content, discussion_id=discussion_id, user_id=current_user.id)
     db.session.add(new_reply)
     db.session.commit()
-    return redirect(url_for('views.discussion_detail', discussion_id=discussion_id))
+    return redirect(url_for('views.discussion_detail', discussion_id=discussion_id, course_id=course_id))
 
 # grade quizzes
 @views.route('/grade-quiz/<int:course_id>/<int:quiz_id>/<int:student_id>', methods=['GET', 'POST'])

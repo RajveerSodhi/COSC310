@@ -15,7 +15,7 @@
             <h1>{{ quiz.quiz_name }}</h1>
                 <form class="quiz-form" method="POST" action="/submit_quiz">
                 {% if already_submitted %}
-                    <p>You have already submitted this quiz.</p>
+                    <h4>You have already submitted this quiz</h4>
                 {% else %}
                     {% for question in questions %}
                         <div class="question">

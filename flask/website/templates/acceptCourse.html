@@ -1,241 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Accept Enrollment Requests</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/acceptCourse.css') }}">
+    </head>
+    <body>
+        {% include 'sidebar.html' %}
+        <a href="{{ url_for('views.home') }}" class="back-button">Back</a>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accept Student Enrollment Requests</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <style>
-    /* Main Content Styles */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f3f3f3;
-    }
+        <main>
+            <h1>Accept Enrolment Requests</h1>
+            <div class="requestContainer">
+            {% for req in requests %}
+                {% if req.status == 'pending' %}
+                    <div class="card">
+                        <h3>Course Code: {{ req.course_code}}</h3>
+                        <p>Student <strong>{{ req.first_name }} {{ req.last_name }}</strong> (ID: {{ req.user_id }}) has
+                        requested to enroll in this course</p>
+                        <form method="POST" action="{{ url_for('views.acceptRequest') }}" class="req-action-form">
+                            <input type="hidden" name="course_id" value="{{ req.course_id }}">
+                            <input type="hidden" name="user_id" value="{{ req.user_id }}">
+                            <input type="submit" class="acceptButton" value="Accept">
+                        </form>
+                        <form method="POST" action="{{ url_for('views.declineRequest') }}" class="req-action-form">
+                            <input type="hidden" name="course_id" value="{{ req.course_id }}">
+                            <input type="hidden" name="user_id" value="{{ req.user_id }}">
+                            <input type="submit" class="declineButton" value="Decline">
+                        </form>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </main>
 
-    .main-content {
-      margin-left: 220px;
-      padding: 20px;
-    }
+        <div id="toastBox">
+        </div>
 
-    .header {
-      margin-bottom: 20px;
-      text-align: center;
-    }
+        <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+            let toastBox = document.getElementById('toastBox');
+            let acceptMessage = "Request Accepted";
+            let declineMessage = "Request Declined";
 
-    .header h2 {
-      color: #333;
-    }
+            function showToast(message) {
+                let toast = document.createElement('div');
+                toast.classList.add('toast');
+                toast.innerText = message;
+                toastBox.appendChild(toast);
 
-    .requestContainer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 0 auto;
-      max-width: 900px;
-    }
+                if (message === declineMessage) {
+                toast.classList.add("decline");
+                } else {
+                toast.classList.add("accept");
+                }
 
-    .request {
-      width: calc(60% - 35px);
-      /* Adjusted width */
-      background-color: #FFF;
-      border: 1px solid #DDD;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      margin-right: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      box-sizing: border-box;
-      /* Include padding and border in the width calculation */
-    }
+                setTimeout(() => {
+                toast.remove();
+                }, 2000);
+            }
 
-    .request h3 {
-      color: #333;
-      margin-bottom: 10px;
-      text-align: center;
-      /* Center the text */
-    }
+            document.querySelectorAll('.acceptButton').forEach(button => {
+                button.addEventListener('click', function (event) {
+                event.preventDefault();
+                showToast(acceptMessage);
+                let form = this.closest('form');
+                setTimeout(() => {
+                    if (form) form.submit();
+                }, 2000);
+                });
+            });
 
-    .request p {
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .req-action-form {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .acceptButton {
-      background-color: #4CAF50;
-      margin: 10px auto;
-    }
-
-    .acceptButton,
-    .declineButton {
-      color: white;
-      border: none;
-      padding: 10px 0;
-      width: 100%;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .declineButton {
-      background-color: #f44336;
-    }
-
-    .acceptButton:hover {
-      background-color: #45a049;
-    }
-
-    .declineButton:hover {
-      background-color: #B00;
-    }
-
-    h2 {
-      margin-bottom: 30px;
-    }
-
-    #toastBox {
-      position: absolute;
-      top: 30px;
-      right: 30px;
-      padding: 20px;
-      display: flex;
-      align-items: flex-end;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .toast {
-      width: 300px;
-      height: 50px;
-      background-color: #FFF;
-      font-weight: 800;
-      color: #222;
-      margin: 20px 0;
-      box-shadow: 0 0 20px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      transform: translateX(100%);
-      animation: moveleft 0.4s linear forwards;
-      font-size: 1.5em;
-    }
-
-    @keyframes moveleft {
-      100% {
-        transform: translateX(0);
-      }
-    }
-
-    .toast::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 5px;
-      background-color: #45a049;
-      animation: anim 2s linear forwards;
-    }
-
-    @keyframes anim {
-      100% {
-        width: 0;
-      }
-    }
-
-    .decline::after {
-      background-color: #B00;
-    }
-  </style>
-</head>
-
-<body>
-  {% include 'sidebar.html' %}
-  <div class="main-content">
-    <div class="header">
-      <h2>Accept Student Enrolment Requests</h2>
-    </div>
-
-    <div class="requestContainer">
-      {% for req in requests %}
-      {% if req.status == 'pending' %}
-      <div class="request">
-        <h3>Course Code : {{ req.course_code}}</h3>
-        <p>Student <strong>{{ req.first_name }} {{ req.last_name }}</strong> (ID: {{ req.user_id }}) has
-          requested to enroll in this course</p>
-        <form method="POST" action="{{ url_for('views.acceptRequest') }}" class="req-action-form">
-          <input type="hidden" name="course_id" value="{{ req.course_id }}">
-          <input type="hidden" name="user_id" value="{{ req.user_id }}">
-          <input type="submit" class="acceptButton" value="Accept">
-        </form>
-        <form method="POST" action="{{ url_for('views.declineRequest') }}" class="req-action-form">
-          <input type="hidden" name="course_id" value="{{ req.course_id }}">
-          <input type="hidden" name="user_id" value="{{ req.user_id }}">
-          <input type="submit" class="declineButton" value="Decline">
-        </form>
-      </div>
-      {% endif %}
-      {% endfor %}
-    </div>
-  </div>
-
-  <div id="toastBox">
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      let toastBox = document.getElementById('toastBox');
-      let acceptMessage = "Request Accepted";
-      let declineMessage = "Request Declined";
-
-      function showToast(message) {
-        let toast = document.createElement('div');
-        toast.classList.add('toast');
-        toast.innerText = message;
-        toastBox.appendChild(toast);
-
-        if (message === declineMessage) {
-          toast.classList.add("decline");
-        } else {
-          toast.classList.add("accept");
-        }
-
-        setTimeout(() => {
-          toast.remove();
-        }, 2000);
-      }
-
-      document.querySelectorAll('.acceptButton').forEach(button => {
-        button.addEventListener('click', function (event) {
-          event.preventDefault();
-          showToast(acceptMessage);
-          let form = this.closest('form');
-          setTimeout(() => {
-            if (form) form.submit();
-          }, 2000);
-        });
-      });
-
-      document.querySelectorAll('.declineButton').forEach(button => {
-        button.addEventListener('click', function (event) {
-          event.preventDefault();
-          showToast(declineMessage);
-          let form = this.closest('form');
-          setTimeout(() => {
-            if (form) form.submit();
-          }, 2000);
-        });
-      });
-    });
-  </script>
-</body>
+            document.querySelectorAll('.declineButton').forEach(button => {
+                button.addEventListener('click', function (event) {
+                event.preventDefault();
+                showToast(declineMessage);
+                let form = this.closest('form');
+                setTimeout(() => {
+                    if (form) form.submit();
+                }, 2000);
+                });
+            });
+            });
+        </script>
+    </body>
 
 </html>

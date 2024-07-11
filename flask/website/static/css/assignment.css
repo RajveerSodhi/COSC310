@@ -7,6 +7,10 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+h4 {
+    margin: 0 auto;
+}
+
 .quiz-form {
     display: flex;
     flex-direction: column;
@@ -15,26 +19,12 @@
 .options textarea,
 .options input[type="file"] {
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
+    padding: 1rem;
+    margin-top: 0.5rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 2rem;
     box-sizing: border-box;
     resize: vertical;
-}
-
-.submit-quiz {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-.submit-quiz:hover {
-    background-color: #45a049;
 }
 
 .response-options {
@@ -48,12 +38,24 @@
 .text-response textarea,
 .file-response input[type="file"] {
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    min-height: 8rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 2rem;
     box-sizing: border-box;
     resize: vertical;
+    font-size: 1rem;
+}
+
+.options {
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.options label {
+    margin: 0.5rem;
 }
 
 .submit-quiz {
@@ -69,16 +71,6 @@
     border-radius: 2rem;
 }
 
-.options {
-    margin: 0.5rem;
-    display: flex;
-    flex-direction: column;
-}
-
-.options label {
-    margin: 0.5rem;
-}
-
 .submit-quiz:hover {
     background-color: #2e7932;
 }
@@ -91,4 +83,12 @@
 img {
     max-width: 100%;
     height: auto;
+}
+
+button {
+    width: 100%;
+}
+
+form {
+    width: 80%;
 }

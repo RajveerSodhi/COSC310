@@ -1,83 +1,54 @@
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  margin-left: 180px;
-  padding: 0;
-  background-color: #f3f3f3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+label {
+    display: block;
+    margin: 1rem 0;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
+.card {
+    min-width: 42rem;
 }
 
-.form-container {
-  background: #ffffff;
-  border: 1px solid #ddd;
-  width: 600px;
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+.card:hover {
+    transform: translateY(0px);
 }
 
-.form-group {
-  margin-bottom: 15px;
+.form-item {
+    width: 100%;
+    margin-bottom: 1rem;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
+input,
+select,
+textarea {
+    width: 100%;
+    font-size: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 2rem;
+    box-sizing: border-box;
 }
 
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
+textarea {
+    resize: vertical;
+    min-height: 8rem;
 }
 
-.form-group textarea {
-  resize: vertical;
+select {
+    appearance: none;
 }
 
-.form-group select {
-  appearance: none;
+button {
+    border-radius: 2rem;
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem 2rem;
+    transition: background 0.5s;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 1.15rem;
+    border: 1px solid #ccc;
 }
 
-button[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  width: 100%;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button[type="submit"]:hover {
-  background: #45a049;
-}
-
-input[type="button"] {
-  background-color: #FF0000;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  width: 100%;
-  cursor: pointer;
-}
-
-input[type="button"]:hover {
-  background-color: #BB0000;
+button:hover {
+    background-color: #2e7932;
 }

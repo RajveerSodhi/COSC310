@@ -1,216 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/EnrollCourse.css') }}">
+    </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Course Enrollment</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f3f3f3;
-    }
+    <body>
+    {% include 'sidebar.html' %}
+    <a href="{{ url_for('views.home') }}" class="back-button">Back</a>
 
-    .main-content {
-      margin-left: 220px;
-      padding: 20px;
-    }
+    <main>
+        <h1>Enroll Into Courses</h1>
+        <section class="section-content">
+            <h2>Available Courses</h2>
+            {% if courses %}
+                {% for course in courses %}
+                    <div class="card">
+                        <h3>{{ course.course_code }}: {{ course.course_name }}</h3>
+                        <p>{{ course.course_desc }}</p>
+                        <p><strong>Instructor:</strong> {{ course.first_name }} {{ course.last_name }}</p>
+                        <p><strong>Total Students:</strong> {{ course.course_limit }}</p>
+                        <form method="POST" action="{{ url_for('views.createRequest') }}">
+                        <input type="hidden" name="course_id" value="{{ course.id }}">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <input type="submit" class="enrollButton" id="request_enroll_button" value="Request to Enroll">
+                        </form>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h4>No Available Courses</h4>
+            {% endif %}
+        </section>
 
-    .courseList {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .course {
-      width: calc(50% - 20px);
-      background: #ffffff;
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-      box-sizing: border-box;
-    }
-
-    .course h3 {
-      color: #333;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .course p {
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .course p strong {
-      color: #000;
-    }
-
-    .enrollButton {
-      background-color: #4CAF50;
-      color: #FFF;
-      width: 100%;
-      text-align: center;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      display: block;
-      margin-top: 20px;
-    }
-
-    .enrollButton:hover {
-      background: #45a049;
-    }
-
-    label {
-      color: #FFF;
-    }
-
-    select {
-      appearance: none;
-    }
-
-    #no-course-p {
-      font-weight: 700;
-      color: #444;
-      font-size: 1.2em;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    #toastBox {
-      position: absolute;
-      top: 30px;
-      right: 30px;
-      padding: 20px;
-      display: flex;
-      align-items: flex-end;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .toast {
-      width: 300px;
-      height: 50px;
-      background-color: #FFF;
-      font-weight: 800;
-      color: #222;
-      margin: 20px 0;
-      box-shadow: 0 0 20px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      transform: translateX(100%);
-      animation: moveleft 0.4s linear forwards;
-      font-size: 1.5em;
-    }
-
-    @keyframes moveleft {
-      100% {
-        transform: translateX(0);
-      }
-    }
-
-    .toast::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 5px;
-      background-color: #45a049;
-      animation: anim 2s linear forwards;
-    }
-
-    @keyframes anim {
-      100% {
-        width: 0;
-      }
-  </style>
-</head>
-
-<body>
-  {% include 'sidebar.html' %}
-  <div class="main-content">
-    <h2>Available Courses</h2>
-    <div class="courseList">
-      <!-- Check if courses list is not empty -->
-      {% if courses %}
-      <!-- Iterate over courses -->
-      {% for course in courses %}
-      <div class="course">
-        <h3>{{ course.course_code }}: {{ course.course_name }}</h3>
-        <p>{{ course.course_desc }}</p>
-        <p><strong>Instructor:</strong> {{ course.first_name }} {{ course.last_name }}</p>
-        <p><strong>Total Students:</strong> {{ course.course_limit }}</p>
-        <form method="POST" action="{{ url_for('views.createRequest') }}">
-          <input type="hidden" name="course_id" value="{{ course.id }}">
-          <input type="hidden" name="user_id" value="{{ user.id }}">
-          <input type="submit" class="enrollButton" id="request_enroll_button" value="Request to Enroll">
-        </form>
-      </div>
-      {% endfor %}
-      {% else %}
-      <p id="no-course-p">No available courses to enroll into.</p>
-      {% endif %}
+        <h2>Rejected Enrollment Requests</h2>
+        <section class="section-content">
+            {% for course in rejected %}
+            <div class="card rejected">
+                <h3>{{ course.course_code }}: {{ course.course_name }}</h3>
+                <p>{{ course.course_desc }}</p>
+                <p><strong>Instructor:</strong> {{ course.first_name }} {{ course.last_name }}</p>
+                <p><strong>Total Students:</strong> {{ course.course_limit }}</p>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+        <div id="toastBox"></div>
     </div>
 
-    <h2>Rejected Enrollment Requests</h2>
-    <div class='courseList'>
-      {% for course in rejected %}
-      <div class="course">
-        <h3>{{ course.course_code }}: {{ course.course_name }}</h3>
-        <p>{{ course.course_desc }}</p>
-        <p><strong>Instructor:</strong> {{ course.first_name }} {{ course.last_name }}</p>
-        <p><strong>Total Students:</strong> {{ course.course_limit }}</p>
-      </div>
-      {% endfor %}
-    </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+            let toastBox = document.getElementById('toastBox');
 
-    <div id="toastBox"></div>
+            function showToast() {
+            let toast = document.createElement('div');
+            toast.classList.add('toast');
+            toast.innerText = "Enrollment Request Sent";
+            toastBox.appendChild(toast);
 
-
-    <script>
-      document.addEventListener('DOMContentLoaded', (event) => {
-        let toastBox = document.getElementById('toastBox');
-
-        function showToast() {
-          let toast = document.createElement('div');
-          toast.classList.add('toast');
-          toast.innerText = "Enrollment Request Sent";
-          toastBox.appendChild(toast);
-
-          setTimeout(() => {
-            toast.remove();
-          }, 2000);
-        }
-
-        document.querySelectorAll('.enrollButton').forEach(button => {
-          button.addEventListener('click', function (event) {
-            event.preventDefault();
-            showToast();
-            let form = this.closest('form');
             setTimeout(() => {
-              if (form) form.submit();
+                toast.remove();
             }, 2000);
-          });
+            }
+
+            document.querySelectorAll('.enrollButton').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                showToast();
+                let form = this.closest('form');
+                setTimeout(() => {
+                if (form) form.submit();
+                }, 2000);
+            });
+            });
         });
-      });
-    </script>
-  </div>
-</body>
+        </script>
+    </body>
 
 </html>

@@ -14,7 +14,7 @@
         <main>
             <h1>{{ essay.essay_name }}</h1>
             {% if already_submitted %}
-                <h4>You have already submitted this essay.</h4>
+                <h4>You have already submitted this essay</h4>
             {% else %}
                 <form
                 action="{{ url_for('views.submit_essay') }}"
