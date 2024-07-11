@@ -1,56 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ quiz.quiz_name }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/assignment.css') }}">
+    </head>
+    <body>
+        {% include 'sidebar.html' %}
+        <a href="{{ url_for('views.course_page', course_id=course_id) }}" class="back-button">Back</a>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz: {{ quiz.quiz_name }}</title>
-  <link rel="stylesheet" href="../static/css/base.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
-</head>
+        <main>
+            <h1>{{ quiz.quiz_name }}</h1>
+                <form class="quiz-form" method="POST" action="/submit_quiz">
+                {% if already_submitted %}
+                    <p>You have already submitted this quiz.</p>
+                {% else %}
+                    {% for question in questions %}
+                        <div class="question">
+                            <p class="question-text">{{ loop.index }}. {{ question.question_text }}</p>
+                            <div class="options">
+                                <label>
+                                    <input type="radio" required name="{{ question.id }}" value="{{ question.option1 }}">
+                                    {{ question.option1 }}
+                                </label>
+                                <label>
+                                    <input type="radio" required name="{{ question.id }}" value="{{ question.option2 }}">
+                                    {{ question.option2 }}
+                                </label>
+                                <label>
+                                    <input type="radio" required name="{{ question.id }}" value="{{ question.option3 }}">
+                                    {{ question.option3 }}
+                                </label>
+                            </div>
+                        </div>
+                    {% endfor %}
 
-<body>
-  {% include 'sidebar.html' %}
-  <div class="main-content">
-    <div class="quiz-title">
-      <h2>Quiz Title: {{ quiz.quiz_name }}</h2>
-    </div>
-    <div class="quiz-container">
-      <form class="quiz-form" method="POST" action="/submit_quiz">
+                    <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
+                    {% if current_user.user_type == 'student' %}
+                        <input type="hidden" name="course_id" value="{{ course_id }}">
+                        <button type="submit" class="submit-quiz">Submit Answers</button>
+                    {% endif %}
+                {% endif %}
+                </form>
+        </main>
 
-        {% if already_submitted %}
-        <p>You have already submitted this quiz.</p>
-        {% else %}
-
-        {% for question in questions %}
-        <div class="question">
-          <p class="question-text">{{ loop.index }}. {{ question.question_text }}</p>
-          <div class="options">
-            <label class="option">
-              <input type="radio" required name="{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}
-            </label>
-            <label class="option">
-              <input type="radio" required name="{{ question.id }}" value="{{ question.option2 }}">{{ question.option2 }}
-            </label>
-            <label class="option">
-              <input type="radio" required name="{{ question.id }}" value="{{ question.option3 }}">{{ question.option3 }}
-            </label>
-          </div>
-        </div>
-        {% endfor %}
-
-        <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
-
-        {% if current_user.user_type not in ['admin', 'teacher'] %}
-        <input type="hidden" name="course_id" value="{{ course_id }}">
-        <button type="submit" class="submit-quiz">Submit Answers</button>
-        {% endif %}
-
-        {% endif %}
-
-      </form>
-    </div>
-  </div>
-</body>
-
+        <script>
+            if ("{{ current_user.user_type }}" !== "student") {
+                var radioButtons = document.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach(function(radioButton) {
+                    radioButton.disabled = true;
+                });
+            }
+        </script>
+    </body>
 </html>

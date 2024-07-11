@@ -3,8 +3,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question</title>
-    <link rel="stylesheet" href="../static/css/base.css">
-    <link rel="stylesheet" href="../static/css/discussion_detail.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/details.css') }}">
     <script>
         function toggleCommentBox() {
             var commentBox = document.getElementById("comment-box");
