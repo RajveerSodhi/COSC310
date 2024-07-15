@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Create Course</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/createCourse.css') }}">
     </head>
     <body>
@@ -48,15 +49,15 @@
         </main>
 
         <script>
-        function validateCourseCode() {
-            var courseCode = document.getElementById('course_code').value;
-            var regex = /^[A-Z]{4}\d{3}$/;
-            if (!regex.test(courseCode)) {
-            alert('Invalid Course Code. The correct format is four uppercase letters followed by three digits (e.g., ABCD123).');
-            return false;
+            function validateCourseCode() {
+                var courseCode = $('#course_code').val();
+                var regex = /^[A-Z]{4}\d{3}$/;
+                if (!regex.test(courseCode)) {
+                    alert('Invalid Course Code. The correct format is four uppercase letters followed by three digits.');
+                    return false;
+                }
+                return true;
             }
-            return true;
-        }
         </script>
     </body>
 </html>

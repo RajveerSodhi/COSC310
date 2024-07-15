@@ -5,13 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Create Assignment</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/createAssignment.css') }}">
     </head>
     <body>
         {% include 'sidebar.html' %}
-        <span class="back-button">
-        <a href="{{ url_for('views.course_page', course_id=course_id) }}">Back</a>
-        </span>
+        <a href="{{ url_for('views.course_page', course_id=course_id) }}" class="back-button">Back</a>
     
     <main>
         <h1>Create Assignment</h1>
@@ -83,85 +82,90 @@
 
     <script>
         function toggleAssignmentType() {
-        var assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
-        var quizContent = document.querySelector('.quiz-content');
-        var essayContent = document.querySelector('.essay-content');
-        quizContent.style.display = assignmentType === 'quiz' ? 'block' : 'none';
-        essayContent.style.display = assignmentType === 'essay' ? 'block' : 'none';
+            var assignmentType = $('input[name="assignmentType"]:checked').val()
+            var quizContent = $('.quiz-content')
+            var essayContent = $('.essay-content')
 
+            quizContent.css('display', assignmentType === 'quiz' ? 'block' : 'none')
+            essayContent.css('display', assignmentType === 'essay' ? 'block' : 'none')
         }
 
         function toggleContentMethod(assignmentType) {
-        var fileUpload = document.querySelector(`.file-upload-${assignmentType}`);
-        var textEntry = document.querySelector(`.text-entry-${assignmentType}`);
-        fileUpload.style.display = assignmentType === 'essay' && fileRadio.checked ? 'block' : 'none';
-        textEntry.style.display = assignmentType === 'essay' && textRadio.checked ? 'block' : 'none';
+            var fileUpload = $(`.file-upload-${assignmentType}`)
+            var textEntry = $(`.text-entry-${assignmentType}`)
+
+            fileUpload.css('display', assignmentType === 'essay' && fileRadio.checked ? 'block' : 'none')
+            textEntry.css('display', assignmentType === 'essay' && textRadio.checked ? 'block' : 'none')
         }
 
         function addQuestion() {
-        var quizQuestions = document.getElementById('quiz-questions');
-        var questionCount = quizQuestions.querySelectorAll('.question-input').length + 1;
-        var newLabel = document.createElement('label');
-        newLabel.setAttribute('for', 'question' + questionCount);
-        newLabel.setAttribute('class', 'items');
-        newLabel.textContent = 'Question ' + questionCount;
+            var quizQuestions = $('#quiz-questions')
+            var questionCount = quizQuestions.find('.question-input').length + 1
+            var newLabel = $('<label></label>')
+                .attr({
+                    'for': 'question' + questionCount,
+                    'class': 'items'
+                })
+                .text('Question ' + questionCount)
 
-        var newInput = document.createElement('input');
-        newInput.type = 'text';
-        newInput.id = 'question' + questionCount;
-        newInput.name = 'question' + questionCount;
-        newInput.classList.add('question-input');
+            var newInput = $('<input>')
+                .addClass('question-input')
+                .attr({
+                    'type': 'text',
+                    'id': 'question' + questionCount,
+                    'name': 'question' + questionCount,
+                })
 
-        var mcqOptionsDiv = document.createElement('div');
-        mcqOptionsDiv.classList.add('mcq-options');
-        mcqOptionsDiv.id = 'mcq-options-' + questionCount;
+            var mcqOptionsDiv = $('<div></div>')
+                .addClass('mcq-options')
+                .attr({ 'id': 'mcq-options-' + questionCount })
 
-        for (let i = 1; i <= 3; i++) {
-            let mcqOptionDiv = document.createElement('div');
-            mcqOptionDiv.classList.add('mcq-option');
+            for (let i = 1; i <= 3; i++) {
+                let mcqOptionDiv = $('<div></div>').addClass('mcq-option')
 
-            let optionLabel = document.createElement('label');
-            optionLabel.htmlFor = `option${questionCount}-${i}`;
-            optionLabel.textContent = `${String.fromCharCode(64 + i)}:`;
+                let optionLabel = $('<label></label>')
+                    .attr({ 'for': `option${questionCount}-${i}` })
+                    .text(`${String.fromCharCode(64 + i)}:`)
 
-            let optionInput = document.createElement('input');
-            optionInput.type = 'text';
-            optionInput.placeholder = 'Option';
-            optionInput.id = `option${questionCount}-${i}`;
-            optionInput.name = `option${questionCount}-${i}`;
+                let optionInput = $('<input>').attr({
+                    'type': 'text',
+                    'placeholder': 'Option',
+                    'id': `option${questionCount}-${i}`,
+                    'name': `option${questionCount}-${i}`
+                });
 
-            mcqOptionDiv.appendChild(optionLabel);
-            mcqOptionDiv.appendChild(optionInput);
-            mcqOptionsDiv.appendChild(mcqOptionDiv);
-        }
+                mcqOptionDiv.append(optionLabel, optionInput)
+                mcqOptionsDiv.append(mcqOptionDiv)
+            }
 
-        var addButton = quizQuestions.querySelector('button');
-        quizQuestions.insertBefore(newLabel, addButton);
-        quizQuestions.insertBefore(newInput, addButton);
-        quizQuestions.insertBefore(mcqOptionsDiv, addButton);
-        quizQuestions.insertBefore(gradeInputLabel, addButton);
-        quizQuestions.insertBefore(gradeInput, addButton);
+            var addButton = quizQuestions.find('button')
+            newLabel.insertBefore(addButton)
+            newInput.insertBefore(addButton)
+            mcqOptionsDiv.insertBefore(addButton)
+            gradeInputLabel.insertBefore(addButton)
+            gradeInput.insertBefore(addButton)
         }
 
         function validateForm() {
-        const assignmentType = document.querySelector('input[name="assignmentType"]:checked').value;
-        if (assignmentType === 'quiz') {
-            const questionInputs = document.querySelectorAll('.question-input');
-            for (let input of questionInputs) {
-            if (input.value.trim() === '') {
-                alert('Please fill in all the quiz questions.');
-                return false;
+            const assignmentType = $('input[name="assignmentType"]:checked').val()
+            if (assignmentType === 'quiz') {
+                const questionInputs = $('.question-input')
+                for (let input of questionInputs) {
+                    if ($(input).val().trim() === '') {
+                        alert('Please fill in all the quiz questions.')
+                        return false
+                    }
+                }
             }
+            else if (assignmentType === 'essay') {
+                const fileRadio = $('#fileRadio')
+                const fileUpload = $('#file-upload-essay')
+                if (fileRadio.checked && !fileUpload.files.length) {
+                    alert('Please upload a file for the essay.')
+                    return false
+                }
             }
-        } else if (assignmentType === 'essay') {
-            const fileRadio = document.getElementById('fileRadio');
-            const fileUpload = document.getElementById('file-upload-essay');
-            if (fileRadio.checked && !fileUpload.files.length) {
-            alert('Please upload a file for the essay.');
-            return false;
-            }
-        }
-        return true;
+            return true
         }
     </script>
     </body>

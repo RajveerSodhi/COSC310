@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/assignment.css') }}">
         <title>{{ essay.essay_name }}</title>
     </head>
@@ -67,41 +68,39 @@
 
         <script>
         // JavaScript to toggle between text and file inputs
-            document.querySelectorAll('.response-options input').forEach(function (radio) {
-            radio.addEventListener('change', function (event) {
+                $('.response-options input').on('change', function(event) {
                 var questionId = event.target.name.replace('response_type', '');
                 var parentQuestionDiv = event.target.closest('.question');
-                var textResponseDiv = parentQuestionDiv.querySelector('.text-response');
-                var fileResponseDiv = parentQuestionDiv.querySelector('.file-response');
-                if (event.target.value === 'text') {
-                textResponseDiv.style.display = 'block';
-                fileResponseDiv.style.display = 'none';
-                } else {
-                textResponseDiv.style.display = 'none';
-                fileResponseDiv.style.display = 'block';
-                }
-            });
-            });
-            function validateForm(event) {
-            let isValid = true;
-            document.querySelectorAll('.question').forEach(question => {
-                const textResponse = question.querySelector('.text-response textarea');
-                const fileResponse = question.querySelector('.file-response input[type="file"]');
-                const responseOption = question.querySelector('.response-options input[type="radio"]:checked').value;
+                var textResponseDiv = parentQuestionDiv.find('.text-response');
+                var fileResponseDiv = parentQuestionDiv.find('.file-response');
 
-                if (responseOption === 'text' && textResponse.value.trim() === '') {
-                alert('Please enter a text response for all questions.');
-                isValid = false;
+                if (event.target.value === 'text') {
+                    textResponseDiv.show();
+                    fileResponseDiv.hide();
                 }
-                else if (responseOption === 'file' && fileResponse.files.length === 0) {
-                alert('Please upload a file for all file response questions.');
-                isValid = false;
+                else {
+                    textResponseDiv.hide();
+                    fileResponseDiv.show();
                 }
             });
-            if (!isValid) {
-                return false;
-            }
-            return isValid;
+
+            function validateForm(event) {
+                let isValid = true
+                $('.question').each(function() {
+                    const textResponse = $(this).find('.text-response textarea')
+                    const fileResponse = $(this).find('.file-response input[type="file"]')
+                    const responseOption = $(this).find('.response-options input[type="radio"]:checked').val()
+
+                    if (responseOption === 'text' && textResponse.val().trim() === '') {
+                        alert('Please enter a text response for all questions.');
+                        isValid = false;
+                    }
+                    else if (responseOption === 'file' && fileResponse.files.length === 0) {
+                        alert('Please upload a file for all file response questions.');
+                        isValid = false;
+                    }
+                });
+                return isValid;
             }
         </script>
     </body>

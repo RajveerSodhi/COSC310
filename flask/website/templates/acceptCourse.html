@@ -5,7 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Accept Enrollment Requests</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/acceptCourse.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
     <body>
         {% include 'sidebar.html' %}
@@ -40,50 +42,39 @@
         </div>
 
         <script>
-            document.addEventListener('DOMContentLoaded', (event) => {
-            let toastBox = document.getElementById('toastBox');
-            let acceptMessage = "Request Accepted";
-            let declineMessage = "Request Declined";
+            $(document).ready(function () {
+                let toastBox = $('#toastBox')
 
-            function showToast(message) {
-                let toast = document.createElement('div');
-                toast.classList.add('toast');
-                toast.innerText = message;
-                toastBox.appendChild(toast);
+                function showToast(message) {
+                    let toast = $('<div></div>').addClass('toast').text(message)
+                    toastBox.append(toast)
+                    toast.addClass(message === "Request Declined" ? "decline" : "accept")
 
-                if (message === declineMessage) {
-                toast.classList.add("decline");
-                } else {
-                toast.classList.add("accept");
+                    setTimeout(function() {
+                    toast.remove()
+                    }, 2000)
                 }
 
-                setTimeout(() => {
-                toast.remove();
-                }, 2000);
-            }
+                $('.acceptButton').on('click', function (event) {
+                    event.preventDefault()
+                    showToast("Request Accepted")
+                    let form = $(this).closest('form')
 
-            document.querySelectorAll('.acceptButton').forEach(button => {
-                button.addEventListener('click', function (event) {
-                event.preventDefault();
-                showToast(acceptMessage);
-                let form = this.closest('form');
-                setTimeout(() => {
-                    if (form) form.submit();
-                }, 2000);
-                });
-            });
+                    setTimeout(function() {
+                        if (form) form.submit()
+                    }, 2000)
+                })
 
-            document.querySelectorAll('.declineButton').forEach(button => {
-                button.addEventListener('click', function (event) {
-                event.preventDefault();
-                showToast(declineMessage);
-                let form = this.closest('form');
-                setTimeout(() => {
-                    if (form) form.submit();
-                }, 2000);
-                });
-            });
-            });
+                $('.declineButton').on('click', function (event) {
+                    event.preventDefault()
+                    showToast("Request Declined")
+                    let form = $(this).closest('form')
+
+                    setTimeout(function() {
+                        if (form) form.submit()
+                    }, 2000)
+                })
+            })
         </script>
     </body>
 

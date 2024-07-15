@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ discussion.title }}</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/discussion.css') }}">
     </head>
     <body>
@@ -40,25 +41,17 @@
 
         <script>
             function addComment() {
-                var comment = document.getElementById("comment").value;
-                var commentsContainer = document.getElementById("comments-container");
+                var comment = $("#comment").value
+                var commentsContainer = $("#comments-container")
 
-                // Create a new div to contain the comment
-                var commentContainer = document.createElement("div");
-                commentContainer.classList.add("comment-container");
-
-                // Create a new paragraph element to display the comment
-                var newComment = document.createElement("p");
-                newComment.textContent = comment;
-
-                // Append the new comment to the comment container
-                commentContainer.appendChild(newComment);
-
-                // Append the comment container to the comments container
-                commentsContainer.appendChild(commentContainer);
+                // Append a new comment
+                var commentContainer = $("<div></div>").addClass("comment-container")
+                var newComment = $("<p></p>").text(comment)
+                commentContainer.append(newComment);
+                commentsContainer.append(commentContainer);
 
                 // Clear the textarea
-                document.getElementById("comment").value = "";
+                $("#comment").val("");
             }
         </script>
     </body>
